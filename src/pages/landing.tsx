@@ -2,12 +2,13 @@ import React from 'react'
 import styles from '../styles/landing.module.scss'
 import Button from '../components/button'
 import Switch from '../components/switch'
+import Card from '../components/card'
 import { Link } from 'react-router-dom'
 
 const LandingPage: React.FC = () => {
   return (
     <div className={styles.container}>
-      <div className={styles.card}>
+      <Card className={styles.card}>
         <h1>Verseghy <span>191</span></h1>
         <p>A csapattagok a csapatvezetőtől kapott emailcímmel és jelszóval jelentkezhetnek be az oldalra. Erről a csapatvezetők a verseny napján emailben kapnak értesítést.</p>
         <p> A beírt megoldások a csapattagok között automatikusan szinkronizálódnak. A megoldás akkor tekinthető beírtnak, ha a felső sorban a feladathoz tartozó négyzet zöldre vált. Kérjük a kevésbé stabil internettel rendelkezőknek, hogy különös figyelemmel legyenek erre. Ha sehogysem vált zöldre a négyzet egy megoldás megadása után, kérjük próbáld meg újratölteni az oldalt. Ha ez sem működik kérjük a csapatvezetőnek kiküldött emailben lévő csatornákon vegyék fel a szerverzőkkel a kapcsolatot.</p>
@@ -18,7 +19,7 @@ const LandingPage: React.FC = () => {
             <Button primary>Tovább</Button>
           </Link>
         </div>
-      </div>
+      </Card>
     </div>
   )
 }
