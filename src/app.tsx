@@ -5,13 +5,15 @@ const LandingPage = React.lazy(() => import('./pages/landing'))
 
 const App: React.FC = () => {
   return (
-    <Router>
-      <Suspense fallback={<p>Loading...</p>}>
-        <Switch>
-          <Route path='/' exact component={LandingPage} />
-        </Switch>
-      </Suspense>
-    </Router>
+    <main>
+      <Router>
+        <Suspense fallback={<p>Loading...</p>}>
+          <Switch>
+            <Route path='/' exact component={LandingPage} />
+          </Switch>
+        </Suspense>
+      </Router>
+    </main>
   );
 }
 

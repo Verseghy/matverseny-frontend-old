@@ -1,0 +1,16 @@
+.button {
+  font-size: 1.4rem;
+  line-height: 3.6rem;
+  padding: 0 1.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+
+  &:focus {
+    outline: 0.2rem solid var(--text-color);
+  }
+
+  &.primary {
+    color: var(--text-on-primary);
+    background: var(--primary);
+  }
+}

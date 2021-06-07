@@ -1,0 +1,13 @@
+:root {
+  --primary: rgb(22, 163, 74);
+  --text-color: #000;
+  --text-on-primary: #fff;
+  --background: #fff;
+}
+
+:root:is([dark]) {
+  --primary: rgb(74, 222, 128);
+  --text-color: #fff;
+  --text-on-primary: #000;
+  --background: #000;
+}

@@ -1,0 +1,38 @@
+.switch {
+  background: var(--primary);
+  width: 3.6rem;
+  height: 2rem;
+  border-radius: 100vw;
+  position: relative;
+  cursor: pointer;
+
+  &::after {
+    content: '';
+    width: 1.6rem;
+    height: 1.6rem;
+    display: inline-block;
+    background: var(--text-on-primary);
+    border-radius: 50%;
+    position: absolute;
+    left: 0.2rem;
+    top: 0.2rem;
+    transition: transform 150ms ease-in-out;
+  }
+
+  &.on::after {
+    transform: translate3d(1.6rem, 0, 0);
+  }
+
+  &:focus {
+    outline: 0.2rem solid var(--text-color);
+  }
+}
+
+.label {
+  display: flex;
+  align-items: center;
+
+  span {
+    margin-left: 1.5rem;
+  }
+}
