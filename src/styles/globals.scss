@@ -18,8 +18,8 @@ body {
   background: var(--background);
 }
 
-html, body, main {
-  min-width: 100vw;
-  min-height: 100vh;
+html, body, #root, main {
+  width: 100%;
+  height: 100%;
 }
 

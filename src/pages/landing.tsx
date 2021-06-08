@@ -3,7 +3,6 @@ import styles from '../styles/landing.module.scss'
 import Button from '../components/button'
 import Switch from '../components/switch'
 import Card from '../components/card'
-import { Link } from 'react-router-dom'
 
 const LandingPage: React.FC = () => {
   return (
@@ -15,9 +14,7 @@ const LandingPage: React.FC = () => {
         <p> Az OLED kijelzővel rendelkező felhasználóknak ajánljuk a sötét téma használatát, mivel ez nagy mértékben csökkenti az akkumulátorhasználatot. Ez a beállítás az alább található kapcsolóval állítható. A verseny időtartama alatt bármikor ki és be kapcsolható ezen az oldalon.</p>
         <div className={styles.controls}>
           <Switch>Sötét téma</Switch>
-          <Link to="/login">
-            <Button primary>Tovább</Button>
-          </Link>
+          <Button to="/login" primary>Tovább</Button>
         </div>
       </Card>
     </div>

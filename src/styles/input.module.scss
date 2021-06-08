@@ -1,0 +1,21 @@
+.input {
+  border: 1px solid #e5e7eb;
+  padding: .8rem 1.2rem;
+  border-radius: 0.6rem;
+  display: inline-block;
+
+  &:focus {
+    border-color: var(--primary);
+    outline: 1px solid var(--primary);
+  }
+
+  &.block {
+    display: block;
+    width: 100%;
+  }
+
+  &.error {
+    border-color: var(--red);
+    outline-color: var(--red);
+  }
+}

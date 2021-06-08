@@ -1,13 +1,15 @@
 :root {
-  --primary: rgb(22, 163, 74);
+  --primary: #16a34a;
   --text-color: #000;
   --text-on-primary: #fff;
   --background: #fff;
+  --red: #DC2626;
 }
 
 :root:is([dark]) {
-  --primary: rgb(74, 222, 128);
+  --primary: #4ADE80;
   --text-color: #fff;
   --text-on-primary: #000;
   --background: #000;
+  --red: #F87171;
 }

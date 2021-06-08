@@ -2,11 +2,30 @@
   font-size: 1.4rem;
   line-height: 3.6rem;
   padding: 0 1.6rem;
-  border-radius: 6px;
+  border-radius: 0.6rem;
   cursor: pointer;
+  background: #e5e7eb;
+  text-decoration: none;
+  color: var(--text-color);
+  display: inline-block;
+  text-align: center;
 
   &:focus {
     outline: 0.2rem solid var(--text-color);
+  }
+
+  &:disabled {
+    cursor: auto;
+
+    &.primary {
+      color: #fff;
+      background: #000;
+    }
+  }
+
+  &.block {
+    display: block;
+    width: 100%;
   }
 
   &.primary {
