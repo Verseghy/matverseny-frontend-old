@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 const LandingPage = React.lazy(() => import('./pages/landing'))
 const LoginPage = React.lazy(() => import('./pages/login'))
 const RegisterPage = React.lazy(() => import('./pages/register'))
+const ForgotPasswordPage = React.lazy(() => import('./pages/forgot-password'))
 
 const App: React.FC = () => {
   return (
@@ -14,6 +15,7 @@ const App: React.FC = () => {
             <Route path='/' exact component={LandingPage} />
             <Route path='/login' component={LoginPage} />
             <Route path='/register' component={RegisterPage} />
+            <Route path='/forgot-password' component={ForgotPasswordPage} />
           </Switch>
         </Suspense>
       </Router>
