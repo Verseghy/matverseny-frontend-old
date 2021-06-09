@@ -8,8 +8,11 @@ import { Formik, Form, Field, FieldProps, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 
 const validationSchema = Yup.object({
-  username: Yup.string().required('Felhasználónév kötelező'),
-  password: Yup.string().required('Jelszó kötelező'),
+  email: Yup.string()
+    .email('Az email formátuma nem megfelelő')
+    .required('Email kötelező'),
+  password: Yup.string()
+    .required('Jelszó kötelező'),
 })
 
 const initialValues = {username: '', password: ''}
@@ -30,13 +33,13 @@ const LoginPage: React.VFC = () => {
               <h1>Bejelentkezés</h1>
               <h2>A <span>191</span> matematikaverseny oldalára</h2>
               <div className={styles.field}>
-                <span>Felhasználónév</span>
-                <Field name="username">
+                <span>Email</span>
+                <Field name="email">
                   {({ field, meta }: FieldProps) => (
-                    <Input block {...field} error={!!meta.touched && !!meta.error} />
+                    <Input type="email" block {...field} error={!!meta.touched && !!meta.error} />
                   )}
                 </Field>
-                <ErrorMessage name="username">
+                <ErrorMessage name="email">
                   {(msg) => (<span className={styles.error}>{msg}</span>)}
                 </ErrorMessage>
               </div>
