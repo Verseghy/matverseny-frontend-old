@@ -26,6 +26,7 @@ const LoginPage: React.VFC = () => {
         <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
           {({ isSubmitting }) => (
             <Form>
+              <img src="/assets/logo.svg" alt="" className={styles.logo} />
               <h1>Bejelentkezés</h1>
               <h2>A <span>191</span> matematikaverseny oldalára</h2>
               <div className={styles.field}>
