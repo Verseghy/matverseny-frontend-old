@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react'
+import { useHistory } from 'react-router-dom'
 import Card from '../components/card'
 import Input from '../components/input'
 import Button from '../components/button'
@@ -8,6 +9,7 @@ import { Formik, Form, Field, FieldProps, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import { AuthContext } from '../context/auth'
 import { RegisterRequest } from '../proto/auth_pb'
+import { NextPage } from '../context/auth'
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -40,7 +42,8 @@ const initialValues = {
 
 const RegisterPage: React.VFC = () => {
   const [error, setError] = useState('')
-  const { service } = useContext(AuthContext)
+  const {service, login} = useContext(AuthContext)
+  const history = useHistory()
 
   const onSubmit = async (values: typeof initialValues) => {
     let num_class = RegisterRequest.Class.K_9
@@ -57,10 +60,15 @@ const RegisterPage: React.VFC = () => {
       .setName(values.name)
       .setSchool(values.school)
       .setClass(num_class)
+
     
     try {
-      let res = await service.register(req, null)
-      console.log(res)
+      const res = await service.register(req, null)
+      const aToken = res.getAccessToken()
+      const rToken = res.getRefreshToken()
+      login(aToken, rToken)
+
+      history.push('/teams')
     } catch (error: any) {
       setError(error.message)
     }

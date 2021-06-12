@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import { AuthContext, def } from './context/auth'
+import { AuthProvider } from './context/auth'
 
 const LandingPage = React.lazy(() => import('./pages/landing'))
 const LoginPage = React.lazy(() => import('./pages/login'))
@@ -9,7 +9,7 @@ const ForgotPasswordPage = React.lazy(() => import('./pages/forgot-password'))
 
 const App: React.FC = () => {
   return (
-    <AuthContext.Provider value={def}>
+    <AuthProvider>
       <main>
         <Router>
           <Suspense fallback={<p>Loading...</p>}>
@@ -22,7 +22,7 @@ const App: React.FC = () => {
           </Suspense>
         </Router>
       </main>
-    </AuthContext.Provider>
+    </AuthProvider>
   );
 }
 

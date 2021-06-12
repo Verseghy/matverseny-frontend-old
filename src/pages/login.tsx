@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import Card from '../components/card'
 import Input from '../components/input'
 import Button from '../components/button'
@@ -8,7 +8,7 @@ import styles from '../styles/login.module.scss'
 import { Formik, Form, Field, FieldProps, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import { LoginRequest } from '../proto/auth_pb'
-import { AuthContext } from '../context/auth'
+import { AuthContext, NextPage } from '../context/auth'
 import { Error } from 'grpc-web'
 
 const validationSchema = Yup.object({
@@ -23,7 +23,8 @@ const initialValues = { email: '', password: '' }
 
 const LoginPage: React.VFC = () => {
   const [error, setError] = useState('');
-  const {service} = useContext(AuthContext)
+  const {service, login} = useContext(AuthContext)
+  const history = useHistory()
 
   const onSubmit = async (values: typeof initialValues) => {
     let req = new LoginRequest()
@@ -31,10 +32,18 @@ const LoginPage: React.VFC = () => {
       .setPassword(values.password)
     
     try {
-      let res = await service.login(req, null)
-      let aToken = res.getAccessToken()
-      let rToken = res.getRefreshToken()
-      console.log(`accessToken: ${aToken}; refreshToken: ${rToken}`)
+      const res = await service.login(req, null)
+      const aToken = res.getAccessToken()
+      const rToken = res.getRefreshToken()
+      const nextPage = login(aToken, rToken)
+
+      if (nextPage === NextPage.ADMIN) {
+        history.push('/admin')
+      } else if (nextPage === NextPage.COMPETITION) {
+        history.push('/competition')
+      } else {
+        history.push('/teams')
+      }
     } catch (error: any) {
       const e = error as Error
       setError(e.message)
