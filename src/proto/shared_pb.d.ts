@@ -56,6 +56,11 @@ export class ProblemStream extends jspb.Message {
   hasSwap(): boolean;
   clearSwap(): ProblemStream;
 
+  getCreate(): ProblemStream.Create | undefined;
+  setCreate(value?: ProblemStream.Create): ProblemStream;
+  hasCreate(): boolean;
+  clearCreate(): ProblemStream;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): ProblemStream.AsObject;
   static toObject(includeInstance: boolean, msg: ProblemStream): ProblemStream.AsObject;
@@ -71,6 +76,7 @@ export namespace ProblemStream {
     update?: ProblemStream.Update.AsObject,
     pb_delete?: ProblemStream.Delete.AsObject,
     swap?: ProblemStream.Swap.AsObject,
+    create?: ProblemStream.Create.AsObject,
   }
 
   export class Initial extends jspb.Message {
@@ -161,11 +167,31 @@ export namespace ProblemStream {
   }
 
 
+  export class Create extends jspb.Message {
+    getAt(): number;
+    setAt(value: number): Create;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): Create.AsObject;
+    static toObject(includeInstance: boolean, msg: Create): Create.AsObject;
+    static serializeBinaryToWriter(message: Create, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): Create;
+    static deserializeBinaryFromReader(message: Create, reader: jspb.BinaryReader): Create;
+  }
+
+  export namespace Create {
+    export type AsObject = {
+      at: number,
+    }
+  }
+
+
   export enum Type { 
     K_INITIAL = 0,
     K_UPDATE = 1,
     K_DELETE = 2,
     K_SWAP = 3,
+    K_CREATE = 4,
   }
 }
 
