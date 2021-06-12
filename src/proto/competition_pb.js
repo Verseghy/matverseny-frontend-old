@@ -605,7 +605,8 @@ proto.competition.SetSolutionsRequest.prototype.toObject = function(opt_includeI
 proto.competition.SetSolutionsRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    value: jspb.Message.getFieldWithDefault(msg, 2, 0)
+    value: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    pb_delete: jspb.Message.getBooleanFieldWithDefault(msg, 3, false)
   };
 
   if (includeInstance) {
@@ -650,6 +651,10 @@ proto.competition.SetSolutionsRequest.deserializeBinaryFromReader = function(msg
       var value = /** @type {number} */ (reader.readInt64());
       msg.setValue(value);
       break;
+    case 3:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setDelete(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -693,6 +698,13 @@ proto.competition.SetSolutionsRequest.serializeBinaryToWriter = function(message
       f
     );
   }
+  f = message.getDelete();
+  if (f) {
+    writer.writeBool(
+      3,
+      f
+    );
+  }
 };
 
 
@@ -729,6 +741,24 @@ proto.competition.SetSolutionsRequest.prototype.getValue = function() {
  */
 proto.competition.SetSolutionsRequest.prototype.setValue = function(value) {
   return jspb.Message.setProto3IntField(this, 2, value);
+};
+
+
+/**
+ * optional bool delete = 3;
+ * @return {boolean}
+ */
+proto.competition.SetSolutionsRequest.prototype.getDelete = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 3, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.competition.SetSolutionsRequest} returns this
+ */
+proto.competition.SetSolutionsRequest.prototype.setDelete = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 3, value);
 };
 
 

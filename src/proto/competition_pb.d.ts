@@ -69,6 +69,9 @@ export class SetSolutionsRequest extends jspb.Message {
   getValue(): number;
   setValue(value: number): SetSolutionsRequest;
 
+  getDelete(): boolean;
+  setDelete(value: boolean): SetSolutionsRequest;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): SetSolutionsRequest.AsObject;
   static toObject(includeInstance: boolean, msg: SetSolutionsRequest): SetSolutionsRequest.AsObject;
@@ -81,6 +84,7 @@ export namespace SetSolutionsRequest {
   export type AsObject = {
     id: string,
     value: number,
+    pb_delete: boolean,
   }
 }
 
