@@ -9,7 +9,6 @@ import { Formik, Form, Field, FieldProps, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import { AuthContext } from '../context/auth'
 import { RegisterRequest } from '../proto/auth_pb'
-import { NextPage } from '../context/auth'
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
