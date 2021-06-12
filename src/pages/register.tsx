@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useState, useContext } from 'react'
 import Card from '../components/card'
 import Input from '../components/input'
 import Button from '../components/button'
+import Message from '../components/error-message'
 import styles from '../styles/register.module.scss'
 import { Formik, Form, Field, FieldProps, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
+import { AuthContext } from '../context/auth'
+import { RegisterRequest } from '../proto/auth_pb'
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -35,9 +38,31 @@ const initialValues = {
 }
 
 const RegisterPage: React.VFC = () => {
+  const [error, setError] = useState('')
+  const { service } = useContext(AuthContext)
 
-  const onSubmit = (asd: any) => {
-    console.log('submit', asd)
+  const onSubmit = async (values: typeof initialValues) => {
+    let num_class = RegisterRequest.Class.K_9
+    if (Number(values.class) === 10)
+      num_class = RegisterRequest.Class.K_10
+    if (Number(values.class) === 11)
+      num_class = RegisterRequest.Class.K_11
+    if (Number(values.class) === 12)
+      num_class = RegisterRequest.Class.K_12
+    
+    let req = new RegisterRequest()
+      .setEmail(values.email)
+      .setPassword(values.password)
+      .setName(values.name)
+      .setSchool(values.school)
+      .setClass(num_class)
+    
+    try {
+      let res = await service.register(req, null)
+      console.log(res)
+    } catch (error: any) {
+      setError(error.message)
+    }
   }
 
   return (
@@ -47,6 +72,7 @@ const RegisterPage: React.VFC = () => {
           {({ isSubmitting }) => (
             <Form>
               <h1>Regisztráció</h1>
+              <Message message={error} />
               <div className={styles.field}>
                 <span>Email</span>
                 <Field name="email">
