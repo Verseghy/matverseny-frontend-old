@@ -14,6 +14,7 @@ const validationSchema = Yup.object().shape({
     .email('Az email formátuma nem megfelelő')
     .required('Email kötelező'),
   password: Yup.string()
+    .min(8, 'A jelszónak legalább 8 karakternek kell lennie')
     .required('Jelszó kötelező'),
   passwordRe: Yup.string()
     .oneOf([Yup.ref('password')], 'Két jelszó nem egyezik')
