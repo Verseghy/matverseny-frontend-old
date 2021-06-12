@@ -1,11 +1,15 @@
-import React from 'react'
+import React, { useState, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import Card from '../components/card'
 import Input from '../components/input'
 import Button from '../components/button'
+import Message from '../components/error-message'
 import styles from '../styles/login.module.scss'
 import { Formik, Form, Field, FieldProps, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
+import { LoginRequest } from '../proto/auth_pb'
+import { AuthContext } from '../context/auth'
+import { Error } from 'grpc-web'
 
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -15,12 +19,26 @@ const validationSchema = Yup.object({
     .required('Jelszó kötelező'),
 })
 
-const initialValues = {username: '', password: ''}
+const initialValues = { email: '', password: '' }
 
 const LoginPage: React.VFC = () => {
+  const [error, setError] = useState('');
+  const {service} = useContext(AuthContext)
 
-  const onSubmit = (asd: any) => {
-    console.log('submit', asd)
+  const onSubmit = async (values: typeof initialValues) => {
+    let req = new LoginRequest()
+      .setEmail(values.email)
+      .setPassword(values.password)
+    
+    try {
+      let res = await service.login(req, null)
+      let aToken = res.getAccessToken()
+      let rToken = res.getRefreshToken()
+      console.log(`accessToken: ${aToken}; refreshToken: ${rToken}`)
+    } catch (error: any) {
+      const e = error as Error
+      setError(e.message)
+    }
   }
 
   return (
@@ -32,6 +50,7 @@ const LoginPage: React.VFC = () => {
               <img src="/assets/logo.svg" alt="" className={styles.logo} />
               <h1>Bejelentkezés</h1>
               <h2>A <span>191</span> matematikaverseny oldalára</h2>
+              <Message message={error} />
               <div className={styles.field}>
                 <span>Email</span>
                 <Field name="email">
