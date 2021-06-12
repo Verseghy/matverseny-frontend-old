@@ -3,6 +3,8 @@
   padding: .8rem 1.2rem;
   border-radius: 0.6rem;
   display: inline-block;
+  background: none;
+  color: var(--text-color);
 
   &:focus {
     border-color: var(--primary);
