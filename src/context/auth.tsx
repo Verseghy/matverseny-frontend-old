@@ -1,11 +1,17 @@
 import React, { useState } from 'react'
 import { AuthClient } from '../proto/AuthServiceClientPb'
 import jwt_decode from 'jwt-decode'
+import { RefreshTokenRequest } from '../proto/auth_pb'
 
-interface Claims {
+interface JWTClaims {
   is_admin: boolean,
   team: string,
   exp: number,
+}
+
+export interface Claims {
+  isAdmin: boolean,
+  team: string,
 }
 
 export enum NextPage {
@@ -22,16 +28,21 @@ enableDevTools([service])
 
 export const def = {
   service,
-  accessToken: '',
   refreshToken: '',
+  getAccessToken: async () => '',
+  getClaims: async () => ({
+    isAdmin: false,
+    team: '',
+  }),
   login: (_aToken: string, _rToken: string): NextPage => NextPage.LOGIN,
 }
 
 export const AuthContext = React.createContext(def)
 
 export const AuthProvider: React.FC = ({ children }) => {
-  const [refreshToken, setRefreshToken] = useState('');
+  const [refreshToken, setRefreshToken] = useState(localStorage.getItem('refreshToken') ?? '');
   const [accessToken, setAccessToken] = useState('');
+  const [exp, setExp] = useState(0);
 
   const login = (aToken: string, rToken: string): NextPage => {
     localStorage.setItem('refreshToken', rToken)
@@ -39,17 +50,41 @@ export const AuthProvider: React.FC = ({ children }) => {
     setRefreshToken(rToken)
     setAccessToken(aToken)
 
-    const claims: Claims = jwt_decode(aToken)
+    const claims: JWTClaims = jwt_decode(aToken)
+
+    setExp(claims.exp)
 
     if (claims.is_admin) return NextPage.ADMIN
     if (claims.team) return NextPage.COMPETITION
     return NextPage.TEAMS
   }
 
+  const getAccessToken = async (): Promise<string> => {
+    if (!refreshToken) return ''
+
+    if (new Date(exp - 5 * 60000) < new Date()) {
+      const res = await service.refreshToken(new RefreshTokenRequest().setToken(refreshToken), null)
+      setAccessToken(res.getToken())
+      return res.getToken()
+    }
+
+    return accessToken
+  }
+
+  const getClaims = async () => {
+    const claims: JWTClaims = jwt_decode(await getAccessToken())
+
+    return {
+      isAdmin: claims.is_admin,
+      team: claims.team,
+    }
+  }
+
   const value = {
     service,
     refreshToken,
-    accessToken,
+    getAccessToken,
+    getClaims,
     login,
   }
 

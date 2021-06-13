@@ -1,11 +1,13 @@
 import React, { Suspense } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { AuthProvider } from './context/auth'
+import PrivateRoute, { Claims } from './components/private-route'
 
 const LandingPage = React.lazy(() => import('./pages/landing'))
 const LoginPage = React.lazy(() => import('./pages/login'))
 const RegisterPage = React.lazy(() => import('./pages/register'))
 const ForgotPasswordPage = React.lazy(() => import('./pages/forgot-password'))
+const AdminPage = React.lazy(() => import('./pages/admin'))
 
 const App: React.FC = () => {
   return (
@@ -18,6 +20,7 @@ const App: React.FC = () => {
               <Route path='/login' component={LoginPage} />
               <Route path='/register' component={RegisterPage} />
               <Route path='/forgot-password' component={ForgotPasswordPage} />
+              <PrivateRoute path='/admin' component={AdminPage} claims={Claims.ADMIN} />
             </Switch>
           </Suspense>
         </Router>
