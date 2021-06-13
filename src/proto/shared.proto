@@ -11,6 +11,9 @@ message Problem {
   int64 solution = 4;
 }
 
+message ProblemStreamRequest {
+}
+
 message ProblemStream {
   enum Type {
     k_INITIAL = 0;
@@ -39,7 +42,8 @@ message ProblemStream {
   }
 
   message Create {
-    uint32 at = 1;
+    Problem problem = 1;
+    uint32 at = 2;
   }
 
   Type type = 1;

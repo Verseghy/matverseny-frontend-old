@@ -76,23 +76,23 @@ export class AdminClient {
     this.methodInfoCreateProblem);
   }
 
-  methodInfoReadProblems = new grpcWeb.AbstractClientBase.MethodInfo(
+  methodInfoGetProblems = new grpcWeb.AbstractClientBase.MethodInfo(
     shared_pb.ProblemStream,
-    (request: admin_pb.ReadRequest) => {
+    (request: shared_pb.ProblemStreamRequest) => {
       return request.serializeBinary();
     },
     shared_pb.ProblemStream.deserializeBinary
   );
 
-  readProblems(
-    request: admin_pb.ReadRequest,
+  getProblems(
+    request: shared_pb.ProblemStreamRequest,
     metadata?: grpcWeb.Metadata) {
     return this.client_.serverStreaming(
       this.hostname_ +
-        '/auth.Admin/ReadProblems',
+        '/auth.Admin/GetProblems',
       request,
       metadata || {},
-      this.methodInfoReadProblems);
+      this.methodInfoGetProblems);
   }
 
   methodInfoUpdateProblem = new grpcWeb.AbstractClientBase.MethodInfo(

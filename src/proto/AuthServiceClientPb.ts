@@ -155,6 +155,46 @@ export class AuthClient {
     this.methodInfoForgotPassword);
   }
 
+  methodInfoResetPassword = new grpcWeb.AbstractClientBase.MethodInfo(
+    auth_pb.ResetPasswordResponse,
+    (request: auth_pb.ResetPasswordRequest) => {
+      return request.serializeBinary();
+    },
+    auth_pb.ResetPasswordResponse.deserializeBinary
+  );
+
+  resetPassword(
+    request: auth_pb.ResetPasswordRequest,
+    metadata: grpcWeb.Metadata | null): Promise<auth_pb.ResetPasswordResponse>;
+
+  resetPassword(
+    request: auth_pb.ResetPasswordRequest,
+    metadata: grpcWeb.Metadata | null,
+    callback: (err: grpcWeb.Error,
+               response: auth_pb.ResetPasswordResponse) => void): grpcWeb.ClientReadableStream<auth_pb.ResetPasswordResponse>;
+
+  resetPassword(
+    request: auth_pb.ResetPasswordRequest,
+    metadata: grpcWeb.Metadata | null,
+    callback?: (err: grpcWeb.Error,
+               response: auth_pb.ResetPasswordResponse) => void) {
+    if (callback !== undefined) {
+      return this.client_.rpcCall(
+        this.hostname_ +
+          '/auth.Auth/ResetPassword',
+        request,
+        metadata || {},
+        this.methodInfoResetPassword,
+        callback);
+    }
+    return this.client_.unaryCall(
+    this.hostname_ +
+      '/auth.Auth/ResetPassword',
+    request,
+    metadata || {},
+    this.methodInfoResetPassword);
+  }
+
   methodInfoRefreshToken = new grpcWeb.AbstractClientBase.MethodInfo(
     auth_pb.RefreshTokenResponse,
     (request: auth_pb.RefreshTokenRequest) => {

@@ -32,6 +32,20 @@ export namespace Problem {
   }
 }
 
+export class ProblemStreamRequest extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): ProblemStreamRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: ProblemStreamRequest): ProblemStreamRequest.AsObject;
+  static serializeBinaryToWriter(message: ProblemStreamRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ProblemStreamRequest;
+  static deserializeBinaryFromReader(message: ProblemStreamRequest, reader: jspb.BinaryReader): ProblemStreamRequest;
+}
+
+export namespace ProblemStreamRequest {
+  export type AsObject = {
+  }
+}
+
 export class ProblemStream extends jspb.Message {
   getType(): ProblemStream.Type;
   setType(value: ProblemStream.Type): ProblemStream;
@@ -168,6 +182,11 @@ export namespace ProblemStream {
 
 
   export class Create extends jspb.Message {
+    getProblem(): Problem | undefined;
+    setProblem(value?: Problem): Create;
+    hasProblem(): boolean;
+    clearProblem(): Create;
+
     getAt(): number;
     setAt(value: number): Create;
 
@@ -181,6 +200,7 @@ export namespace ProblemStream {
 
   export namespace Create {
     export type AsObject = {
+      problem?: Problem.AsObject,
       at: number,
     }
   }

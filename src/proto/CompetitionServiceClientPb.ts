@@ -38,14 +38,14 @@ export class CompetitionClient {
 
   methodInfoGetProblems = new grpcWeb.AbstractClientBase.MethodInfo(
     shared_pb.ProblemStream,
-    (request: competition_pb.GetProblemsRequest) => {
+    (request: shared_pb.ProblemStreamRequest) => {
       return request.serializeBinary();
     },
     shared_pb.ProblemStream.deserializeBinary
   );
 
   getProblems(
-    request: competition_pb.GetProblemsRequest,
+    request: shared_pb.ProblemStreamRequest,
     metadata?: grpcWeb.Metadata) {
     return this.client_.serverStreaming(
       this.hostname_ +
