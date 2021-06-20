@@ -1,14 +1,17 @@
 .textarea {
-  border: 1px solid #e5e7eb;
+  --border-color: #e5e7eb;
+
   padding: .8rem 1.2rem;
   border-radius: 0.6rem;
   display: inline-block;
   background: none;
   color: var(--text-color);
+  border: 1px solid var(--border-color);
 
   &:focus {
-    border-color: var(--primary);
-    outline: 1px solid var(--primary);
+    --border-color: var(--primary);
+    box-shadow: 0 0 0 1px var(--border-color);
+    outline: 0;
   }
 
   &.block {
@@ -17,7 +20,6 @@
   }
 
   &.error {
-    border-color: var(--red);
-    outline-color: var(--red);
+    --border-color: var(--red);
   }
 }
