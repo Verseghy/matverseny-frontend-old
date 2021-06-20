@@ -85,7 +85,7 @@ const LoginPage: React.VFC = () => {
               <Link to="/forgot-password" className={styles.forgot}>Elfelejtetted a jelszavad?</Link>
               <div className={styles.controls}>
                 <Button block to="/register">Regisztráció</Button>
-                <Button className={styles.button} primary disabled={isSubmitting} type="submit">Bejelentkezés</Button>
+                <Button className={styles.button} kind="primary" disabled={isSubmitting} type="submit">Bejelentkezés</Button>
               </div>
             </Form>
           )}

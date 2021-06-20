@@ -1,31 +1,36 @@
 import React, { useContext } from 'react'
 import Button from '../components/button'
 import { AuthContext } from '../context/auth'
-import { useProblems } from '../hooks/problems'
-import { AdminClient } from '../proto/AdminServiceClientPb'
 import { CreateRequest } from '../proto/admin_pb'
-import ProblemCard from '../components/problem'
+import ProblemCard from '../components/problem-card'
 import styles from '../styles/admin.module.scss'
+import { AdminContext, AdminProvider } from '../context/admin'
 
-const service = new AdminClient('http://localhost:8080', null, null)
+const InnerAdminPage: React.VFC = () => {
+  const {service, data} = useContext(AdminContext)!
+  const {getAccessToken} = useContext(AuthContext)
 
-const AdminPage: React.VFC = () => {
-  const { getAccessToken } = useContext(AuthContext)
-  const data = useProblems(service)
-
-  const newProblem = async (at: number) => {
-    service.createProblem(new CreateRequest().setAt(at), {
+  const newProblem = async () => {
+    service.createProblem(new CreateRequest().setAt(data.length + 1), {
       'Authorization': `Bearer: ${await getAccessToken()}`
     })
   }
-  
+
   return (
     <div className={styles.container}>
-      <Button primary onClick={async () => newProblem(1)}>Add problem</Button>
+      <Button kind="primary" onClick={async () => newProblem()}>Új</Button>
       {data.map((problem) => (
-        <ProblemCard key={problem.id} problem={problem} className={styles.card} />
+        <ProblemCard key={problem.id} problem={problem} className={styles.card} admin />
       ))}
     </div>
+  )
+}
+
+const AdminPage: React.VFC = () => {
+  return (
+    <AdminProvider>
+      <InnerAdminPage />
+    </AdminProvider>
   )
 }
 

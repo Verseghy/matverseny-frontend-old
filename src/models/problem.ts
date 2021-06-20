@@ -3,5 +3,6 @@ export interface Problem {
   position: number,
   body: string,
   image: string,
+  solution: string,
 }
 

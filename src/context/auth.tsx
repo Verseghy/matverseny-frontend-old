@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { AuthClient } from '../proto/AuthServiceClientPb'
 import jwt_decode from 'jwt-decode'
 import { RefreshTokenRequest } from '../proto/auth_pb'
@@ -59,7 +59,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     return NextPage.TEAMS
   }
 
-  const getAccessToken = async (): Promise<string> => {
+  const getAccessToken = useCallback(async (): Promise<string> => {
     if (!refreshToken) return ''
 
     if (new Date(exp - 5 * 60000) < new Date()) {
@@ -69,7 +69,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     }
 
     return accessToken
-  }
+  }, [refreshToken, service])
 
   const getClaims = async () => {
     const claims: JWTClaims = jwt_decode(await getAccessToken())

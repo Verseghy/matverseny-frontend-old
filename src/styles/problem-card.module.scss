@@ -1,0 +1,21 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.2rem;
+
+  .title {
+    font-size: 1.6rem;
+    font-family: 'Inter';
+    font-weight: 900;
+  }
+
+  .buttons {
+    display: flex;
+    gap: 10px;
+  }
+}
+
+.problemText {
+  margin-bottom: 1.2rem;
+}

@@ -43,7 +43,7 @@ const ForgotPasswordPage: React.VFC = () => {
                 </ErrorMessage>
               </div>
               <div className={styles.controls}>
-                <Button className={styles.button} primary disabled={isSubmitting} type="submit">Küldés</Button>
+                <Button className={styles.button} kind="primary" disabled={isSubmitting} type="submit">Küldés</Button>
               </div>
             </Form>
           )}

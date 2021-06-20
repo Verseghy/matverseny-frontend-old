@@ -16,11 +16,8 @@
 
   &:disabled {
     cursor: auto;
-
-    &.primary {
-      color: #fff;
-      background: #000;
-    }
+    color: #fff;
+    background: #000;
   }
 
   &.block {
@@ -31,5 +28,10 @@
   &.primary {
     color: var(--text-on-primary);
     background: var(--primary);
+  }
+
+  &.danger {
+    color: var(--text-on-primary);
+    background: var(--red);
   }
 }

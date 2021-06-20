@@ -14,7 +14,7 @@ const LandingPage: React.FC = () => {
         <p> Az OLED kijelzővel rendelkező felhasználóknak ajánljuk a sötét téma használatát, mivel ez nagy mértékben csökkenti az akkumulátorhasználatot. Ez a beállítás az alább található kapcsolóval állítható. A verseny időtartama alatt bármikor ki és be kapcsolható ezen az oldalon.</p>
         <div className={styles.controls}>
           <Switch>Sötét téma</Switch>
-          <Button to="/login" primary>Tovább</Button>
+          <Button to="/login" kind="primary">Tovább</Button>
         </div>
       </Card>
     </div>
