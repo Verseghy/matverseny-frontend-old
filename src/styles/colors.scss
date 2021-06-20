@@ -1,15 +1,55 @@
 :root {
-  --primary: #16a34a;
+  --red: hsl(0, 72%, 51%);
+  --green: hsl(142, 76%, 36%);
+  --gray: hsl(220, 13%, 91%);
+  --primary: var(--green);
+
   --text-color: #000;
-  --text-on-primary: #fff;
+  --text-on-red: #fff;
+  --text-on-green: #fff;
+  --text-on-gray: #000;
+  --text-on-primary: var(--text-on-green);
+
+  --red-disabled: hsla(0, 72%, 51%, 0.25);
+  --green-disabled: hsla(142, 76%, 36%, 0.25);
+  --gray-disabled: hsla(220, 13%, 91%, 0.25);
+  --primary-disabled: var(--green-disabled);
+
+  --text-on-red-disabled: hsla(0, 100%, 100%, 0.5);
+  --text-on-green-disabled: hsla(0, 100%, 100%, 0.5);
+  --text-on-gray-disabled: hsla(0, 0%, 0%, 0.25);
+  --text-on-primary-disabled: var(--text-on-green-disabled);
+
   --background: #fff;
-  --red: #DC2626;
+  --background-card: #fff;
+
+  --card-elevation: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
 }
 
 :root:is([dark]) {
-  --primary: #4ADE80;
+  --red: hsl(0, 91%, 71%);
+  --green: hsl(142, 69%, 58%);
+  --gray: hsl(240, 5%, 34%);
+  --primary: var(--green);
+
   --text-color: #fff;
-  --text-on-primary: #000;
-  --background: #000;
-  --red: #F87171;
+  --text-on-red: #000;
+  --text-on-green: #000;
+  --text-on-gray: #fff;
+  --text-on-primary: var(--text-on-green);
+
+  --red-disabled: hsla(0, 91%, 71%, 0.25);
+  --green-disabled: hsla(142, 69%, 58%, 0.25);
+  --gray-disabled: hsla(240, 5%, 34%, 0.25);
+  --primary-disabled: var(--green-disabled);
+
+  --text-on-red-disabled: hsla(0, 0%, 0%, 0.5);
+  --text-on-green-disabled: hsla(0, 0%, 0%, 0.5);
+  --text-on-gray-disabled: hsla(0, 100%, 100%, 0.25);
+  --text-on-primary-disabled: var(--text-on-green-disabled);
+
+  --background: hsl(240, 6%, 10%);
+  --background-card: hsl(240, 4%, 16%);
+
+  --card-elevation: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
 }

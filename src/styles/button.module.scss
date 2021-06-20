@@ -4,11 +4,16 @@
   padding: 0 1.6rem;
   border-radius: 0.6rem;
   cursor: pointer;
-  background: #e5e7eb;
+  background: var(--gray);
   text-decoration: none;
-  color: var(--text-color);
+  color: var(--text-on-gray);
   display: inline-block;
   text-align: center;
+
+  &.block {
+    display: block;
+    width: 100%;
+  }
 
   &:focus {
     outline: 0.2rem solid var(--text-color);
@@ -16,22 +21,27 @@
 
   &:disabled {
     cursor: auto;
-    color: #fff;
-    background: #000;
-  }
-
-  &.block {
-    display: block;
-    width: 100%;
+    color: var(--text-on-gray-disabled);
+    background: var(--gray-disabled);
   }
 
   &.primary {
     color: var(--text-on-primary);
     background: var(--primary);
+
+    &:disabled {
+      color: var(--text-on-primary-disabled);
+      background: var(--primary-disabled);
+    }
   }
 
   &.danger {
-    color: var(--text-on-primary);
+    color: var(--text-on-red);
     background: var(--red);
+
+    &:disabled {
+      color: var(--text-on-red-disabled);
+      background: var(--red-disabled);
+    }
   }
 }
