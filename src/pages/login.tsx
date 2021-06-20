@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import Card from '../components/card'
 import Input from '../components/input'
@@ -23,8 +23,23 @@ const initialValues = { email: '', password: '' }
 
 const LoginPage: React.VFC = () => {
   const [error, setError] = useState('');
-  const {service, login} = useContext(AuthContext)
+  const {service, login, getAccessToken, getClaims} = useContext(AuthContext)
   const history = useHistory()
+
+  useEffect(() => {
+    getAccessToken().then(async (token) => {
+      if (token === '') return
+
+      const claims = await getClaims()
+      if (claims.isAdmin) {
+        history.replace('/admin')
+      } else if (claims.team === '') {
+        history.replace('/teams')
+      } else {
+        history.replace('/competition')
+      }
+    })
+  }, [])
 
   const onSubmit = async (values: typeof initialValues) => {
     let req = new LoginRequest()
