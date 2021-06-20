@@ -3,6 +3,7 @@ import styles from '../styles/landing.module.scss'
 import Button from '../components/button'
 import Switch from '../components/switch'
 import Card from '../components/card'
+import { changeTheme, isDarkTheme, Theme } from '../utils/theme'
 
 const LandingPage: React.FC = () => {
   return (
@@ -13,7 +14,9 @@ const LandingPage: React.FC = () => {
         <p> A beírt megoldások a csapattagok között automatikusan szinkronizálódnak. A megoldás akkor tekinthető beírtnak, ha a felső sorban a feladathoz tartozó négyzet zöldre vált. Kérjük a kevésbé stabil internettel rendelkezőknek, hogy különös figyelemmel legyenek erre. Ha sehogysem vált zöldre a négyzet egy megoldás megadása után, kérjük próbáld meg újratölteni az oldalt. Ha ez sem működik kérjük a csapatvezetőnek kiküldött emailben lévő csatornákon vegyék fel a szerverzőkkel a kapcsolatot.</p>
         <p> Az OLED kijelzővel rendelkező felhasználóknak ajánljuk a sötét téma használatát, mivel ez nagy mértékben csökkenti az akkumulátorhasználatot. Ez a beállítás az alább található kapcsolóval állítható. A verseny időtartama alatt bármikor ki és be kapcsolható ezen az oldalon.</p>
         <div className={styles.controls}>
-          <Switch>Sötét téma</Switch>
+          <Switch value={isDarkTheme()} onClick={(value: boolean) => {
+            changeTheme(value ? Theme.DARK : Theme.LIGHT)
+          }}>Sötét téma</Switch>
           <Button to="/login" kind="primary">Tovább</Button>
         </div>
       </Card>

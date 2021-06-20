@@ -2,6 +2,7 @@ import React, { Suspense } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { AuthProvider } from './context/auth'
 import PrivateRoute, { Claims } from './components/private-route'
+import { changeTheme, isDarkTheme, Theme } from './utils/theme'
 
 const LandingPage = React.lazy(() => import('./pages/landing'))
 const LoginPage = React.lazy(() => import('./pages/login'))
@@ -10,6 +11,8 @@ const ForgotPasswordPage = React.lazy(() => import('./pages/forgot-password'))
 const AdminPage = React.lazy(() => import('./pages/admin'))
 
 const App: React.FC = () => {
+  changeTheme(isDarkTheme() ? Theme.DARK : Theme.LIGHT)
+
   return (
     <AuthProvider>
       <main>
