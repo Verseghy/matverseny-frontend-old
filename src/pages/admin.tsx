@@ -33,9 +33,9 @@ const InnerAdminPage: React.VFC = () => {
 
   const updateProblem = useCallback(async (problem: Problem) => {
     const problemPB = new ProblemPB()
-      .setId(problem.id!)
-      .setBody(problem.body!)
-      .setImage(problem.image!)
+      .setId(problem.id)
+      .setBody(problem.body)
+      .setImage(problem.image)
     
     if (problem.solution !== '') {
       const value = Number(problem.solution)

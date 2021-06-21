@@ -4,12 +4,12 @@ import Textarea from '../components/textarea'
 import Button from '../components/button'
 import Input from '../components/input'
 import styles from '../styles/problem-card.module.scss'
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import { useFormatedProblem } from '../hooks/formatted-problem'
 import { useNotFirstEffect } from '../hooks/not-first-effect'
 import { useDebounce } from '../hooks/debounce'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowDown, faArrowUp, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faArrowDown, faArrowUp, faImages, faTrash } from '@fortawesome/free-solid-svg-icons'
 
 export interface ProblemCardProps extends CardProps {
   problem: Problem,
@@ -38,7 +38,9 @@ const ProblemCard: React.VFC<ProblemCardProps> = ({
 }) => {
   const [problemText, setProblemText] = useState(problem.body)
   const [problemSolution, setProblemSolution] = useState(admin ? problem.solution : solutions![problem.id] ?? '')
+  const [image, setImage] = useState(problem.image)
   const [update, setUpdate] = useState(false)
+  const uploadElement = useRef<HTMLInputElement>(null)
 
   const formattedProblemText = useFormatedProblem(problemText)
   const debouncedText = useDebounce(problemText, 1000)
@@ -55,21 +57,33 @@ const ProblemCard: React.VFC<ProblemCardProps> = ({
   useEffect(() => {
     setUpdate(false)
     setProblemText(problem.body)
+    setImage(problem.image)
     if (admin) setProblemSolution(problem.solution)
-  }, [problem.body, problem.solution])
+  }, [problem.body, problem.solution, problem.image])
 
   useNotFirstEffect(() => {
     if (!onUpdate || !update) return
+    console.log('change')
     onUpdate({
       ...problem,
       body: debouncedText,
+      image,
       solution: debouncedSolution,
     })
-  }, [debouncedText, debouncedSolution, onUpdate])
+  }, [debouncedText, debouncedSolution, image, onUpdate])
 
   const swapProblem = (swap: Swap) => {
     if (!onSwap) return
     onSwap(problem.position, problem.position + (swap === Swap.UP ? -1 : 1))
+  }
+
+  const uploadImage = () => {
+    const reader = new FileReader()
+    reader.onload = () => {
+      setUpdate(true)
+      setImage(reader.result!.toString())
+    }
+    reader.readAsDataURL(uploadElement.current!.files![0])
   }
 
   return (
@@ -78,6 +92,18 @@ const ProblemCard: React.VFC<ProblemCardProps> = ({
         <h1 className={styles.title}>{problem.position}. feladat</h1>
         {!!admin && (
           <div className={styles.buttons}>
+            {problem.image === ''
+            ? (
+              <Button kind="primary" label>
+                  <input ref={uploadElement} onChange={uploadImage} hidden type="file" />
+                  <FontAwesomeIcon icon={faImages} />
+              </Button>
+            )
+            : (
+              <Button kind="danger" onClick={() => { setUpdate(true); setImage('') }}>
+                Kép törlése
+              </Button>
+            )}
             <Button onClick={() => { swapProblem(Swap.UP) }} disabled={first}>
               <FontAwesomeIcon icon={faArrowUp} />
             </Button>
@@ -91,7 +117,7 @@ const ProblemCard: React.VFC<ProblemCardProps> = ({
         )}
       </div>
       <p dangerouslySetInnerHTML={{__html: formattedProblemText}} />
-      <img src={problem.image} alt="" />
+      <img className={styles.image} src={problem.image} alt="" />
       {!!admin && (
         <Fragment>
           <Textarea block rows={5} value={problemText} className={styles.problemText} onInput={(event) => {
