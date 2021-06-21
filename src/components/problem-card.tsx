@@ -127,7 +127,7 @@ const ProblemCard: React.VFC<ProblemCardProps> = ({
           <span>Megoldás</span>
         </Fragment>
       )}
-      <Input block error={isNaN(Number(problem.solution))} inputMode="numeric" value={problemSolution ?? ''} onInput={(event) => {
+      <Input block error={isNaN(Number(problemSolution))} inputMode="numeric" value={problemSolution ?? ''} onInput={(event) => {
         setUpdate(true)
         setProblemSolution((event.target as HTMLInputElement).value)
       }} />
