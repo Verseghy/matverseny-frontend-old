@@ -1,6 +1,5 @@
 import { ClientReadableStream } from 'grpc-web'
 import { useCallback, useContext, useEffect, useRef, useState } from 'react'
-import { SetUpdateFn } from '../context/admin'
 import { AuthContext } from '../context/auth'
 import { Problem } from '../models/problem'
 import { AdminClient } from '../proto/AdminServiceClientPb'
@@ -9,19 +8,9 @@ import { CompetitionClient } from '../proto/CompetitionServiceClientPb'
 import { ProblemStream } from '../proto/shared_pb'
 
 export type SetProblemFn = (id: string, problem: Partial<Problem>) => void
-export type FindProblemFn = (problem: Partial<Problem>) => Problem | undefined
+export type FindProblemFn = (pos: number) => Problem | undefined
 
-const eqProblem = (p1: Problem, p2: Partial<Problem>): boolean => {
-  const keys = Object.keys(p2) as (keyof Problem)[]
-
-  for (const key of keys) {
-    if (p1[key] !== p2[key]) return false
-  }
-  
-  return true
-}
-
-export const useProblems = <T extends AdminClient | CompetitionClient>(service: T, setUpdate: SetUpdateFn): [Problem[], SetProblemFn, FindProblemFn] => {
+export const useProblems = <T extends AdminClient | CompetitionClient>(service: T): [Problem[], SetProblemFn, FindProblemFn] => {
   const [problems, setProblems] = useState<{[key: string]: Problem}>({})
   const stream = useRef<ClientReadableStream<ProblemStream> | null>(null)
   const { getAccessToken } = useContext(AuthContext)
@@ -37,9 +26,9 @@ export const useProblems = <T extends AdminClient | CompetitionClient>(service: 
   }, [])
 
 
-  const findProblem = useCallback((problem: Partial<Problem>): Problem | undefined => {
-    return Object.values(problems).find((value) => {
-      return eqProblem(value, problem)
+  const findProblemFromPos = useCallback((pos: number): Problem | undefined => {
+    return Object.values(problems).find((problem) => {
+      return problem.position === pos
     })
   }, [problems])
 
@@ -54,7 +43,6 @@ export const useProblems = <T extends AdminClient | CompetitionClient>(service: 
         const initial = p.getInitial()!
         const problem = initial.getProblem()!
 
-        setUpdate(false)
         setProblems((state) => ({
           ...state,
           [problem.getId()]: {
@@ -70,7 +58,6 @@ export const useProblems = <T extends AdminClient | CompetitionClient>(service: 
         const problem = update.getProblem()!
         const id = problem.getId()!
 
-        setUpdate(false)
         updateProblem(id, {
           id: problem.getId(),
           body: problem.getBody(),
@@ -81,7 +68,6 @@ export const useProblems = <T extends AdminClient | CompetitionClient>(service: 
         const del = p.getDelete()!
         const id = del.getId()
 
-        setUpdate(false)
         setProblems((state) => {
           const position = state[id].position
 
@@ -114,7 +100,6 @@ export const useProblems = <T extends AdminClient | CompetitionClient>(service: 
         const at = create.getAt()
         const id = create.getProblem()!.getId();
 
-        setUpdate(false)
         setProblems((state) => {
           let mapped = Object.entries(state).map(([key, value]) => {
             if (value.position >= at) {
@@ -148,5 +133,5 @@ export const useProblems = <T extends AdminClient | CompetitionClient>(service: 
     stream.current = s
   })()}, [service, getAccessToken])
 
-  return [Object.values(problems).sort((a, b) => a.position - b.position), updateProblem, findProblem]
+  return [Object.values(problems).sort((a, b) => a.position - b.position), updateProblem, findProblemFromPos]
 }
