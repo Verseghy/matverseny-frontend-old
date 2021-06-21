@@ -68,17 +68,19 @@ export const AuthProvider: React.FC = ({ children }) => {
   const getAccessToken = useCallback(async (): Promise<string> => {
     if (!refreshToken) return ''
 
-    if (new Date(exp - 5 * 60000) < new Date()) {
+    if (exp - 5 * 60 < new Date().getTime() / 1000) {
       const res = await service.refreshToken(new RefreshTokenRequest().setToken(refreshToken), null)
       setAccessToken(res.getToken())
       return res.getToken()
     }
 
     return accessToken
-  }, [refreshToken, service])
+  }, [refreshToken, service, exp])
 
   const getClaims = async () => {
     const claims: JWTClaims = jwt_decode(await getAccessToken())
+
+    setExp(claims.exp)
 
     return {
       isAdmin: claims.is_admin,

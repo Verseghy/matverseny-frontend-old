@@ -122,9 +122,14 @@ export const useProblems = <T extends AdminClient | CompetitionClient>(service: 
         const b = swap.getB()!
 
         setProblems((state) => {
-          let s = Object.assign({}, state) as {[key: string]: Problem}
-          [s[a].position, s[b].position] = [s[b].position, s[a].position]
-          return s
+          let problemA = {...state[a]}
+          let problemB = {...state[b]}
+          ;[problemA.position, problemB.position] = [problemB.position, problemA.position]
+          return {
+            ...state,
+            [a]: problemA,
+            [b]: problemB,
+          }
         })
       } else if (type === ProblemStream.Type.K_CREATE) {
         const create = p.getCreate()!
