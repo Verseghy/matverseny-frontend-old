@@ -35,6 +35,7 @@ export const def = {
     team: '',
   }),
   login: (_aToken: string, _rToken: string): NextPage => NextPage.LOGIN,
+  logout: () => {},
 }
 
 export const AuthContext = React.createContext(def)
@@ -57,6 +58,11 @@ export const AuthProvider: React.FC = ({ children }) => {
     if (claims.is_admin) return NextPage.ADMIN
     if (claims.team) return NextPage.COMPETITION
     return NextPage.TEAMS
+  }
+
+  const logout = () => {
+    setRefreshToken('')
+    localStorage.removeItem('refreshToken')
   }
 
   const getAccessToken = useCallback(async (): Promise<string> => {
@@ -86,6 +92,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     getAccessToken,
     getClaims,
     login,
+    logout,
   }
 
   return (

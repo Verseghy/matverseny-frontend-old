@@ -14,6 +14,7 @@ import { faArrowDown, faArrowUp, faTrash } from '@fortawesome/free-solid-svg-ico
 export interface ProblemCardProps extends CardProps {
   problem: Problem,
   admin?: boolean,
+  solutions?: {[key: string]: string},
   totalItems: number,
   onDelete?: (id: string) => void,
   onUpdate?: (problem: Problem) => void,
@@ -28,6 +29,7 @@ enum Swap {
 const ProblemCard: React.VFC<ProblemCardProps> = ({
   problem,
   admin,
+  solutions,
   totalItems,
   onDelete,
   onUpdate,
@@ -35,7 +37,7 @@ const ProblemCard: React.VFC<ProblemCardProps> = ({
   ...rest
 }) => {
   const [problemText, setProblemText] = useState(problem.body)
-  const [problemSolution, setProblemSolution] = useState(problem.solution)
+  const [problemSolution, setProblemSolution] = useState(admin ? problem.solution : solutions![problem.id] ?? '')
   const [update, setUpdate] = useState(false)
 
   const formattedProblemText = useFormatedProblem(problemText)
@@ -46,9 +48,14 @@ const ProblemCard: React.VFC<ProblemCardProps> = ({
   const last = problem.position === totalItems
 
   useEffect(() => {
+    if (!solutions || admin) return
+    setProblemSolution(solutions[problem.id] ?? '')
+  }, [solutions])
+
+  useEffect(() => {
     setUpdate(false)
     setProblemText(problem.body)
-    setProblemSolution(problem.solution)
+    if (admin) setProblemSolution(problem.solution)
   }, [problem.body, problem.solution])
 
   useNotFirstEffect(() => {

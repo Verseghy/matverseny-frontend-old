@@ -5,14 +5,22 @@ import { Problem } from '../models/problem'
 import { AdminClient } from '../proto/AdminServiceClientPb'
 import { ReadRequest } from '../proto/admin_pb'
 import { CompetitionClient } from '../proto/CompetitionServiceClientPb'
+import { GetSolutionsRequest, GetSolutionsResponse } from '../proto/competition_pb'
 import { ProblemStream } from '../proto/shared_pb'
 
 export type SetProblemFn = (id: string, problem: Partial<Problem>) => void
 export type FindProblemFn = (pos: number) => Problem | undefined
 
-export const useProblems = <T extends AdminClient | CompetitionClient>(service: T): [Problem[], SetProblemFn, FindProblemFn] => {
+export const useProblems = <T extends AdminClient | CompetitionClient>(service: T): [
+  Problem[],
+  SetProblemFn,
+  FindProblemFn,
+  {[key: string]: string},
+] => {
   const [problems, setProblems] = useState<{[key: string]: Problem}>({})
+  const [solutions, setSolutions] = useState<{[key: string]: string}>({})
   const stream = useRef<ClientReadableStream<ProblemStream> | null>(null)
+  const solutionsStream = useRef<ClientReadableStream<GetSolutionsResponse> | null>(null)
   const { getAccessToken } = useContext(AuthContext)
 
   const updateProblem = useCallback((id: string, problem: Partial<Problem>) => {
@@ -25,12 +33,35 @@ export const useProblems = <T extends AdminClient | CompetitionClient>(service: 
     }))
   }, [])
 
-
   const findProblemFromPos = useCallback((pos: number): Problem | undefined => {
     return Object.values(problems).find((problem) => {
       return problem.position === pos
     })
   }, [problems])
+
+  useEffect(() => { (async () => {
+    if (!(service instanceof CompetitionClient)) return
+
+    const stream = service.getSolutions(new GetSolutionsRequest(), {
+      Authorization: `Bearer: ${await getAccessToken()}`
+    }) as ClientReadableStream<GetSolutionsResponse>
+
+    stream.on('data', (res: GetSolutionsResponse) => {
+      if (res.getType()! === GetSolutionsResponse.Modification.K_CHANGE) {
+        setSolutions((state) => ({
+          ...state,
+          [res.getId()!]: res.getValue()!.toString(),
+        }))
+        return
+      }
+      setSolutions((state) => ({
+        ...state,
+        [res.getId()!]: '',
+      }))
+    })
+
+    solutionsStream.current = stream
+  })()}, [service])
 
   useEffect(() => { (async () => {
     const s = service.getProblems(new ReadRequest(), {
@@ -133,5 +164,10 @@ export const useProblems = <T extends AdminClient | CompetitionClient>(service: 
     stream.current = s
   })()}, [service, getAccessToken])
 
-  return [Object.values(problems).sort((a, b) => a.position - b.position), updateProblem, findProblemFromPos]
+  return [
+    Object.values(problems).sort((a, b) => a.position - b.position),
+    updateProblem,
+    findProblemFromPos,
+    solutions,
+  ]
 }
