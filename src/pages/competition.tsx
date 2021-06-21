@@ -42,7 +42,11 @@ const CompetitionPageInner: React.VFC = () => {
         <PaginatorControls />
         <div className={styles.buttonsContainer}>
           {pageData.map((problem) => (
-            <Button kind={solutions[problem.id] ? 'primary' : undefined} key={problem.id}>{problem.position}</Button>
+            <Button
+              className={styles.problemButton}
+              kind={solutions[problem.id] ? 'primary' : undefined}
+              key={problem.id}
+            >{problem.position}</Button>
           ))}
         </div>
         {pageData.map((problem) => (
