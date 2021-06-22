@@ -116,8 +116,8 @@ const ProblemCard: React.VFC<ProblemCardProps> = ({
           </div>
         )}
       </div>
-      <p dangerouslySetInnerHTML={{__html: formattedProblemText}} />
-      <img className={styles.image} src={problem.image} alt="" />
+      <p className={styles.problem} dangerouslySetInnerHTML={{__html: formattedProblemText}} />
+      {!!problem.image && <img className={styles.image} src={problem.image} alt="" />}
       {!!admin && (
         <Fragment>
           <Textarea block rows={5} value={problemText} className={styles.problemText} onInput={(event) => {
