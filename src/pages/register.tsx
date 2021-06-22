@@ -41,7 +41,7 @@ const initialValues = {
 
 const RegisterPage: React.VFC = () => {
   const [error, setError] = useState('')
-  const {service, login} = useContext(AuthContext)
+  const {service, login} = useContext(AuthContext)!
   const history = useHistory()
 
   const onSubmit = async (values: typeof initialValues) => {

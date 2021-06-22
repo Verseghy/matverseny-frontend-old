@@ -26,19 +26,16 @@ const service = new AuthClient('http://localhost:8080', null, null)
 
 enableDevTools([service])
 
-export const def = {
-  service,
-  refreshToken: '',
-  getAccessToken: async () => '',
-  getClaims: async () => ({
-    isAdmin: false,
-    team: '',
-  }),
-  login: (_aToken: string, _rToken: string): NextPage => NextPage.LOGIN,
-  logout: () => {},
+export interface AuthContextType {
+  service: AuthClient,
+  refreshToken: string,
+  getAccessToken: () => Promise<string>,
+  getClaims: () => Promise<Claims | null>,
+  login: (accessToken: string, refreshToken: string) => NextPage,
+  logout: () => void,
 }
 
-export const AuthContext = React.createContext(def)
+export const AuthContext = React.createContext<AuthContextType | null>(null)
 
 export const AuthProvider: React.FC = ({ children }) => {
   const [refreshToken, setRefreshToken] = useState(localStorage.getItem('refreshToken') ?? '');
@@ -77,7 +74,9 @@ export const AuthProvider: React.FC = ({ children }) => {
     return accessToken
   }, [refreshToken, service, exp])
 
-  const getClaims = async () => {
+  const getClaims = async (): Promise<Claims | null> => {
+    if (refreshToken === '') return null
+
     const claims: JWTClaims = jwt_decode(await getAccessToken())
 
     setExp(claims.exp)

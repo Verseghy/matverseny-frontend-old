@@ -21,7 +21,7 @@ export const useProblems = <T extends AdminClient | CompetitionClient>(service: 
   const [solutions, setSolutions] = useState<{[key: string]: string}>({})
   const stream = useRef<ClientReadableStream<ProblemStream> | null>(null)
   const solutionsStream = useRef<ClientReadableStream<GetSolutionsResponse> | null>(null)
-  const { getAccessToken } = useContext(AuthContext)
+  const { getAccessToken } = useContext(AuthContext)!
 
   const updateProblem = useCallback((id: string, problem: Partial<Problem>) => {
     setProblems((state) => ({

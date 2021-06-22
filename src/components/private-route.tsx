@@ -1,37 +1,33 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { Route, Redirect } from 'react-router-dom'
-import { AuthContext } from '../context/auth'
-
-export enum Claims {
-  ADMIN,
-  HAS_TEAM,
-  NO_TEAM,
-}
+import React, { useEffect, useState } from "react"
+import { Redirect, Route } from "react-router-dom"
+import { Guard, GuardHook, InvalidGuard } from "../models/guard"
 
 export interface PrivateRouteProps {
   path: string,
   component: React.ComponentType<any>,
-  claims: Claims,
+  guard: GuardHook,
 }
 
-const redirect = <Redirect to="/login" />
-
-const PrivateRoute: React.VFC<PrivateRouteProps> = ({ path, component, claims }) => {
-  const [comp, setComp] = useState<typeof redirect | null>(null)
-  const { getClaims, refreshToken } = useContext(AuthContext)
+const PrivateRoute: React.VFC<PrivateRouteProps> = ({ path, component: Component, guard }) => {
+  const [loaded, setLoaded] = useState(false)
+  const [finalGuard, setFinalGuard] = useState<Guard>()
+  const guardHook = guard()
 
   useEffect(() => {
-    getClaims().then((ctxClaims) => {
-      if (claims === Claims.ADMIN && !ctxClaims.isAdmin) { setComp(redirect) }
-      else if (claims === Claims.HAS_TEAM && ctxClaims.team === '') { setComp(redirect) }
-      else if (claims === Claims.NO_TEAM && ctxClaims.team !== '') { setComp(redirect) }
-      else setComp(<Route path={path} component={component} />)
+    guardHook.then((g) => {
+      setFinalGuard(g)
+      setLoaded(true)
     })
-  }, [getClaims])
+  },[guard])
 
-  if (!refreshToken) return redirect
+  return <Route path={path} render={() => {
+    if (!loaded) return null
 
-  return comp
+    if (finalGuard!.valid) {
+      return <Component />
+    }
+    return <Redirect to={(finalGuard as InvalidGuard).redirect} />
+  }}/>
 }
 
 export default PrivateRoute 

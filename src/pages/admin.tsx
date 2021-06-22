@@ -11,7 +11,7 @@ import { Problem as ProblemPB } from '../proto/shared_pb'
 
 const InnerAdminPage: React.VFC = () => {
   const {service, findProblemFromPos, data} = useContext(AdminContext)!
-  const {getAccessToken} = useContext(AuthContext)
+  const {getAccessToken} = useContext(AuthContext)!
   const [activePage, setActivePage] = useState(1)
 
   const pageSize = 10

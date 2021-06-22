@@ -15,7 +15,7 @@ const validationSchema = Yup.object().shape({
 const initialValues = { email: '' }
 
 const ForgotPasswordPage: React.VFC = () => {
-  const { service } = React.useContext(AuthContext)
+  const { service } = React.useContext(AuthContext)!
 
   const onSubmit = async (values: typeof initialValues) => {
     let req = new ForgotPasswordRequest()
