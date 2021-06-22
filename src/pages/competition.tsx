@@ -1,4 +1,5 @@
 import React, { useCallback, useContext, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import Button from '../components/button'
 import { Paginator, PaginatorControls } from '../components/paginator'
 import ProblemCard from '../components/problem-card'
@@ -12,6 +13,7 @@ const CompetitionPageInner: React.VFC = () => {
   const {service, data, solutions} = useContext(CompetitionContext)!
   const {getAccessToken, logout} = useContext(AuthContext)!
   const [activePage, setActivePage] = useState(1)
+  const history = useHistory()
   const pageSize = 10
 
   const pageData = data.slice((activePage - 1) * pageSize, activePage * pageSize)
@@ -30,10 +32,15 @@ const CompetitionPageInner: React.VFC = () => {
     })
   }, [getAccessToken])
 
+  const onLogout = () => {
+    logout()
+    history.push('/login')
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.logoutContainer}>
-        <Button onClick={logout} className={styles.logout}>Kijelentkezés</Button>
+        <Button onClick={onLogout} className={styles.logout}>Kijelentkezés</Button>
       </div>
       <Paginator totalItems={data.length} pageSize={pageSize} onPageSwitch={(page: number) => {
         setActivePage(page)
