@@ -5,27 +5,39 @@ import { Guard, GuardHook, InvalidGuard } from "../models/guard"
 export interface PrivateRouteProps {
   path: string,
   component: React.ComponentType<any>,
-  guard: GuardHook,
+  guards: GuardHook[],
 }
 
-const PrivateRoute: React.VFC<PrivateRouteProps> = ({ path, component: Component, guard }) => {
+const PrivateRoute: React.VFC<PrivateRouteProps> = ({ path, component: Component, guards }) => {
   const [loaded, setLoaded] = useState(false)
   const [finalGuard, setFinalGuard] = useState<Guard>()
-  const guardHook = guard()
+  const guardHooks = guards.map((g) => g())
 
   useEffect(() => {
-    guardHook.then((g) => {
-      setFinalGuard(g)
+    const checkGuards = async () => {
+      for (const guard of guardHooks) {
+        const result = await guard
+
+        if (result.valid === false) {
+          setFinalGuard(result)
+          setLoaded(true)
+          return
+        }
+      }
+
+      setFinalGuard(await guardHooks[guardHooks.length - 1])
       setLoaded(true)
-    })
-  },[guard])
+    }
+
+    checkGuards()
+  },[guards])
 
   return <Route path={path} render={() => {
     if (!loaded) return null
 
-    if (finalGuard!.valid) {
+    if (finalGuard!.valid)
       return <Component />
-    }
+
     return <Redirect to={(finalGuard as InvalidGuard).redirect} />
   }}/>
 }

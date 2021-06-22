@@ -24,11 +24,11 @@ const App: React.FC = () => {
           <Suspense fallback={<p>Loading...</p>}>
             <Switch>
               <Route path='/' exact component={LandingPage} />
-              <PrivateRoute path='/login' component={LoginPage} guard={useLoginGuard} />
+              <PrivateRoute path='/login' component={LoginPage} guards={[useLoginGuard]} />
               <Route path='/register' component={RegisterPage} />
               <Route path='/forgot-password' component={ForgotPasswordPage} />
-              <PrivateRoute path='/admin' component={AdminPage} guard={useAdminGuard} />
-              <PrivateRoute path='/competition' component={CompetitionPage} guard={useAuthGuard} />
+              <PrivateRoute path='/admin' component={AdminPage} guards={[useAdminGuard]} />
+              <PrivateRoute path='/competition' component={CompetitionPage} guards={[useAuthGuard]} />
               <Redirect to="/" />
             </Switch>
           </Suspense>
