@@ -5,6 +5,7 @@ import { Paginator, PaginatorControls } from '../components/paginator'
 import ProblemCard from '../components/problem-card'
 import { AuthContext } from '../context/auth'
 import { CompetitionContext, CompetitionProvider } from '../context/competition'
+import { TimeContext } from '../context/time'
 import { Problem } from '../models/problem'
 import { SetSolutionsRequest } from '../proto/competition_pb'
 import styles from '../styles/competition.module.scss'
@@ -13,6 +14,7 @@ const CompetitionPageInner: React.VFC = () => {
   const {service, data, solutions} = useContext(CompetitionContext)!
   const {getAccessToken, logout} = useContext(AuthContext)!
   const [activePage, setActivePage] = useState(1)
+  const {time} = useContext(TimeContext)!
   const history = useHistory()
   const pageSize = 10
 
@@ -40,7 +42,9 @@ const CompetitionPageInner: React.VFC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.logoutContainer}>
-        <Button onClick={onLogout} className={styles.logout}>Kijelentkezés</Button>
+        <Button className={styles.button}>Csapat</Button>
+        <span className={styles.timer}>{time}</span>
+        <Button onClick={onLogout} className={styles.button}>Kijelentkezés</Button>
       </div>
       <Paginator totalItems={data.length} pageSize={pageSize} onPageSwitch={(page: number) => {
         setActivePage(page)

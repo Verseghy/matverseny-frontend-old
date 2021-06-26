@@ -19,10 +19,16 @@
 
   .logoutContainer {
     display: flex;
-    justify-content: right;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 0 2rem;
 
-    .logout {
-      margin: 0 0 2rem;
+    .timer {
+      font-size: 3.6rem;
+    }
+
+    .button {
+      width: 120px;
     }
   }
 }
