@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import Card from '../components/card'
 import Input from '../components/input'
 import Button from '../components/button'
@@ -8,8 +8,9 @@ import styles from '../styles/login.module.scss'
 import { Formik, Form, Field, FieldProps, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import { LoginRequest } from '../proto/auth_pb'
-import { AuthContext, NextPage } from '../context/auth'
 import { Error } from 'grpc-web'
+import { useSetRecoilState } from 'recoil'
+import { authService, authTokens } from '../state/auth'
 
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -23,8 +24,7 @@ const initialValues = { email: '', password: '' }
 
 const LoginPage: React.VFC = () => {
   const [error, setError] = useState('');
-  const {service, login} = useContext(AuthContext)!
-  const history = useHistory()
+  const setTokens = useSetRecoilState(authTokens)
 
   const onSubmit = async (values: typeof initialValues) => {
     let req = new LoginRequest()
@@ -32,18 +32,22 @@ const LoginPage: React.VFC = () => {
       .setPassword(values.password)
     
     try {
-      const res = await service.login(req, null)
-      const aToken = res.getAccessToken()
-      const rToken = res.getRefreshToken()
-      const nextPage = login(aToken, rToken)
+      const res = await authService.login(req, null)
+      setTokens({
+        refreshToken: res.getRefreshToken()!,
+        accessToken: res.getAccessToken()!,
+      })
+      // TODO: move this code
+      localStorage.setItem('refreshToken', res.getRefreshToken())
 
-      if (nextPage === NextPage.ADMIN) {
-        history.push('/admin')
-      } else if (nextPage === NextPage.COMPETITION) {
-        history.push('/competition')
-      } else {
-        history.push('/teams')
-      }
+      // TODO: implement page switching after login
+      // if (nextPage === NextPage.ADMIN) {
+      //   history.push('/admin')
+      // } else if (nextPage === NextPage.COMPETITION) {
+      //   history.push('/competition')
+      // } else {
+      //   history.push('/teams')
+      // }
     } catch (error: any) {
       const e = error as Error
       setError(e.message)

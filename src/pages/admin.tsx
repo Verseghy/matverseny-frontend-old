@@ -1,6 +1,5 @@
 import React, { useCallback, useContext, useState } from 'react'
 import Button from '../components/button'
-import { AuthContext } from '../context/auth'
 import { CreateRequest, DeleteRequest, SwapRequest, UpdateRequest } from '../proto/admin_pb'
 import ProblemCard from '../components/problem-card'
 import styles from '../styles/admin.module.scss'
@@ -8,17 +7,19 @@ import { AdminContext, AdminProvider } from '../context/admin'
 import { Paginator, PaginatorControls} from '../components/paginator'
 import { Problem } from '../models/problem'
 import { Problem as ProblemPB } from '../proto/shared_pb'
+import { useRecoilValue } from 'recoil'
+import { authAccessToken } from '../state/auth'
 
 const InnerAdminPage: React.VFC = () => {
   const {service, findProblemFromPos, data} = useContext(AdminContext)!
-  const {getAccessToken} = useContext(AuthContext)!
   const [activePage, setActivePage] = useState(1)
+  const accessToken = useRecoilValue(authAccessToken)
 
   const pageSize = 10
 
   const newProblem = async () => {
     service.createProblem(new CreateRequest().setAt(data.length + 1), {
-      'Authorization': `Bearer: ${await getAccessToken()}`
+      'Authorization': `Bearer: ${accessToken}`
     })
   }
 
@@ -27,9 +28,9 @@ const InnerAdminPage: React.VFC = () => {
       .setId(id)
 
     await service.deleteProblem(req, {
-      'Authorization': `Bearer: ${await getAccessToken()}`
+      'Authorization': `Bearer: ${accessToken}`
     })
-  }, [service, getAccessToken])
+  }, [service, accessToken])
 
   const updateProblem = useCallback(async (problem: Problem) => {
     const problemPB = new ProblemPB()
@@ -48,9 +49,9 @@ const InnerAdminPage: React.VFC = () => {
       .setProblem(problemPB)
     
     await service.updateProblem(req, {
-      'Authorization': `Bearer: ${await getAccessToken()}`
+      'Authorization': `Bearer: ${accessToken}`
     })
-  }, [service, getAccessToken])
+  }, [service, accessToken])
 
   const swapProblem = useCallback(async (posA: number, posB: number) => {
     const problemA = findProblemFromPos(posA)
@@ -63,9 +64,9 @@ const InnerAdminPage: React.VFC = () => {
       .setB(problemB.id)
 
     await service.swapProblem(req, {
-      'Authorization': `Bearer: ${await getAccessToken()}`
+      'Authorization': `Bearer: ${accessToken}`
     })
-  }, [service, getAccessToken, findProblemFromPos])
+  }, [service, accessToken, findProblemFromPos])
 
   return (
     <div className={styles.container}>

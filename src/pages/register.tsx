@@ -7,8 +7,9 @@ import Message from '../components/error-message'
 import styles from '../styles/register.module.scss'
 import { Formik, Form, Field, FieldProps, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
-import { AuthContext } from '../context/auth'
 import { RegisterRequest } from '../proto/auth_pb'
+import { authService, authTokens } from '../state/auth'
+import { useSetRecoilState } from 'recoil'
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -41,8 +42,8 @@ const initialValues = {
 
 const RegisterPage: React.VFC = () => {
   const [error, setError] = useState('')
-  const {service, login} = useContext(AuthContext)!
   const history = useHistory()
+  const setTokens = useSetRecoilState(authTokens)
 
   const onSubmit = async (values: typeof initialValues) => {
     let num_class = RegisterRequest.Class.K_9
@@ -62,10 +63,11 @@ const RegisterPage: React.VFC = () => {
 
     
     try {
-      const res = await service.register(req, null)
-      const aToken = res.getAccessToken()
-      const rToken = res.getRefreshToken()
-      login(aToken, rToken)
+      const res = await authService.register(req, null)
+      setTokens({
+        refreshToken: res.getRefreshToken()!,
+        accessToken: res.getAccessToken()!,
+      })
 
       history.push('/teams')
     } catch (error: any) {

@@ -1,12 +1,13 @@
 import { ClientReadableStream } from 'grpc-web'
-import { useCallback, useContext, useEffect, useRef, useState } from 'react'
-import { AuthContext } from '../context/auth'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { useRecoilValue } from 'recoil'
 import { Problem } from '../models/problem'
 import { AdminClient } from '../proto/AdminServiceClientPb'
 import { ReadRequest } from '../proto/admin_pb'
 import { CompetitionClient } from '../proto/CompetitionServiceClientPb'
 import { GetSolutionsRequest, GetSolutionsResponse } from '../proto/competition_pb'
 import { ProblemStream } from '../proto/shared_pb'
+import { authAccessToken } from '../state/auth'
 
 export type SetProblemFn = (id: string, problem: Partial<Problem>) => void
 export type FindProblemFn = (pos: number) => Problem | undefined
@@ -21,7 +22,7 @@ export const useProblems = <T extends AdminClient | CompetitionClient>(service: 
   const [solutions, setSolutions] = useState<{[key: string]: string}>({})
   const stream = useRef<ClientReadableStream<ProblemStream> | null>(null)
   const solutionsStream = useRef<ClientReadableStream<GetSolutionsResponse> | null>(null)
-  const { getAccessToken } = useContext(AuthContext)!
+  const accessToken = useRecoilValue(authAccessToken)
 
   const updateProblem = useCallback((id: string, problem: Partial<Problem>) => {
     setProblems((state) => ({
@@ -43,7 +44,7 @@ export const useProblems = <T extends AdminClient | CompetitionClient>(service: 
     if (!(service instanceof CompetitionClient)) return
 
     const stream = service.getSolutions(new GetSolutionsRequest(), {
-      Authorization: `Bearer: ${await getAccessToken()}`
+      Authorization: `Bearer: ${accessToken}`
     }) as ClientReadableStream<GetSolutionsResponse>
 
     stream.on('data', (res: GetSolutionsResponse) => {
@@ -65,7 +66,7 @@ export const useProblems = <T extends AdminClient | CompetitionClient>(service: 
 
   useEffect(() => { (async () => {
     const s = service.getProblems(new ReadRequest(), {
-      Authorization: `Bearer: ${await getAccessToken()}`
+      Authorization: `Bearer: ${accessToken}`
     }) as ClientReadableStream<ProblemStream>
 
     s.on('data', (p: ProblemStream) => {
@@ -167,7 +168,7 @@ export const useProblems = <T extends AdminClient | CompetitionClient>(service: 
     })
 
     stream.current = s
-  })()}, [service, getAccessToken])
+  })()}, [service, accessToken])
 
   return [
     Object.values(problems).sort((a, b) => a.position - b.position),

@@ -1,10 +1,9 @@
-import { useContext } from "react";
-import { AuthContext } from "../context/auth";
+import { useRecoilValue } from "recoil";
 import { Guard } from "../models/guard";
+import { authClaims } from "../state/auth";
 
 export const useAuthGuard = async (): Promise<Guard> => {
-  const {getClaims} = useContext(AuthContext)!
-  const claims = await getClaims()
+  const claims = useRecoilValue(authClaims)
 
   if (claims !== null) return { valid: true }
 

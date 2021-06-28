@@ -1,20 +1,22 @@
 import React, { useCallback, useContext, useState } from 'react'
 import { useHistory } from 'react-router-dom'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import Button from '../components/button'
 import { Paginator, PaginatorControls } from '../components/paginator'
 import ProblemCard from '../components/problem-card'
-import { AuthContext } from '../context/auth'
 import { CompetitionContext, CompetitionProvider } from '../context/competition'
 import { TimeContext } from '../context/time'
 import { Problem } from '../models/problem'
 import { SetSolutionsRequest } from '../proto/competition_pb'
+import { authAccessToken, authTokens } from '../state/auth'
 import styles from '../styles/competition.module.scss'
 
 const CompetitionPageInner: React.VFC = () => {
   const {service, data, solutions} = useContext(CompetitionContext)!
-  const {getAccessToken, logout} = useContext(AuthContext)!
   const [activePage, setActivePage] = useState(1)
   const {time} = useContext(TimeContext)!
+  const accessToken = useRecoilValue(authAccessToken)
+  const setTokens = useSetRecoilState(authTokens)
   const history = useHistory()
   const pageSize = 10
 
@@ -30,12 +32,17 @@ const CompetitionPageInner: React.VFC = () => {
       .setDelete(problem.solution === '')
     
     await service.setSolutions(req, {
-      'Authorization': `Bearer: ${await getAccessToken()}`
+      'Authorization': `Bearer: ${accessToken}`
     })
-  }, [getAccessToken])
+  }, [accessToken])
 
   const onLogout = () => {
-    logout()
+    setTokens({
+      refreshToken: '',
+      accessToken: '',
+    })
+    // TODO: move this code
+    localStorage.removeItem('refreshToken')
     history.push('/login')
   }
 

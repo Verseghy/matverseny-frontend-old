@@ -1,17 +1,16 @@
-import { useContext } from "react";
-import { AuthContext } from "../context/auth";
+import { useRecoilValue } from "recoil";
 import { Guard } from "../models/guard";
+import { authClaims } from "../state/auth";
 
 export const useLoginGuard = async (): Promise<Guard> => {
-  const {getClaims} = useContext(AuthContext)!
-  const claims = await getClaims()
+  const claims = useRecoilValue(authClaims)
 
   if (claims === null) return { valid: true }
 
   let redirect = '/competition'
-  if (claims!.isAdmin) {
+  if (claims.is_admin) {
     redirect = '/admin'
-  } else if (claims!.team === '') {
+  } else if (claims.team === '') {
     redirect = '/teams'
   }
 

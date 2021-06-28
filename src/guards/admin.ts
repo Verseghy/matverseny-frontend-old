@@ -1,12 +1,11 @@
-import { useContext } from "react";
-import { AuthContext } from "../context/auth";
+import { useRecoilValue } from "recoil";
 import { Guard } from "../models/guard";
+import { authClaims } from "../state/auth";
 
 export const useAdminGuard = async (): Promise<Guard> => {
-  const {getClaims} = useContext(AuthContext)!
-  const claims = await getClaims()
+  const claims = useRecoilValue(authClaims)
 
-  if (claims !== null && claims.isAdmin) return { valid: true }
+  if (claims !== null && claims.is_admin) return { valid: true }
 
   return {
     valid: false,
