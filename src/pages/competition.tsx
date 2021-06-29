@@ -9,18 +9,20 @@ import { TimeContext } from '../context/time'
 import { Problem } from '../models/problem'
 import { SetSolutionsRequest } from '../proto/competition_pb'
 import { authAccessToken, authTokens } from '../state/auth'
+import { sortedProblems } from '../state/competition'
 import styles from '../styles/competition.module.scss'
 
 const CompetitionPageInner: React.VFC = () => {
-  const {service, data, solutions} = useContext(CompetitionContext)!
+  const {service} = useContext(CompetitionContext)!
   const [activePage, setActivePage] = useState(1)
   const {time} = useContext(TimeContext)!
   const accessToken = useRecoilValue(authAccessToken)
   const setTokens = useSetRecoilState(authTokens)
   const history = useHistory()
   const pageSize = 10
+  const problems = useRecoilValue(sortedProblems)
 
-  const pageData = data.slice((activePage - 1) * pageSize, activePage * pageSize)
+  const pageData = problems.slice((activePage - 1) * pageSize, activePage * pageSize)
 
   const onUpdate = useCallback(async (problem: Problem) => {
     const solution = Number(problem.solution)
@@ -53,7 +55,7 @@ const CompetitionPageInner: React.VFC = () => {
         <span className={styles.timer}>{time}</span>
         <Button onClick={onLogout} className={styles.button}>Kijelentkezés</Button>
       </div>
-      <Paginator totalItems={data.length} pageSize={pageSize} onPageSwitch={(page: number) => {
+      <Paginator totalItems={problems.length} pageSize={pageSize} onPageSwitch={(page: number) => {
         setActivePage(page)
         window.scrollTo(0, 0)
       }}>
@@ -62,7 +64,7 @@ const CompetitionPageInner: React.VFC = () => {
           {pageData.map((problem) => (
             <Button
               className={styles.problemButton}
-              kind={solutions[problem.id] ? 'primary' : undefined}
+              kind={problem.solution ? 'primary' : undefined}
               key={problem.id}
             >{problem.position}</Button>
           ))}
@@ -71,9 +73,7 @@ const CompetitionPageInner: React.VFC = () => {
           <ProblemCard
             key={problem.id}
             className={styles.card}
-            problem={problem}
-            solutions={solutions}
-            totalItems={data.length}
+            problemID={problem.id}
             onUpdate={onUpdate}
           />
         ))}

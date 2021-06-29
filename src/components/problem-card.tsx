@@ -1,4 +1,3 @@
-import { Problem } from '../models/problem'
 import Card, { CardProps } from '../components/card'
 import Textarea from '../components/textarea'
 import Button from '../components/button'
@@ -10,12 +9,15 @@ import { useNotFirstEffect } from '../hooks/not-first-effect'
 import { useDebounce } from '../hooks/debounce'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowDown, faArrowUp, faImages, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { useRecoilValue } from 'recoil'
+import { getProblemByID as competitionGetProblemByID } from '../state/competition'
+import { sortedProblemIDs, getProblemByID } from '../state/problems'
+import { Problem } from '../models/problem'
 
 export interface ProblemCardProps extends CardProps {
-  problem: Problem,
+  problemID: string,
   admin?: boolean,
   solutions?: {[key: string]: string},
-  totalItems: number,
   onDelete?: (id: string) => void,
   onUpdate?: (problem: Problem) => void,
   onSwap?: (posA: number, posB: number) => void,
@@ -27,17 +29,19 @@ enum Swap {
 }
 
 const ProblemCard: React.VFC<ProblemCardProps> = ({
-  problem,
+  problemID,
   admin,
   solutions,
-  totalItems,
   onDelete,
   onUpdate,
   onSwap,
   ...rest
 }) => {
+  const problem = useRecoilValue(admin ? getProblemByID(problemID) : competitionGetProblemByID(problemID))
+  const totalItems = useRecoilValue(sortedProblemIDs).length
+
   const [problemText, setProblemText] = useState(problem.body)
-  const [problemSolution, setProblemSolution] = useState(admin ? problem.solution : solutions![problem.id] ?? '')
+  const [problemSolution, setProblemSolution] = useState(problem.solution)
   const [image, setImage] = useState(problem.image)
   const [update, setUpdate] = useState(false)
   const uploadElement = useRef<HTMLInputElement>(null)
@@ -63,7 +67,6 @@ const ProblemCard: React.VFC<ProblemCardProps> = ({
 
   useNotFirstEffect(() => {
     if (!onUpdate || !update) return
-    console.log('change')
     onUpdate({
       ...problem,
       body: debouncedText,

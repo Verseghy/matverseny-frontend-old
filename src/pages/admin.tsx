@@ -9,16 +9,19 @@ import { Problem } from '../models/problem'
 import { Problem as ProblemPB } from '../proto/shared_pb'
 import { useRecoilValue } from 'recoil'
 import { authAccessToken } from '../state/auth'
+import { sortedProblemIDs, useProblemFunctions } from '../state/problems'
 
 const InnerAdminPage: React.VFC = () => {
-  const {service, findProblemFromPos, data} = useContext(AdminContext)!
+  const {service} = useContext(AdminContext)!
   const [activePage, setActivePage] = useState(1)
   const accessToken = useRecoilValue(authAccessToken)
+  const problems = useRecoilValue(sortedProblemIDs)
+  const {getProblemFromPos} = useProblemFunctions()
 
   const pageSize = 10
 
-  const newProblem = async () => {
-    service.createProblem(new CreateRequest().setAt(data.length + 1), {
+  const newProblem = () => {
+    service.createProblem(new CreateRequest().setAt(problems.length + 1), {
       'Authorization': `Bearer: ${accessToken}`
     })
   }
@@ -54,34 +57,33 @@ const InnerAdminPage: React.VFC = () => {
   }, [service, accessToken])
 
   const swapProblem = useCallback(async (posA: number, posB: number) => {
-    const problemA = findProblemFromPos(posA)
-    const problemB = findProblemFromPos(posB)
-
+    const problemA = await getProblemFromPos(posA)
+    const problemB = await getProblemFromPos(posB)
+    
     if (!problemA || !problemB) return
-
+    
     const req = new SwapRequest()
       .setA(problemA.id)
       .setB(problemB.id)
-
+    
     await service.swapProblem(req, {
       'Authorization': `Bearer: ${accessToken}`
     })
-  }, [service, accessToken, findProblemFromPos])
+  }, [service, accessToken])
 
   return (
     <div className={styles.container}>
-      <Paginator totalItems={data.length} pageSize={pageSize} onPageSwitch={(page: number) => {
+      <Paginator totalItems={problems.length} pageSize={pageSize} onPageSwitch={(page: number) => {
         setActivePage(page)
         window.scrollTo(0, 0)
       }}>
         <PaginatorControls />
         <Button kind="primary" onClick={async () => newProblem()}>Új</Button>
-        {data.slice((activePage - 1) * pageSize, activePage * pageSize).map((problem) => (
+        {problems.slice((activePage - 1) * pageSize, activePage * pageSize).map((problem) => (
           <ProblemCard
-            key={problem.id}
+            key={problem}
             admin
-            totalItems={data.length}
-            problem={problem}
+            problemID={problem}
             className={styles.card}
             onUpdate={updateProblem}
             onDelete={deleteProblem}
