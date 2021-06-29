@@ -23,11 +23,6 @@ export interface ProblemCardProps extends CardProps {
   onSwap?: (posA: number, posB: number) => void,
 }
 
-enum Swap {
-  UP,
-  DOWN,
-}
-
 const ProblemCard: React.VFC<ProblemCardProps> = ({
   problemID,
   admin,
@@ -75,9 +70,9 @@ const ProblemCard: React.VFC<ProblemCardProps> = ({
     })
   }, [debouncedText, debouncedSolution, image, onUpdate])
 
-  const swapProblem = (swap: Swap) => {
+  const swapProblem = (swap: 'up' | 'down') => {
     if (!onSwap) return
-    onSwap(problem.position, problem.position + (swap === Swap.UP ? -1 : 1))
+    onSwap(problem.position, problem.position + (swap === 'up' ? -1 : 1))
   }
 
   const uploadImage = () => {
@@ -107,10 +102,10 @@ const ProblemCard: React.VFC<ProblemCardProps> = ({
                 Kép törlése
               </Button>
             )}
-            <Button onClick={() => { swapProblem(Swap.UP) }} disabled={first}>
+            <Button onClick={() => { swapProblem('up') }} disabled={first}>
               <FontAwesomeIcon icon={faArrowUp} />
             </Button>
-            <Button onClick={() => { swapProblem(Swap.DOWN) }} disabled={last}>
+            <Button onClick={() => { swapProblem('down') }} disabled={last}>
               <FontAwesomeIcon icon={faArrowDown} />
             </Button>
             <Button onClick={() => onDelete&& onDelete(problem.id)} kind="danger">
