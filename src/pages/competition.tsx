@@ -1,22 +1,22 @@
-import React, { useCallback, useContext, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import Button from '../components/button'
 import { Paginator, PaginatorControls } from '../components/paginator'
 import PrivateRoute from '../components/private-route'
 import ProblemCard from '../components/problem-card'
-import { TimeContext } from '../context/time'
 import { useAuthGuard } from '../guards/auth'
 import { useProblems } from '../hooks/problems'
+import { useTime } from '../hooks/time'
 import { Problem } from '../models/problem'
 import { SetSolutionsRequest } from '../proto/competition_pb'
 import { useAuthFunctions } from '../state/auth'
-import { competitionService, sortedProblems } from '../state/competition'
+import { competitionService, sortedProblems, timeString } from '../state/competition'
 import styles from '../styles/competition.module.scss'
 
 const CompetitionPage: React.VFC = () => {
   const [activePage, setActivePage] = useState(1)
-  const {time} = useContext(TimeContext)!
+  const time = useRecoilValue(timeString)
   const history = useHistory()
   const pageSize = 10
   const problems = useRecoilValue(sortedProblems)
@@ -79,6 +79,7 @@ const CompetitionPage: React.VFC = () => {
 
 const CompetitionRoutes: React.VFC = () => {
   useProblems(competitionService)
+  useTime()
 
   return (
     <React.Fragment>

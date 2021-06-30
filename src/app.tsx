@@ -4,7 +4,6 @@ import PrivateRoute from './components/private-route'
 import { changeTheme, isDarkTheme, Theme } from './utils/theme'
 import { useLoginGuard } from './guards/login'
 import { useAdminGuard } from './guards/admin'
-import { TimeProvider } from './context/time'
 import { RecoilRoot } from 'recoil'
 
 const LandingPage = React.lazy(() => import('./pages/landing'))
@@ -20,21 +19,19 @@ const App: React.FC = () => {
   return (
     <RecoilRoot>
       <Suspense fallback={<p>Loading...</p>}>
-        <TimeProvider>
-          <main>
-            <Router>
-              <Switch>
-                <Route path='/' exact component={LandingPage} />
-                <PrivateRoute path='/login' component={LoginPage} guards={[useLoginGuard]} />
-                <Route path='/register' component={RegisterPage} />
-                <Route path='/forgot-password' component={ForgotPasswordPage} />
-                <PrivateRoute path='/admin' component={AdminPage} guards={[useAdminGuard]} />
-                <CompetitionRoutes />
-                <Redirect to="/" />
-              </Switch>
-            </Router>
-          </main>
-        </TimeProvider>
+        <main>
+          <Router>
+            <Switch>
+              <Route path='/' exact component={LandingPage} />
+              <PrivateRoute path='/login' component={LoginPage} guards={[useLoginGuard]} />
+              <Route path='/register' component={RegisterPage} />
+              <Route path='/forgot-password' component={ForgotPasswordPage} />
+              <PrivateRoute path='/admin' component={AdminPage} guards={[useAdminGuard]} />
+              <CompetitionRoutes />
+              <Redirect to="/" />
+            </Switch>
+          </Router>
+        </main>
       </Suspense>
     </RecoilRoot>
   );
