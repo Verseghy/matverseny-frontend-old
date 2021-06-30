@@ -23,15 +23,15 @@ const App: React.FC = () => {
         <TimeProvider>
           <main>
             <Router>
-                <Switch>
-                  <Route path='/' exact component={LandingPage} />
-                  <PrivateRoute path='/login' component={LoginPage} guards={[useLoginGuard]} />
-                  <Route path='/register' component={RegisterPage} />
-                  <Route path='/forgot-password' component={ForgotPasswordPage} />
-                  <PrivateRoute path='/admin' component={AdminPage} guards={[useAdminGuard]} />
-                  <CompetitionRoutes />
-                  <Redirect to="/" />
-                </Switch>
+              <Switch>
+                <Route path='/' exact component={LandingPage} />
+                <PrivateRoute path='/login' component={LoginPage} guards={[useLoginGuard]} />
+                <Route path='/register' component={RegisterPage} />
+                <Route path='/forgot-password' component={ForgotPasswordPage} />
+                <PrivateRoute path='/admin' component={AdminPage} guards={[useAdminGuard]} />
+                <CompetitionRoutes />
+                <Redirect to="/" />
+              </Switch>
             </Router>
           </main>
         </TimeProvider>
