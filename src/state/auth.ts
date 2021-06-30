@@ -41,7 +41,6 @@ export const useAuthFunctions = (): {
   getClaims: () => Promise<JWT | null>,
 } => {
   const login = useRecoilCallback(({ set }) => (refreshToken: string, accessToken: string) => {
-    console.log('login')
     set(authTokens, {
       refreshToken,
       accessToken,
@@ -79,7 +78,6 @@ export const useAuthFunctions = (): {
       return getNewToken(refreshToken)
     }
 
-    console.log(accessToken)
     const claims = jwtDecode<JWT>(accessToken)
     if (claims.exp - 300 < new Date().getTime() / 1000) {
       return getNewToken(refreshToken)
