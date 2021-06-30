@@ -1,5 +1,7 @@
+import { Metadata } from 'grpc-web'
 import jwtDecode from 'jwt-decode'
-import { atom, selector } from 'recoil'
+import { useCallback } from 'react'
+import { atom, selector, useRecoilCallback } from 'recoil'
 import { AuthClient } from '../proto/AuthServiceClientPb'
 import { RefreshTokenRequest } from '../proto/auth_pb'
 
@@ -25,33 +27,6 @@ export const authTokens = atom({
   },
 })
 
-const getNewToken = async (refreshToken: string) => {
-  const req = new RefreshTokenRequest().setToken(refreshToken)
-  const res = await authService.refreshToken(req, null)
-  return res.getToken()!
-}
-
-export const authAccessToken = selector<string | null>({
-  key: 'auth_accessToken',
-  get: async ({ get }) => {
-    const {refreshToken, accessToken} = get(authTokens)
-
-    if (refreshToken === '') return null
-    if (accessToken === '') return getNewToken(refreshToken)
-
-    const claims = jwtDecode<JWT>(accessToken)
-    if (claims.exp - 300 < new Date().getTime() / 1000) {
-      return getNewToken(refreshToken)
-    }
-
-    return accessToken
-  },
-  set: ({ get, set }, newToken) => set(authTokens, {
-    ...get(authTokens),
-    accessToken: newToken as string,
-  }),
-})
-
 export const isLoggedIn = selector<boolean>({
   key: 'auth_isLoggedIn',
   get: ({ get }) => {
@@ -59,12 +34,70 @@ export const isLoggedIn = selector<boolean>({
   },
 })
 
-export const authClaims = selector<JWT | null>({
-  key: 'auth_claims',
-  get: ({ get }) => {
-    const token = get(authAccessToken)
-    if (token === null) return null
+export const useAuthFunctions = (): {
+  login: (refreshToken: string, accessToken: string) => void,
+  logout: () => void,
+  getAuth: () => Promise<Metadata>,
+  getClaims: () => Promise<JWT | null>,
+} => {
+  const login = useRecoilCallback(({ set }) => (refreshToken: string, accessToken: string) => {
+    console.log('login')
+    set(authTokens, {
+      refreshToken,
+      accessToken,
+    })
+    localStorage.setItem('refreshToken', refreshToken)
+  }, [])
 
-    return jwtDecode<JWT>(token)
-  },
-})
+  const logout = useRecoilCallback(({ set }) => () => {
+    set(authTokens, () => ({
+      refreshToken: '',
+      accessToken: '',
+    }))
+    localStorage.removeItem('refreshToken')
+  }, [])
+
+  const getNewToken = useRecoilCallback(({ set }) => async (refreshToken: string) => {
+    const req = new RefreshTokenRequest().setToken(refreshToken)
+    const res = await authService.refreshToken(req, null)
+    const accessToken= res.getToken()
+    set(authTokens, (state) => ({
+      ...state,
+      accessToken,
+    }))
+    return accessToken
+  }, [])
+
+  const getAccessToken = useRecoilCallback(({ snapshot }) => async () => {
+    const {refreshToken, accessToken} = await snapshot.getPromise(authTokens)
+
+    if (refreshToken === '') {
+      return ''
+    }
+
+    if (accessToken === '') {
+      return getNewToken(refreshToken)
+    }
+
+    console.log(accessToken)
+    const claims = jwtDecode<JWT>(accessToken)
+    if (claims.exp - 300 < new Date().getTime() / 1000) {
+      return getNewToken(refreshToken)
+    }
+
+    return accessToken
+  })
+
+  const getAuth = useCallback(async () => {
+    return { Authorization: `Bearer: ${await getAccessToken()}` } 
+  }, [])
+
+  const getClaims = useCallback(async () => {
+    const accessToken = await getAccessToken()
+    if (accessToken === '') return null
+
+    return jwtDecode<JWT>(accessToken)
+  }, []) 
+
+  return {login, logout, getAuth, getClaims}
+}

@@ -1,10 +1,9 @@
 import { ClientReadableStream } from "grpc-web";
 import { createContext, Dispatch, SetStateAction, useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
 import { useInterval } from "../hooks/interval";
 import { Time, TimeState } from "../models/time";
 import { GetTimesRequest, GetTimesResponse } from "../proto/competition_pb";
-import { authAccessToken } from "../state/auth";
+import { useAuthFunctions } from "../state/auth";
 import { competitionService } from "../state/competition";
 
 export interface TimeContextType {
@@ -19,15 +18,16 @@ export const TimeProvider: React.FC = ({ children }) => {
   const [state, setState] = useState(TimeState.BEFORE_COMP)
   const [timeString, setTimeString] = useState('00:00:00')
   const [time, setTime] = useState<Time | null>(null)
-  const accessToken = useRecoilValue(authAccessToken)
+  const {getAuth} = useAuthFunctions()
 
   useEffect(() => {
     const getTimes = async () => {
       if (competitionService === null) return
 
-      const stream = competitionService.getTimes(new GetTimesRequest(), {
-        Authorization: `Bearer: ${accessToken}`
-      }) as ClientReadableStream<GetTimesResponse>
+      const stream = competitionService.getTimes(
+        new GetTimesRequest(),
+        await getAuth(),
+      ) as ClientReadableStream<GetTimesResponse>
 
       stream.on('data', (res: GetTimesResponse) => {
         setTime({

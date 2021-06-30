@@ -8,32 +8,28 @@ import { Paginator, PaginatorControls} from '../components/paginator'
 import { Problem } from '../models/problem'
 import { Problem as ProblemPB } from '../proto/shared_pb'
 import { useRecoilValue } from 'recoil'
-import { authAccessToken } from '../state/auth'
+import { useAuthFunctions } from '../state/auth'
 import { sortedProblemIDs, useProblemFunctions } from '../state/problems'
 
 const InnerAdminPage: React.VFC = () => {
   const {service} = useContext(AdminContext)!
   const [activePage, setActivePage] = useState(1)
-  const accessToken = useRecoilValue(authAccessToken)
   const problems = useRecoilValue(sortedProblemIDs)
   const {getProblemFromPos} = useProblemFunctions()
+  const {getAuth} = useAuthFunctions()
 
   const pageSize = 10
 
-  const newProblem = () => {
-    service.createProblem(new CreateRequest().setAt(problems.length + 1), {
-      'Authorization': `Bearer: ${accessToken}`
-    })
+  const newProblem = async () => {
+    service.createProblem(new CreateRequest().setAt(problems.length + 1), await getAuth())
   }
 
   const deleteProblem = useCallback(async (id: string) => {
     const req = new DeleteRequest()
       .setId(id)
 
-    await service.deleteProblem(req, {
-      'Authorization': `Bearer: ${accessToken}`
-    })
-  }, [service, accessToken])
+    await service.deleteProblem(req, await getAuth())
+  }, [service])
 
   const updateProblem = useCallback(async (problem: Problem) => {
     const problemPB = new ProblemPB()
@@ -51,10 +47,8 @@ const InnerAdminPage: React.VFC = () => {
     const req = new UpdateRequest()
       .setProblem(problemPB)
     
-    await service.updateProblem(req, {
-      'Authorization': `Bearer: ${accessToken}`
-    })
-  }, [service, accessToken])
+    await service.updateProblem(req, await getAuth())
+  }, [service])
 
   const swapProblem = useCallback(async (posA: number, posB: number) => {
     const problemA = await getProblemFromPos(posA)
@@ -66,10 +60,8 @@ const InnerAdminPage: React.VFC = () => {
       .setA(problemA.id)
       .setB(problemB.id)
     
-    await service.swapProblem(req, {
-      'Authorization': `Bearer: ${accessToken}`
-    })
-  }, [service, accessToken])
+    await service.swapProblem(req, await getAuth())
+  }, [service])
 
   return (
     <div className={styles.container}>

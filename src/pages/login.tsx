@@ -9,8 +9,7 @@ import { Formik, Form, Field, FieldProps, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import { LoginRequest } from '../proto/auth_pb'
 import { Error } from 'grpc-web'
-import { useSetRecoilState } from 'recoil'
-import { authService, authTokens } from '../state/auth'
+import { authService, useAuthFunctions } from '../state/auth'
 
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -24,7 +23,7 @@ const initialValues = { email: '', password: '' }
 
 const LoginPage: React.VFC = () => {
   const [error, setError] = useState('');
-  const setTokens = useSetRecoilState(authTokens)
+  const {login} = useAuthFunctions()
 
   const onSubmit = async (values: typeof initialValues) => {
     let req = new LoginRequest()
@@ -33,12 +32,7 @@ const LoginPage: React.VFC = () => {
     
     try {
       const res = await authService.login(req, null)
-      setTokens({
-        refreshToken: res.getRefreshToken()!,
-        accessToken: res.getAccessToken()!,
-      })
-      // TODO: move this code
-      localStorage.setItem('refreshToken', res.getRefreshToken())
+      login(res.getRefreshToken(), res.getAccessToken())
 
       // TODO: implement page switching after login
       // if (nextPage === NextPage.ADMIN) {

@@ -1,13 +1,13 @@
 import { ClientReadableStream } from 'grpc-web'
 import { useEffect, useRef } from 'react'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { useSetRecoilState } from 'recoil'
 import { Problem } from '../models/problem'
 import { AdminClient } from '../proto/AdminServiceClientPb'
 import { ReadRequest } from '../proto/admin_pb'
 import { CompetitionClient } from '../proto/CompetitionServiceClientPb'
 import { GetSolutionsRequest, GetSolutionsResponse } from '../proto/competition_pb'
 import { ProblemStream } from '../proto/shared_pb'
-import { authAccessToken } from '../state/auth'
+import { useAuthFunctions } from '../state/auth'
 import { solutionsData } from '../state/competition'
 import { useProblemFunctions } from '../state/problems'
 
@@ -17,16 +17,17 @@ export type FindProblemFn = (pos: number) => Problem | undefined
 export const useProblems = <T extends AdminClient | CompetitionClient>(service: T) => {
   const stream = useRef<ClientReadableStream<ProblemStream> | null>(null)
   const solutionsStream = useRef<ClientReadableStream<GetSolutionsResponse> | null>(null)
-  const accessToken = useRecoilValue(authAccessToken)
   const setSolutions = useSetRecoilState(solutionsData)
   const {updateProblem, deleteProblem, swapProblem, createProblem} = useProblemFunctions()
+  const {getAuth} = useAuthFunctions()
 
   useEffect(() => { (async () => {
     if (!(service instanceof CompetitionClient)) return
 
-    const stream = service.getSolutions(new GetSolutionsRequest(), {
-      Authorization: `Bearer: ${accessToken}`
-    }) as ClientReadableStream<GetSolutionsResponse>
+    const stream = service.getSolutions(
+      new GetSolutionsRequest(),
+      await getAuth()
+    ) as ClientReadableStream<GetSolutionsResponse>
 
     stream.on('data', (res: GetSolutionsResponse) => {
       if (res.getType()! === GetSolutionsResponse.Modification.K_CHANGE) {
@@ -46,9 +47,10 @@ export const useProblems = <T extends AdminClient | CompetitionClient>(service: 
   })()}, [service])
 
   useEffect(() => { (async () => {
-    const s = service.getProblems(new ReadRequest(), {
-      Authorization: `Bearer: ${accessToken}`
-    }) as ClientReadableStream<ProblemStream>
+    const s = service.getProblems(
+      new ReadRequest(),
+      await getAuth(),
+    ) as ClientReadableStream<ProblemStream>
 
     s.on('data', (p: ProblemStream) => {
       const type = p.getType()
@@ -95,5 +97,5 @@ export const useProblems = <T extends AdminClient | CompetitionClient>(service: 
     })
 
     stream.current = s
-  })()}, [service, accessToken])
+  })()}, [service])
 }
