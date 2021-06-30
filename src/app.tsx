@@ -2,7 +2,6 @@ import React, { Suspense } from 'react'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 import PrivateRoute from './components/private-route'
 import { changeTheme, isDarkTheme, Theme } from './utils/theme'
-import { useAuthGuard } from './guards/auth'
 import { useLoginGuard } from './guards/login'
 import { useAdminGuard } from './guards/admin'
 import { TimeProvider } from './context/time'
@@ -13,7 +12,7 @@ const LoginPage = React.lazy(() => import('./pages/login'))
 const RegisterPage = React.lazy(() => import('./pages/register'))
 const ForgotPasswordPage = React.lazy(() => import('./pages/forgot-password'))
 const AdminPage = React.lazy(() => import('./pages/admin'))
-const CompetitionPage = React.lazy(() => import('./pages/competition'))
+const CompetitionRoutes = React.lazy(() => import('./pages/competition'))
 
 const App: React.FC = () => {
   changeTheme(isDarkTheme() ? Theme.DARK : Theme.LIGHT)
@@ -30,7 +29,7 @@ const App: React.FC = () => {
                   <Route path='/register' component={RegisterPage} />
                   <Route path='/forgot-password' component={ForgotPasswordPage} />
                   <PrivateRoute path='/admin' component={AdminPage} guards={[useAdminGuard]} />
-                  <PrivateRoute path='/competition' component={CompetitionPage} guards={[useAuthGuard]} />
+                  <CompetitionRoutes />
                   <Redirect to="/" />
                 </Switch>
             </Router>

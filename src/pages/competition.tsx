@@ -3,17 +3,18 @@ import { useHistory } from 'react-router-dom'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import Button from '../components/button'
 import { Paginator, PaginatorControls } from '../components/paginator'
+import PrivateRoute from '../components/private-route'
 import ProblemCard from '../components/problem-card'
-import { CompetitionContext, CompetitionProvider } from '../context/competition'
 import { TimeContext } from '../context/time'
+import { useAuthGuard } from '../guards/auth'
+import { useProblems } from '../hooks/problems'
 import { Problem } from '../models/problem'
 import { SetSolutionsRequest } from '../proto/competition_pb'
 import { authAccessToken, authTokens } from '../state/auth'
-import { sortedProblems } from '../state/competition'
+import { competitionService, sortedProblems } from '../state/competition'
 import styles from '../styles/competition.module.scss'
 
-const CompetitionPageInner: React.VFC = () => {
-  const {service} = useContext(CompetitionContext)!
+const CompetitionPage: React.VFC = () => {
   const [activePage, setActivePage] = useState(1)
   const {time} = useContext(TimeContext)!
   const accessToken = useRecoilValue(authAccessToken)
@@ -33,7 +34,7 @@ const CompetitionPageInner: React.VFC = () => {
       .setValue(solution)
       .setDelete(problem.solution === '')
     
-    await service.setSolutions(req, {
+    await competitionService.setSolutions(req, {
       'Authorization': `Bearer: ${accessToken}`
     })
   }, [accessToken])
@@ -51,7 +52,7 @@ const CompetitionPageInner: React.VFC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.logoutContainer}>
-        <Button className={styles.button}>Csapat</Button>
+        <Button to="/team" className={styles.button}>Csapat</Button>
         <span className={styles.timer}>{time}</span>
         <Button onClick={onLogout} className={styles.button}>Kijelentkezés</Button>
       </div>
@@ -83,13 +84,16 @@ const CompetitionPageInner: React.VFC = () => {
   )
 }
 
-const CompetitionPage: React.VFC = () => {
+const CompetitionRoutes: React.VFC = () => {
+  useProblems(competitionService)
+
   return (
-    <CompetitionProvider>
-      <CompetitionPageInner />
-    </CompetitionProvider>
+    <React.Fragment>
+      <PrivateRoute path='/competition' component={CompetitionPage} guards={[useAuthGuard]} />
+      <PrivateRoute path='/team' component={CompetitionPage} guards={[useAuthGuard]} />
+    </React.Fragment>
   )
 }
 
-export default CompetitionPage
+export default CompetitionRoutes
 
