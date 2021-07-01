@@ -8,18 +8,23 @@ import { useFormatedProblem } from '../hooks/formatted-problem'
 import { useNotFirstEffect } from '../hooks/not-first-effect'
 import { useDebounce } from '../hooks/debounce'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowDown, faArrowUp, faImages, faTrash } from '@fortawesome/free-solid-svg-icons'
+import {
+  faArrowDown,
+  faArrowUp,
+  faImages,
+  faTrash,
+} from '@fortawesome/free-solid-svg-icons'
 import { useRecoilValue } from 'recoil'
 import { getProblemByID as competitionGetProblemByID } from '../state/competition'
 import { sortedProblemIDs, getProblemByID } from '../state/problems'
 import { Problem } from '../models/problem'
 
 export interface ProblemCardProps extends CardProps {
-  problemID: string,
-  admin?: boolean,
-  onDelete?: (id: string) => void,
-  onUpdate?: (problem: Problem) => void,
-  onSwap?: (posA: number, posB: number) => void,
+  problemID: string
+  admin?: boolean
+  onDelete?: (id: string) => void
+  onUpdate?: (problem: Problem) => void
+  onSwap?: (posA: number, posB: number) => void
 }
 
 const ProblemCard: React.VFC<ProblemCardProps> = ({
@@ -30,7 +35,9 @@ const ProblemCard: React.VFC<ProblemCardProps> = ({
   onSwap,
   ...rest
 }) => {
-  const problem = useRecoilValue(admin ? getProblemByID(problemID) : competitionGetProblemByID(problemID))
+  const problem = useRecoilValue(
+    admin ? getProblemByID(problemID) : competitionGetProblemByID(problemID)
+  )
   const totalItems = useRecoilValue(sortedProblemIDs).length
 
   const [problemText, setProblemText] = useState(problem.body)
@@ -88,48 +95,86 @@ const ProblemCard: React.VFC<ProblemCardProps> = ({
         <h1 className={styles.title}>{problem.position}. feladat</h1>
         {!!admin && (
           <div className={styles.buttons}>
-            {problem.image === ''
-            ? (
+            {problem.image === '' ? (
               <Button kind="primary" label>
-                  <input ref={uploadElement} onChange={uploadImage} hidden type="file" />
-                  <FontAwesomeIcon icon={faImages} />
+                <input
+                  ref={uploadElement}
+                  onChange={uploadImage}
+                  hidden
+                  type="file"
+                />
+                <FontAwesomeIcon icon={faImages} />
               </Button>
-            )
-            : (
-              <Button kind="danger" onClick={() => { setUpdate(true); setImage('') }}>
+            ) : (
+              <Button
+                kind="danger"
+                onClick={() => {
+                  setUpdate(true)
+                  setImage('')
+                }}
+              >
                 Kép törlése
               </Button>
             )}
-            <Button onClick={() => { swapProblem('up') }} disabled={first}>
+            <Button
+              onClick={() => {
+                swapProblem('up')
+              }}
+              disabled={first}
+            >
               <FontAwesomeIcon icon={faArrowUp} />
             </Button>
-            <Button onClick={() => { swapProblem('down') }} disabled={last}>
+            <Button
+              onClick={() => {
+                swapProblem('down')
+              }}
+              disabled={last}
+            >
               <FontAwesomeIcon icon={faArrowDown} />
             </Button>
-            <Button onClick={() => onDelete&& onDelete(problem.id)} kind="danger">
+            <Button
+              onClick={() => onDelete && onDelete(problem.id)}
+              kind="danger"
+            >
               <FontAwesomeIcon icon={faTrash} />
             </Button>
           </div>
         )}
       </div>
-      <p className={styles.problem} dangerouslySetInnerHTML={{__html: formattedProblemText}} />
-      {!!problem.image && <img className={styles.image} src={problem.image} alt="" />}
+      <p
+        className={styles.problem}
+        dangerouslySetInnerHTML={{ __html: formattedProblemText }}
+      />
+      {!!problem.image && (
+        <img className={styles.image} src={problem.image} alt="" />
+      )}
       {!!admin && (
         <Fragment>
-          <Textarea block rows={5} value={problemText} className={styles.problemText} onInput={(event) => {
-            setUpdate(true)
-            setProblemText((event.target as HTMLTextAreaElement).value)
-          }} />
+          <Textarea
+            block
+            rows={5}
+            value={problemText}
+            className={styles.problemText}
+            onInput={(event) => {
+              setUpdate(true)
+              setProblemText((event.target as HTMLTextAreaElement).value)
+            }}
+          />
           <span>Megoldás</span>
         </Fragment>
       )}
-      <Input block error={isNaN(Number(problemSolution))} inputMode="numeric" value={problemSolution ?? ''} onInput={(event) => {
-        setUpdate(true)
-        setProblemSolution((event.target as HTMLInputElement).value)
-      }} />
+      <Input
+        block
+        error={isNaN(Number(problemSolution))}
+        inputMode="numeric"
+        value={problemSolution ?? ''}
+        onInput={(event) => {
+          setUpdate(true)
+          setProblemSolution((event.target as HTMLInputElement).value)
+        }}
+      />
     </Card>
   )
 }
 
 export default ProblemCard
-

@@ -20,10 +20,11 @@
   --text-on-gray-disabled: hsla(0, 0%, 0%, 0.25);
   --text-on-primary-disabled: var(--text-on-green-disabled);
 
-  --background: #F9FAFB;
+  --background: #f9fafb;
   --background-card: #fff;
 
-  --card-elevation: rgba(0, 0, 0, 0.1) 0 1rem 1.5rem -0.3rem, rgba(0, 0, 0, 0.05) 0 0.4rem 0.6rem -0.2rem;
+  --card-elevation: rgba(0, 0, 0, 0.1) 0 1rem 1.5rem -0.3rem,
+    rgba(0, 0, 0, 0.05) 0 0.4rem 0.6rem -0.2rem;
 
   --outline: #000;
 }
@@ -53,7 +54,8 @@
   --background: hsl(240, 6%, 10%);
   --background-card: hsl(240, 4%, 16%);
 
-  --card-elevation: rgba(0, 0, 0, 0.1) 0 1rem 1.5rem -0.3rem, rgba(0, 0, 0, 0.05) 0 0.4rem 0.6rem -0.2rem;
+  --card-elevation: rgba(0, 0, 0, 0.1) 0 1rem 1.5rem -0.3rem,
+    rgba(0, 0, 0, 0.05) 0 0.4rem 0.6rem -0.2rem;
 
   --outline: #fff;
 }

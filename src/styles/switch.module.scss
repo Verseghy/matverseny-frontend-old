@@ -19,7 +19,7 @@
     transition: transform 150ms ease-in-out;
   }
 
-  &[aria-checked="true"]::after {
+  &[aria-checked='true']::after {
     transform: translate3d(1.6rem, 0, 0);
   }
 

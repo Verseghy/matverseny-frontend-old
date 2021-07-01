@@ -8,7 +8,7 @@ import { competitionTime, currentTime } from '../state/competition'
 import { useInterval } from './interval'
 
 export const useTime = () => {
-  const {getAuth} = useAuthFunctions()
+  const { getAuth } = useAuthFunctions()
   const setTimes = useSetRecoilState(competitionTime)
   const setCurrentTime = useSetRecoilState(currentTime)
 
@@ -30,7 +30,11 @@ export const useTime = () => {
     getTimes()
   }, [])
 
-  useInterval(() => {
-    setCurrentTime(new Date().getTime())
-  }, [], 1000)
+  useInterval(
+    () => {
+      setCurrentTime(new Date().getTime())
+    },
+    [],
+    1000
+  )
 }

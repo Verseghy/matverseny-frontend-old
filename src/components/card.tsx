@@ -3,7 +3,7 @@ import styles from '../styles/card.module.scss'
 import classnames from 'classnames'
 
 export interface CardProps {
-  className?: string,
+  className?: string
 }
 
 const Card: React.FC<CardProps> = ({ children, className }) => {

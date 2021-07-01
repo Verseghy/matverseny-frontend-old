@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import styles from '../styles/switch.module.scss'
 
 export interface SwitchProps {
-  value?: boolean,
-  onClick?: (value: boolean) => void,
+  value?: boolean
+  onClick?: (value: boolean) => void
 }
 
 const Switch: React.FC<SwitchProps> = ({ children, value, onClick }) => {
@@ -17,14 +17,25 @@ const Switch: React.FC<SwitchProps> = ({ children, value, onClick }) => {
     }
   }
 
-
   if (!children) {
-    return <button role="switch" aria-checked={internalValue} className={styles.switch} onClick={handleClick} />
+    return (
+      <button
+        role="switch"
+        aria-checked={internalValue}
+        className={styles.switch}
+        onClick={handleClick}
+      />
+    )
   }
 
   return (
     <label className={styles.label}>
-      <button role="switch" aria-checked={internalValue} className={styles.switch} onClick={handleClick} />
+      <button
+        role="switch"
+        aria-checked={internalValue}
+        className={styles.switch}
+        onClick={handleClick}
+      />
       <span>{children}</span>
     </label>
   )

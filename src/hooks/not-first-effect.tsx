@@ -1,6 +1,9 @@
-import { DependencyList, EffectCallback, useEffect, useRef } from "react";
+import { DependencyList, EffectCallback, useEffect, useRef } from 'react'
 
-export const useNotFirstEffect = (effect: EffectCallback, deps?: DependencyList) => {
+export const useNotFirstEffect = (
+  effect: EffectCallback,
+  deps?: DependencyList
+) => {
   const firstUpdate = useRef(true)
 
   useEffect(() => {

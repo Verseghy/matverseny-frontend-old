@@ -1,5 +1,10 @@
 import React, { Suspense } from 'react'
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from 'react-router-dom'
 import PrivateRoute from './components/private-route'
 import { changeTheme, isDarkTheme, Theme } from './utils/theme'
 import { useLoginGuard } from './guards/login'
@@ -24,18 +29,26 @@ const App: React.FC = () => {
       <main>
         <Router>
           <Switch>
-            <Route path='/' exact component={LandingPage} />
-            <PrivateRoute path='/login' component={LoginPage} guards={[loginGuard]} />
-            <Route path='/register' component={RegisterPage} />
-            <Route path='/forgot-password' component={ForgotPasswordPage} />
-            <PrivateRoute path='/admin' component={AdminPage} guards={[adminGuard]} />
+            <Route path="/" exact component={LandingPage} />
+            <PrivateRoute
+              path="/login"
+              component={LoginPage}
+              guards={[loginGuard]}
+            />
+            <Route path="/register" component={RegisterPage} />
+            <Route path="/forgot-password" component={ForgotPasswordPage} />
+            <PrivateRoute
+              path="/admin"
+              component={AdminPage}
+              guards={[adminGuard]}
+            />
             <CompetitionRoutes />
             <Redirect to="/" />
           </Switch>
         </Router>
       </main>
     </Suspense>
-  );
+  )
 }
 
 export default App

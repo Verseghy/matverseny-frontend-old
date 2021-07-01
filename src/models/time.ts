@@ -1,6 +1,6 @@
 export interface Time {
-  start: Date,
-  end: Date,
+  start: Date
+  end: Date
 }
 
 export enum TimeState {

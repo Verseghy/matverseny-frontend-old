@@ -1,6 +1,9 @@
 import { atom, selector, selectorFamily } from 'recoil'
 import { TimeState } from '../models/time'
-import { problemsData, sortedProblems as problemsSortedProblems } from './problems'
+import {
+  problemsData,
+  sortedProblems as problemsSortedProblems,
+} from './problems'
 
 export enum CompetitionState {
   BEFORE,
@@ -8,7 +11,7 @@ export enum CompetitionState {
   AFTER,
 }
 
-export const solutionsData = atom<{[key: string]: string}>({
+export const solutionsData = atom<{ [key: string]: string }>({
   key: 'competition_solutionsData',
   default: {},
 })
@@ -46,7 +49,6 @@ const formatTime = (time: number) => {
   const minutes = Math.floor(time / 60000) % 60
   const seconds = Math.floor(time / 1000) % 60
 
-
   const hoursString = hours < 10 ? `0${hours}` : hours
   const minutesString = `0${minutes}`.slice(-2)
   const secondsString = `0${seconds}`.slice(-2)
@@ -72,14 +74,16 @@ export const timeString = selector({
 
 export const getProblemByID = selectorFamily({
   key: 'competition_getProblemByID',
-  get: (problemID: string) => ({ get }) => {
-    const problems = get(problemsData)
-    const solutions = get(solutionsData)
-    return {
-      ...problems[problemID],
-      solution: solutions[problemID] ?? '',
-    }
-  },
+  get:
+    (problemID: string) =>
+    ({ get }) => {
+      const problems = get(problemsData)
+      const solutions = get(solutionsData)
+      return {
+        ...problems[problemID],
+        solution: solutions[problemID] ?? '',
+      }
+    },
 })
 
 export const sortedProblems = selector({
@@ -89,8 +93,7 @@ export const sortedProblems = selector({
     const solutions = get(solutionsData)
     return problems.map((problem) => ({
       ...problem,
-      solution: solutions[problem.id]
+      solution: solutions[problem.id],
     }))
   },
 })
-

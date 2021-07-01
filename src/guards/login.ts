@@ -1,8 +1,8 @@
-import { Guard } from "../models/guard";
-import { useAuthFunctions } from "../state/auth";
+import { Guard } from '../models/guard'
+import { useAuthFunctions } from '../state/auth'
 
 export const useLoginGuard = async (): Promise<Guard> => {
-  const {getClaims} = useAuthFunctions()
+  const { getClaims } = useAuthFunctions()
   const claims = await getClaims()
 
   if (claims === null) return { valid: true }
@@ -16,6 +16,6 @@ export const useLoginGuard = async (): Promise<Guard> => {
 
   return {
     valid: false,
-    redirect
+    redirect,
   }
-} 
+}

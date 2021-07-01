@@ -7,12 +7,12 @@ import { RefreshTokenRequest } from '../proto/auth_pb'
 import { authService } from '../services'
 
 export interface JWT {
-  user_id: string,
-  is_admin: boolean,
-  team: string,
-  exp: number,
-  iat: number,
-  iss: string,
+  user_id: string
+  is_admin: boolean
+  team: string
+  exp: number
+  iat: number
+  iss: string
 }
 
 export const authTokens = atom({
@@ -31,71 +31,89 @@ export const isLoggedIn = selector<boolean>({
 })
 
 export const useAuthFunctions = (): {
-  login: (refreshToken: string, accessToken: string) => void,
-  logout: () => void,
-  getAuth: () => Promise<Metadata>,
-  getClaims: () => Promise<JWT | null>,
+  login: (refreshToken: string, accessToken: string) => void
+  logout: () => void
+  getAuth: () => Promise<Metadata>
+  getClaims: () => Promise<JWT | null>
 } => {
   const history = useHistory()
 
-  const login = useRecoilCallback(({ set }) => (refreshToken: string, accessToken: string) => {
-    set(authTokens, {
-      refreshToken,
-      accessToken,
-    })
-    localStorage.setItem('refreshToken', refreshToken)
+  const login = useRecoilCallback(
+    ({ set }) =>
+      (refreshToken: string, accessToken: string) => {
+        set(authTokens, {
+          refreshToken,
+          accessToken,
+        })
+        localStorage.setItem('refreshToken', refreshToken)
 
-    const claims = jwtDecode<JWT>(accessToken)
-    if (claims.is_admin) {
-      history.push('/admin')
-    } else if (claims.team === '') {
-      history.push('/team')
-    } else {
-      history.push('/competition')
-    }
-  }, [])
+        const claims = jwtDecode<JWT>(accessToken)
+        if (claims.is_admin) {
+          history.push('/admin')
+        } else if (claims.team === '') {
+          history.push('/team')
+        } else {
+          history.push('/competition')
+        }
+      },
+    []
+  )
 
-  const logout = useRecoilCallback(({ set }) => () => {
-    set(authTokens, () => ({
-      refreshToken: '',
-      accessToken: '',
-    }))
-    localStorage.removeItem('refreshToken')
-    history.push('/login')
-  }, [])
+  const logout = useRecoilCallback(
+    ({ set }) =>
+      () => {
+        set(authTokens, () => ({
+          refreshToken: '',
+          accessToken: '',
+        }))
+        localStorage.removeItem('refreshToken')
+        history.push('/login')
+      },
+    []
+  )
 
-  const getNewToken = useRecoilCallback(({ set }) => async (refreshToken: string) => {
-    const req = new RefreshTokenRequest().setToken(refreshToken)
-    const res = await authService.refreshToken(req, null)
-    const accessToken= res.getToken()
-    set(authTokens, (state) => ({
-      ...state,
-      accessToken,
-    }))
-    return accessToken
-  }, [])
+  const getNewToken = useRecoilCallback(
+    ({ set }) =>
+      async (refreshToken: string) => {
+        const req = new RefreshTokenRequest().setToken(refreshToken)
+        const res = await authService.refreshToken(req, null)
+        const accessToken = res.getToken()
+        set(authTokens, (state) => ({
+          ...state,
+          accessToken,
+        }))
+        return accessToken
+      },
+    []
+  )
 
-  const getAccessToken = useRecoilCallback(({ snapshot }) => async () => {
-    const {refreshToken, accessToken} = await snapshot.getPromise(authTokens)
+  const getAccessToken = useRecoilCallback(
+    ({ snapshot }) =>
+      async () => {
+        const { refreshToken, accessToken } = await snapshot.getPromise(
+          authTokens
+        )
 
-    if (refreshToken === '') {
-      return ''
-    }
+        if (refreshToken === '') {
+          return ''
+        }
 
-    if (accessToken === '') {
-      return getNewToken(refreshToken)
-    }
+        if (accessToken === '') {
+          return getNewToken(refreshToken)
+        }
 
-    const claims = jwtDecode<JWT>(accessToken)
-    if (claims.exp - 300 < new Date().getTime() / 1000) {
-      return getNewToken(refreshToken)
-    }
+        const claims = jwtDecode<JWT>(accessToken)
+        if (claims.exp - 300 < new Date().getTime() / 1000) {
+          return getNewToken(refreshToken)
+        }
 
-    return accessToken
-  }, [])
+        return accessToken
+      },
+    []
+  )
 
   const getAuth = useCallback(async () => {
-    return { Authorization: `Bearer: ${await getAccessToken()}` } 
+    return { Authorization: `Bearer: ${await getAccessToken()}` }
   }, [getAccessToken])
 
   const getClaims = useCallback(async () => {
@@ -103,7 +121,7 @@ export const useAuthFunctions = (): {
     if (accessToken === '') return null
 
     return jwtDecode<JWT>(accessToken)
-  }, [getAccessToken]) 
+  }, [getAccessToken])
 
-  return {login, logout, getAuth, getClaims}
+  return { login, logout, getAuth, getClaims }
 }

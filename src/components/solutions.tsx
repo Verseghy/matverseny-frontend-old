@@ -1,13 +1,16 @@
 import { ClientReadableStream } from 'grpc-web'
 import { useEffect, useRef } from 'react'
 import { useSetRecoilState } from 'recoil'
-import { GetSolutionsRequest, GetSolutionsResponse } from '../proto/competition_pb'
+import {
+  GetSolutionsRequest,
+  GetSolutionsResponse,
+} from '../proto/competition_pb'
 import { competitionService } from '../services'
 import { useAuthFunctions } from '../state/auth'
 import { solutionsData } from '../state/competition'
 
 export const useSolutions = () => {
-  const {getAuth} = useAuthFunctions()
+  const { getAuth } = useAuthFunctions()
   const setSolutions = useSetRecoilState(solutionsData)
   const streamRef = useRef<ClientReadableStream<GetSolutionsResponse>>()
 
@@ -15,7 +18,7 @@ export const useSolutions = () => {
     const getSolutions = async () => {
       const stream = competitionService.getSolutions(
         new GetSolutionsRequest(),
-        await getAuth(),
+        await getAuth()
       ) as ClientReadableStream<GetSolutionsResponse>
 
       stream.on('data', (res: GetSolutionsResponse) => {
@@ -40,4 +43,4 @@ export const useSolutions = () => {
 
     getSolutions()
   }, [])
-} 
+}

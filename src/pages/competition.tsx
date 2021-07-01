@@ -20,33 +20,47 @@ const CompetitionPage: React.VFC = () => {
   const time = useRecoilValue(timeString)
   const pageSize = 10
   const problems = useRecoilValue(sortedProblems)
-  const {getAuth, logout} = useAuthFunctions()
+  const { getAuth, logout } = useAuthFunctions()
 
-  const pageData = problems.slice((activePage - 1) * pageSize, activePage * pageSize)
+  const pageData = problems.slice(
+    (activePage - 1) * pageSize,
+    activePage * pageSize
+  )
 
-  const onUpdate = useCallback(async (problem: Problem) => {
-    const solution = Number(problem.solution)
-    if (isNaN(solution) || !Number.isSafeInteger(solution)) return
+  const onUpdate = useCallback(
+    async (problem: Problem) => {
+      const solution = Number(problem.solution)
+      if (isNaN(solution) || !Number.isSafeInteger(solution)) return
 
-    const req = new SetSolutionsRequest()
-      .setId(problem.id)
-      .setValue(solution)
-      .setDelete(problem.solution === '')
-    
-    await competitionService.setSolutions(req, await getAuth())
-  }, [getAuth])
+      const req = new SetSolutionsRequest()
+        .setId(problem.id)
+        .setValue(solution)
+        .setDelete(problem.solution === '')
+
+      await competitionService.setSolutions(req, await getAuth())
+    },
+    [getAuth]
+  )
 
   return (
     <div className={styles.container}>
       <div className={styles.logoutContainer}>
-        <Button to="/team" className={styles.button}>Csapat</Button>
+        <Button to="/team" className={styles.button}>
+          Csapat
+        </Button>
         <span className={styles.timer}>{time}</span>
-        <Button onClick={logout} className={styles.button}>Kijelentkezés</Button>
+        <Button onClick={logout} className={styles.button}>
+          Kijelentkezés
+        </Button>
       </div>
-      <Paginator totalItems={problems.length} pageSize={pageSize} onPageSwitch={(page: number) => {
-        setActivePage(page)
-        window.scrollTo(0, 0)
-      }}>
+      <Paginator
+        totalItems={problems.length}
+        pageSize={pageSize}
+        onPageSwitch={(page: number) => {
+          setActivePage(page)
+          window.scrollTo(0, 0)
+        }}
+      >
         <PaginatorControls />
         <div className={styles.buttonsContainer}>
           {pageData.map((problem) => (
@@ -54,7 +68,9 @@ const CompetitionPage: React.VFC = () => {
               className={styles.problemButton}
               kind={problem.solution ? 'primary' : undefined}
               key={problem.id}
-            >{problem.position}</Button>
+            >
+              {problem.position}
+            </Button>
           ))}
         </div>
         {pageData.map((problem) => (
@@ -80,11 +96,18 @@ const CompetitionRoutes: React.VFC = () => {
 
   return (
     <React.Fragment>
-      <PrivateRoute path='/competition' component={CompetitionPage} guards={[authGuard]} />
-      <PrivateRoute path='/team' component={CompetitionPage} guards={[authGuard]} />
+      <PrivateRoute
+        path="/competition"
+        component={CompetitionPage}
+        guards={[authGuard]}
+      />
+      <PrivateRoute
+        path="/team"
+        component={CompetitionPage}
+        guards={[authGuard]}
+      />
     </React.Fragment>
   )
 }
 
 export default CompetitionRoutes
-

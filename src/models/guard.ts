@@ -1,10 +1,10 @@
 export interface ValidGuard {
-  valid: true,
+  valid: true
 }
 
 export interface InvalidGuard {
-  valid: false,
-  redirect: string,
+  valid: false
+  redirect: string
 }
 
 export type Guard = ValidGuard | InvalidGuard

@@ -16,16 +16,19 @@ const initialValues = { email: '' }
 
 const ForgotPasswordPage: React.VFC = () => {
   const onSubmit = async (values: typeof initialValues) => {
-    let req = new ForgotPasswordRequest()
-      .setEmail(values.email)
-    
+    let req = new ForgotPasswordRequest().setEmail(values.email)
+
     await authService.forgotPassword(req, null)
   }
 
   return (
     <div className={styles.container}>
       <Card className={styles.card}>
-        <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
+        <Formik
+          initialValues={initialValues}
+          onSubmit={onSubmit}
+          validationSchema={validationSchema}
+        >
           {({ isSubmitting }) => (
             <Form>
               <h1>Elfelejtett jelszó</h1>
@@ -33,15 +36,27 @@ const ForgotPasswordPage: React.VFC = () => {
                 <span>Email</span>
                 <Field name="email">
                   {({ field, meta }: FieldProps) => (
-                    <Input type="email" block {...field} error={!!meta.touched && !!meta.error} />
+                    <Input
+                      type="email"
+                      block
+                      {...field}
+                      error={!!meta.touched && !!meta.error}
+                    />
                   )}
                 </Field>
                 <ErrorMessage name="email">
-                  {(msg) => (<span className={styles.error}>{msg}</span>)}
+                  {(msg) => <span className={styles.error}>{msg}</span>}
                 </ErrorMessage>
               </div>
               <div className={styles.controls}>
-                <Button className={styles.button} kind="primary" disabled={isSubmitting} type="submit">Küldés</Button>
+                <Button
+                  className={styles.button}
+                  kind="primary"
+                  disabled={isSubmitting}
+                  type="submit"
+                >
+                  Küldés
+                </Button>
               </div>
             </Form>
           )}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from 'react'
 import KaTeX from 'katex'
 
 export const useFormatedProblem = (problemText: string) => {
