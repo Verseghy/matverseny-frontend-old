@@ -1,11 +1,7 @@
 import { createContext } from "react";
 import { useProblems } from "../hooks/problems";
 import { AdminClient } from "../proto/AdminServiceClientPb";
-
-const enableDevTools = (process.env.NODE_ENV === 'development' && (window as any).__GRPCWEB_DEVTOOLS__) || (() => {})
-const service = new AdminClient(process.env.REACT_APP_BACKEND_URL!, null, null)
-
-enableDevTools([service])
+import { adminService } from "../services";
 
 export interface AdminContext {
   service: AdminClient,
@@ -14,10 +10,10 @@ export interface AdminContext {
 export const AdminContext = createContext<AdminContext | null>(null)
 
 export const AdminProvider: React.FC = ({ children }) => {
-  useProblems(service)
+  useProblems(adminService)
 
   return (
-    <AdminContext.Provider value={{ service }}>
+    <AdminContext.Provider value={{ service: adminService }}>
       {children}
     </AdminContext.Provider>
   )

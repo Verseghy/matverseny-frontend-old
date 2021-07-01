@@ -9,7 +9,8 @@ import { Formik, Form, Field, FieldProps, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import { LoginRequest } from '../proto/auth_pb'
 import { Error } from 'grpc-web'
-import { authService, useAuthFunctions } from '../state/auth'
+import { useAuthFunctions } from '../state/auth'
+import { authService } from '../services'
 
 const validationSchema = Yup.object({
   email: Yup.string()

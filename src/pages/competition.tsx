@@ -10,8 +10,9 @@ import { useProblems } from '../hooks/problems'
 import { useTime } from '../hooks/time'
 import { Problem } from '../models/problem'
 import { SetSolutionsRequest } from '../proto/competition_pb'
+import { competitionService } from '../services'
 import { useAuthFunctions } from '../state/auth'
-import { competitionService, sortedProblems, timeString } from '../state/competition'
+import { sortedProblems, timeString } from '../state/competition'
 import styles from '../styles/competition.module.scss'
 
 const CompetitionPage: React.VFC = () => {

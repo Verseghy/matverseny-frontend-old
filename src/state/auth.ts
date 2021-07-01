@@ -3,13 +3,8 @@ import jwtDecode from 'jwt-decode'
 import { useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 import { atom, selector, useRecoilCallback } from 'recoil'
-import { AuthClient } from '../proto/AuthServiceClientPb'
 import { RefreshTokenRequest } from '../proto/auth_pb'
-
-const enableDevTools = (process.env.NODE_ENV === 'development' && (window as any).__GRPCWEB_DEVTOOLS__) || (() => {})
-export const authService = new AuthClient(process.env.REACT_APP_BACKEND_URL!, null, null)
-
-enableDevTools([authService])
+import { authService } from '../services'
 
 export interface JWT {
   user_id: string,

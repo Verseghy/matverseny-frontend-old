@@ -2,8 +2,9 @@ import { ClientReadableStream } from 'grpc-web'
 import { useEffect } from 'react'
 import { useSetRecoilState } from 'recoil'
 import { GetTimesRequest, GetTimesResponse } from '../proto/competition_pb'
+import { competitionService } from '../services'
 import { useAuthFunctions } from '../state/auth'
-import { competitionService, competitionTime, currentTime } from '../state/competition'
+import { competitionTime, currentTime } from '../state/competition'
 import { useInterval } from './interval'
 
 export const useTime = () => {

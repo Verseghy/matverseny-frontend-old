@@ -6,7 +6,7 @@ import styles from '../styles/forgot-password.module.scss'
 import { Formik, Form, Field, FieldProps, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import { ForgotPasswordRequest } from '../proto/auth_pb'
-import { authService } from '../state/auth'
+import { authService } from '../services'
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required('Email kötelező'),

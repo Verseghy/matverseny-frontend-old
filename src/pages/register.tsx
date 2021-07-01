@@ -8,7 +8,8 @@ import styles from '../styles/register.module.scss'
 import { Formik, Form, Field, FieldProps, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import { RegisterRequest } from '../proto/auth_pb'
-import { authService, useAuthFunctions } from '../state/auth'
+import { useAuthFunctions } from '../state/auth'
+import { authService } from '../services'
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
