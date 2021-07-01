@@ -4,7 +4,7 @@ import { CompetitionClient } from '../proto/CompetitionServiceClientPb'
 import { problemsData, sortedProblems as problemsSortedProblems } from './problems'
 
 const enableDevTools = (process.env.NODE_ENV === 'development' && (window as any).__GRPCWEB_DEVTOOLS__) || (() => {})
-export const competitionService = new CompetitionClient('http://localhost:8080', null, null)
+export const competitionService = new CompetitionClient(process.env.REACT_APP_BACKEND_URL!, null, null)
 
 enableDevTools([competitionService])
 

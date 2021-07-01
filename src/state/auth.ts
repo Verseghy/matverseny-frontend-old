@@ -7,7 +7,7 @@ import { AuthClient } from '../proto/AuthServiceClientPb'
 import { RefreshTokenRequest } from '../proto/auth_pb'
 
 const enableDevTools = (process.env.NODE_ENV === 'development' && (window as any).__GRPCWEB_DEVTOOLS__) || (() => {})
-export const authService = new AuthClient('http://localhost:8080', null, null)
+export const authService = new AuthClient(process.env.REACT_APP_BACKEND_URL!, null, null)
 
 enableDevTools([authService])
 

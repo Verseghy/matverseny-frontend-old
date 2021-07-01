@@ -3,7 +3,7 @@ import { useProblems } from "../hooks/problems";
 import { AdminClient } from "../proto/AdminServiceClientPb";
 
 const enableDevTools = (process.env.NODE_ENV === 'development' && (window as any).__GRPCWEB_DEVTOOLS__) || (() => {})
-const service = new AdminClient('http://localhost:8080', null, null)
+const service = new AdminClient(process.env.REACT_APP_BACKEND_URL!, null, null)
 
 enableDevTools([service])
 
