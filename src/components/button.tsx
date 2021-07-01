@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom'
 import styles from '../styles/button.module.scss'
 import classnames from 'classnames'
 
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   kind?: 'primary' | 'danger'
   block?: boolean
   label?: boolean

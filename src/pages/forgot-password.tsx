@@ -36,12 +36,7 @@ const ForgotPasswordPage: React.VFC = () => {
                 <span>Email</span>
                 <Field name="email">
                   {({ field, meta }: FieldProps) => (
-                    <Input
-                      type="email"
-                      block
-                      {...field}
-                      error={!!meta.touched && !!meta.error}
-                    />
+                    <Input type="email" block {...field} error={!!meta.touched && !!meta.error} />
                   )}
                 </Field>
                 <ErrorMessage name="email">

@@ -1,11 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import Button from '../components/button'
-import {
-  CreateRequest,
-  DeleteRequest,
-  SwapRequest,
-  UpdateRequest,
-} from '../proto/admin_pb'
+import { CreateRequest, DeleteRequest, SwapRequest, UpdateRequest } from '../proto/admin_pb'
 import ProblemCard from '../components/problem-card'
 import styles from '../styles/admin.module.scss'
 import { Paginator, PaginatorControls } from '../components/paginator'
@@ -27,10 +22,7 @@ const AdminPage: React.VFC = () => {
   const pageSize = 10
 
   const newProblem = async () => {
-    adminService.createProblem(
-      new CreateRequest().setAt(problems.length + 1),
-      await getAuth()
-    )
+    adminService.createProblem(new CreateRequest().setAt(problems.length + 1), await getAuth())
   }
 
   const deleteProblem = useCallback(
@@ -91,19 +83,17 @@ const AdminPage: React.VFC = () => {
         <Button kind="primary" onClick={async () => newProblem()}>
           Új
         </Button>
-        {problems
-          .slice((activePage - 1) * pageSize, activePage * pageSize)
-          .map((problem) => (
-            <ProblemCard
-              key={problem}
-              admin
-              problemID={problem}
-              className={styles.card}
-              onUpdate={updateProblem}
-              onDelete={deleteProblem}
-              onSwap={swapProblem}
-            />
-          ))}
+        {problems.slice((activePage - 1) * pageSize, activePage * pageSize).map((problem) => (
+          <ProblemCard
+            key={problem}
+            admin
+            problemID={problem}
+            className={styles.card}
+            onUpdate={updateProblem}
+            onDelete={deleteProblem}
+            onSwap={swapProblem}
+          />
+        ))}
         <PaginatorControls />
       </Paginator>
     </div>

@@ -90,9 +90,7 @@ export const useAuthFunctions = (): {
   const getAccessToken = useRecoilCallback(
     ({ snapshot }) =>
       async () => {
-        const { refreshToken, accessToken } = await snapshot.getPromise(
-          authTokens
-        )
+        const { refreshToken, accessToken } = await snapshot.getPromise(authTokens)
 
         if (refreshToken === '') {
           return ''

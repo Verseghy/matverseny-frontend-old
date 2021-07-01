@@ -1,9 +1,6 @@
 import { atom, selector, selectorFamily } from 'recoil'
 import { TimeState } from '../models/time'
-import {
-  problemsData,
-  sortedProblems as problemsSortedProblems,
-} from './problems'
+import { problemsData, sortedProblems as problemsSortedProblems } from './problems'
 
 export enum CompetitionState {
   BEFORE,

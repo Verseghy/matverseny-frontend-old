@@ -1,10 +1,7 @@
 import { ClientReadableStream } from 'grpc-web'
 import { useEffect, useRef } from 'react'
 import { useSetRecoilState } from 'recoil'
-import {
-  GetSolutionsRequest,
-  GetSolutionsResponse,
-} from '../proto/competition_pb'
+import { GetSolutionsRequest, GetSolutionsResponse } from '../proto/competition_pb'
 import { competitionService } from '../services'
 import { useAuthFunctions } from '../state/auth'
 import { solutionsData } from '../state/competition'

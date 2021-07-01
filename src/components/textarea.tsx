@@ -8,12 +8,7 @@ export interface InputProps extends React.HTMLProps<HTMLTextAreaElement> {
   className?: string
 }
 
-const Input: React.VFC<InputProps> = ({
-  block,
-  error,
-  className,
-  ...props
-}) => {
+const Input: React.VFC<InputProps> = ({ block, error, className, ...props }) => {
   const classes = classnames(styles.textarea, className, {
     [styles.block]: block,
     [styles.error]: error,

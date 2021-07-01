@@ -11,9 +11,7 @@ import { useAuthFunctions } from '../state/auth'
 import { authService } from '../services'
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string()
-    .email('Az email formátuma nem megfelelő')
-    .required('Email kötelező'),
+  email: Yup.string().email('Az email formátuma nem megfelelő').required('Email kötelező'),
   password: Yup.string()
     .min(8, 'A jelszónak legalább 8 karakternek kell lennie')
     .required('Jelszó kötelező'),
@@ -78,12 +76,7 @@ const RegisterPage: React.VFC = () => {
                 <span>Email</span>
                 <Field name="email">
                   {({ field, meta }: FieldProps) => (
-                    <Input
-                      type="name"
-                      block
-                      {...field}
-                      error={!!meta.touched && !!meta.error}
-                    />
+                    <Input type="name" block {...field} error={!!meta.touched && !!meta.error} />
                   )}
                 </Field>
                 <ErrorMessage name="email">
@@ -126,11 +119,7 @@ const RegisterPage: React.VFC = () => {
                 <span>Név</span>
                 <Field name="name">
                   {({ field, meta }: FieldProps) => (
-                    <Input
-                      block
-                      {...field}
-                      error={!!meta.touched && !!meta.error}
-                    />
+                    <Input block {...field} error={!!meta.touched && !!meta.error} />
                   )}
                 </Field>
                 <ErrorMessage name="name">
@@ -141,11 +130,7 @@ const RegisterPage: React.VFC = () => {
                 <span>Iskola</span>
                 <Field name="school">
                   {({ field, meta }: FieldProps) => (
-                    <Input
-                      block
-                      {...field}
-                      error={!!meta.touched && !!meta.error}
-                    />
+                    <Input block {...field} error={!!meta.touched && !!meta.error} />
                   )}
                 </Field>
                 <ErrorMessage name="school">
@@ -156,12 +141,7 @@ const RegisterPage: React.VFC = () => {
                 <span>Évfolyam</span>
                 <Field name="class">
                   {({ field, meta }: FieldProps) => (
-                    <Input
-                      type="number"
-                      block
-                      {...field}
-                      error={!!meta.touched && !!meta.error}
-                    />
+                    <Input type="number" block {...field} error={!!meta.touched && !!meta.error} />
                   )}
                 </Field>
                 <ErrorMessage name="class">

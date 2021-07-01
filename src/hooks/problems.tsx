@@ -11,12 +11,9 @@ import { useProblemFunctions } from '../state/problems'
 export type SetProblemFn = (id: string, problem: Partial<Problem>) => void
 export type FindProblemFn = (pos: number) => Problem | undefined
 
-export const useProblems = <T extends AdminClient | CompetitionClient>(
-  service: T
-) => {
+export const useProblems = <T extends AdminClient | CompetitionClient>(service: T) => {
   const stream = useRef<ClientReadableStream<ProblemStream> | null>(null)
-  const { updateProblem, deleteProblem, swapProblem, createProblem } =
-    useProblemFunctions()
+  const { updateProblem, deleteProblem, swapProblem, createProblem } = useProblemFunctions()
   const { getAuth } = useAuthFunctions()
 
   useEffect(() => {

@@ -8,12 +8,7 @@ import { useFormatedProblem } from '../hooks/formatted-problem'
 import { useNotFirstEffect } from '../hooks/not-first-effect'
 import { useDebounce } from '../hooks/debounce'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faArrowDown,
-  faArrowUp,
-  faImages,
-  faTrash,
-} from '@fortawesome/free-solid-svg-icons'
+import { faArrowDown, faArrowUp, faImages, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { useRecoilValue } from 'recoil'
 import { getProblemByID as competitionGetProblemByID } from '../state/competition'
 import { sortedProblemIDs, getProblemByID } from '../state/problems'
@@ -97,12 +92,7 @@ const ProblemCard: React.VFC<ProblemCardProps> = ({
           <div className={styles.buttons}>
             {problem.image === '' ? (
               <Button kind="primary" label>
-                <input
-                  ref={uploadElement}
-                  onChange={uploadImage}
-                  hidden
-                  type="file"
-                />
+                <input ref={uploadElement} onChange={uploadImage} hidden type="file" />
                 <FontAwesomeIcon icon={faImages} />
               </Button>
             ) : (
@@ -132,22 +122,14 @@ const ProblemCard: React.VFC<ProblemCardProps> = ({
             >
               <FontAwesomeIcon icon={faArrowDown} />
             </Button>
-            <Button
-              onClick={() => onDelete && onDelete(problem.id)}
-              kind="danger"
-            >
+            <Button onClick={() => onDelete && onDelete(problem.id)} kind="danger">
               <FontAwesomeIcon icon={faTrash} />
             </Button>
           </div>
         )}
       </div>
-      <p
-        className={styles.problem}
-        dangerouslySetInnerHTML={{ __html: formattedProblemText }}
-      />
-      {!!problem.image && (
-        <img className={styles.image} src={problem.image} alt="" />
-      )}
+      <p className={styles.problem} dangerouslySetInnerHTML={{ __html: formattedProblemText }} />
+      {!!problem.image && <img className={styles.image} src={problem.image} alt="" />}
       {!!admin && (
         <Fragment>
           <Textarea

@@ -22,10 +22,7 @@ const CompetitionPage: React.VFC = () => {
   const problems = useRecoilValue(sortedProblems)
   const { getAuth, logout } = useAuthFunctions()
 
-  const pageData = problems.slice(
-    (activePage - 1) * pageSize,
-    activePage * pageSize
-  )
+  const pageData = problems.slice((activePage - 1) * pageSize, activePage * pageSize)
 
   const onUpdate = useCallback(
     async (problem: Problem) => {
@@ -96,16 +93,8 @@ const CompetitionRoutes: React.VFC = () => {
 
   return (
     <React.Fragment>
-      <PrivateRoute
-        path="/competition"
-        component={CompetitionPage}
-        guards={[authGuard]}
-      />
-      <PrivateRoute
-        path="/team"
-        component={CompetitionPage}
-        guards={[authGuard]}
-      />
+      <PrivateRoute path="/competition" component={CompetitionPage} guards={[authGuard]} />
+      <PrivateRoute path="/team" component={CompetitionPage} guards={[authGuard]} />
     </React.Fragment>
   )
 }

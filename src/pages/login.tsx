@@ -13,9 +13,7 @@ import { useAuthFunctions } from '../state/auth'
 import { authService } from '../services'
 
 const validationSchema = Yup.object({
-  email: Yup.string()
-    .email('Az email formátuma nem megfelelő')
-    .required('Email kötelező'),
+  email: Yup.string().email('Az email formátuma nem megfelelő').required('Email kötelező'),
   password: Yup.string().required('Jelszó kötelező'),
 })
 
@@ -26,9 +24,7 @@ const LoginPage: React.VFC = () => {
   const { login } = useAuthFunctions()
 
   const onSubmit = async (values: typeof initialValues) => {
-    let req = new LoginRequest()
-      .setEmail(values.email)
-      .setPassword(values.password)
+    let req = new LoginRequest().setEmail(values.email).setPassword(values.password)
 
     try {
       const res = await authService.login(req, null)
@@ -59,12 +55,7 @@ const LoginPage: React.VFC = () => {
                 <span>Email</span>
                 <Field name="email">
                   {({ field, meta }: FieldProps) => (
-                    <Input
-                      type="email"
-                      block
-                      {...field}
-                      error={!!meta.touched && !!meta.error}
-                    />
+                    <Input type="email" block {...field} error={!!meta.touched && !!meta.error} />
                   )}
                 </Field>
                 <ErrorMessage name="email">

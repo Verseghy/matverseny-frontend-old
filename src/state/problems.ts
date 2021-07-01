@@ -9,9 +9,7 @@ export const problemsData = atom<{ [key: string]: Problem }>({
 export const sortedProblems = selector({
   key: 'problems_sortedProblems',
   get: ({ get }) => {
-    return Object.values(get(problemsData)).sort(
-      (a, b) => a.position - b.position
-    )
+    return Object.values(get(problemsData)).sort((a, b) => a.position - b.position)
   },
 })
 
@@ -33,8 +31,7 @@ export const getProblemByID = selectorFamily({
     },
 })
 
-export type RequiedKey<T, K extends keyof T> = Partial<Omit<T, K>> &
-  Required<Pick<T, K>>
+export type RequiedKey<T, K extends keyof T> = Partial<Omit<T, K>> & Required<Pick<T, K>>
 
 export const useProblemFunctions = (): {
   updateProblem: (problem: RequiedKey<Problem, 'id'>) => void
@@ -70,10 +67,7 @@ export const useProblemFunctions = (): {
               ...acc,
               [key]: {
                 ...value,
-                position:
-                  value.position > position
-                    ? value.position - 1
-                    : value.position,
+                position: value.position > position ? value.position - 1 : value.position,
               },
             }
           }, {})
@@ -90,10 +84,7 @@ export const useProblemFunctions = (): {
         set(problemsData, (state) => {
           const problemA = { ...state[a] }
           const problemB = { ...state[b] }
-          ;[problemA.position, problemB.position] = [
-            problemB.position,
-            problemA.position,
-          ]
+          ;[problemA.position, problemB.position] = [problemB.position, problemA.position]
 
           return {
             ...state,
@@ -115,8 +106,7 @@ export const useProblemFunctions = (): {
                 ...acc,
                 [key]: {
                   ...value,
-                  position:
-                    value.position >= at ? value.position + 1 : value.position,
+                  position: value.position >= at ? value.position + 1 : value.position,
                 },
               }
             },
@@ -139,9 +129,7 @@ export const useProblemFunctions = (): {
     ({ snapshot }) =>
       async (pos: number) => {
         const problems = await snapshot.getPromise(problemsData)
-        return Object.values(problems).find(
-          (problem) => problem.position === pos
-        )
+        return Object.values(problems).find((problem) => problem.position === pos)
       },
     []
   )
