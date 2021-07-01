@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react'
-import { useHistory } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import Button from '../components/button'
 import { Paginator, PaginatorControls } from '../components/paginator'
@@ -18,7 +17,6 @@ import styles from '../styles/competition.module.scss'
 const CompetitionPage: React.VFC = () => {
   const [activePage, setActivePage] = useState(1)
   const time = useRecoilValue(timeString)
-  const history = useHistory()
   const pageSize = 10
   const problems = useRecoilValue(sortedProblems)
   const {getAuth, logout} = useAuthFunctions()

@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
 import Card from '../components/card'
 import Input from '../components/input'
 import Button from '../components/button'
@@ -42,7 +41,6 @@ const initialValues = {
 
 const RegisterPage: React.VFC = () => {
   const [error, setError] = useState('')
-  const history = useHistory()
   const {login} = useAuthFunctions()
 
   const onSubmit = async (values: typeof initialValues) => {
