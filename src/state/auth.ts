@@ -1,6 +1,7 @@
 import { Metadata } from 'grpc-web'
 import jwtDecode from 'jwt-decode'
 import { useCallback } from 'react'
+import { useHistory } from 'react-router-dom'
 import { atom, selector, useRecoilCallback } from 'recoil'
 import { AuthClient } from '../proto/AuthServiceClientPb'
 import { RefreshTokenRequest } from '../proto/auth_pb'
@@ -40,12 +41,23 @@ export const useAuthFunctions = (): {
   getAuth: () => Promise<Metadata>,
   getClaims: () => Promise<JWT | null>,
 } => {
+  const history = useHistory()
+
   const login = useRecoilCallback(({ set }) => (refreshToken: string, accessToken: string) => {
     set(authTokens, {
       refreshToken,
       accessToken,
     })
     localStorage.setItem('refreshToken', refreshToken)
+
+    const claims = jwtDecode<JWT>(accessToken)
+    if (claims.is_admin) {
+      history.push('/admin')
+    } else if (claims.team === '') {
+      history.push('/team')
+    } else {
+      history.push('/competition')
+    }
   }, [])
 
   const logout = useRecoilCallback(({ set }) => () => {
@@ -54,6 +66,7 @@ export const useAuthFunctions = (): {
       accessToken: '',
     }))
     localStorage.removeItem('refreshToken')
+    history.push('/login')
   }, [])
 
   const getNewToken = useRecoilCallback(({ set }) => async (refreshToken: string) => {

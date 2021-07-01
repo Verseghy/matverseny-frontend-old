@@ -36,18 +36,12 @@ const CompetitionPage: React.VFC = () => {
     await competitionService.setSolutions(req, await getAuth())
   }, [])
 
-  const onLogout = () => {
-    logout()
-    // TODO: move this code
-    history.push('/login')
-  }
-
   return (
     <div className={styles.container}>
       <div className={styles.logoutContainer}>
         <Button to="/team" className={styles.button}>Csapat</Button>
         <span className={styles.timer}>{time}</span>
-        <Button onClick={onLogout} className={styles.button}>Kijelentkezés</Button>
+        <Button onClick={logout} className={styles.button}>Kijelentkezés</Button>
       </div>
       <Paginator totalItems={problems.length} pageSize={pageSize} onPageSwitch={(page: number) => {
         setActivePage(page)

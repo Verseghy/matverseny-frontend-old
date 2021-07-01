@@ -64,8 +64,6 @@ const RegisterPage: React.VFC = () => {
     try {
       const res = await authService.register(req, null)
       login(res.getRefreshToken(), res.getAccessToken())
-
-      history.push('/teams')
     } catch (error: any) {
       setError(error.message)
     }

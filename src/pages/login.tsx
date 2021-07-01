@@ -33,15 +33,6 @@ const LoginPage: React.VFC = () => {
     try {
       const res = await authService.login(req, null)
       login(res.getRefreshToken(), res.getAccessToken())
-
-      // TODO: implement page switching after login
-      // if (nextPage === NextPage.ADMIN) {
-      //   history.push('/admin')
-      // } else if (nextPage === NextPage.COMPETITION) {
-      //   history.push('/competition')
-      // } else {
-      //   history.push('/teams')
-      // }
     } catch (error: any) {
       const e = error as Error
       setError(e.message)
