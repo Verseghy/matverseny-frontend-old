@@ -4,6 +4,7 @@ import Button from '../components/button'
 import { Paginator, PaginatorControls } from '../components/paginator'
 import PrivateRoute from '../components/private-route'
 import ProblemCard from '../components/problem-card'
+import { useSolutions } from '../components/solutions'
 import { useAuthGuard } from '../guards/auth'
 import { useProblems } from '../hooks/problems'
 import { useTime } from '../hooks/time'
@@ -72,6 +73,7 @@ const CompetitionPage: React.VFC = () => {
 
 const CompetitionRoutes: React.VFC = () => {
   useProblems(competitionService)
+  useSolutions()
   useTime()
 
   return (

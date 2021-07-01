@@ -17,7 +17,6 @@ import { Problem } from '../models/problem'
 export interface ProblemCardProps extends CardProps {
   problemID: string,
   admin?: boolean,
-  solutions?: {[key: string]: string},
   onDelete?: (id: string) => void,
   onUpdate?: (problem: Problem) => void,
   onSwap?: (posA: number, posB: number) => void,
@@ -26,7 +25,6 @@ export interface ProblemCardProps extends CardProps {
 const ProblemCard: React.VFC<ProblemCardProps> = ({
   problemID,
   admin,
-  solutions,
   onDelete,
   onUpdate,
   onSwap,
@@ -49,9 +47,9 @@ const ProblemCard: React.VFC<ProblemCardProps> = ({
   const last = problem.position === totalItems
 
   useEffect(() => {
-    if (!solutions || admin) return
-    setProblemSolution(solutions[problem.id] ?? '')
-  }, [solutions, problem.id, admin])
+    if (admin) return
+    setProblemSolution(problem.solution ?? '')
+  }, [problem.solution, admin])
 
   useEffect(() => {
     setUpdate(false)
