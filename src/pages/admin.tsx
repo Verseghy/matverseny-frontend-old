@@ -3,33 +3,34 @@ import Button from '../components/button'
 import { CreateRequest, DeleteRequest, SwapRequest, UpdateRequest } from '../proto/admin_pb'
 import ProblemCard from '../components/problem-card'
 import styles from '../styles/admin.module.scss'
-import { AdminContext, AdminProvider } from '../context/admin'
 import { Paginator, PaginatorControls} from '../components/paginator'
 import { Problem } from '../models/problem'
 import { Problem as ProblemPB } from '../proto/shared_pb'
 import { useRecoilValue } from 'recoil'
 import { useAuthFunctions } from '../state/auth'
 import { sortedProblemIDs, useProblemFunctions } from '../state/problems'
+import { adminService } from '../services'
+import { useProblems } from '../hooks/problems'
 
-const InnerAdminPage: React.VFC = () => {
-  const {service} = useContext(AdminContext)!
+const AdminPage: React.VFC = () => {
   const [activePage, setActivePage] = useState(1)
   const problems = useRecoilValue(sortedProblemIDs)
   const {getProblemFromPos} = useProblemFunctions()
   const {getAuth} = useAuthFunctions()
+  useProblems(adminService)
 
   const pageSize = 10
 
   const newProblem = async () => {
-    service.createProblem(new CreateRequest().setAt(problems.length + 1), await getAuth())
+    adminService.createProblem(new CreateRequest().setAt(problems.length + 1), await getAuth())
   }
 
   const deleteProblem = useCallback(async (id: string) => {
     const req = new DeleteRequest()
       .setId(id)
 
-    await service.deleteProblem(req, await getAuth())
-  }, [service])
+    await adminService.deleteProblem(req, await getAuth())
+  }, [])
 
   const updateProblem = useCallback(async (problem: Problem) => {
     const problemPB = new ProblemPB()
@@ -47,8 +48,8 @@ const InnerAdminPage: React.VFC = () => {
     const req = new UpdateRequest()
       .setProblem(problemPB)
     
-    await service.updateProblem(req, await getAuth())
-  }, [service])
+    await adminService.updateProblem(req, await getAuth())
+  }, [])
 
   const swapProblem = useCallback(async (posA: number, posB: number) => {
     const problemA = await getProblemFromPos(posA)
@@ -60,8 +61,8 @@ const InnerAdminPage: React.VFC = () => {
       .setA(problemA.id)
       .setB(problemB.id)
     
-    await service.swapProblem(req, await getAuth())
-  }, [service])
+    await adminService.swapProblem(req, await getAuth())
+  }, [])
 
   return (
     <div className={styles.container}>
@@ -85,14 +86,6 @@ const InnerAdminPage: React.VFC = () => {
         <PaginatorControls />
       </Paginator>
     </div>
-  )
-}
-
-const AdminPage: React.VFC = () => {
-  return (
-    <AdminProvider>
-      <InnerAdminPage />
-    </AdminProvider>
   )
 }
 
