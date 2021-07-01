@@ -30,7 +30,7 @@ const PrivateRoute: React.VFC<PrivateRouteProps> = ({ path, component: Component
     }
 
     checkGuards()
-  },[guardHooks])
+  },[])
 
   return <Route path={path} render={() => {
     if (!loaded) return null
