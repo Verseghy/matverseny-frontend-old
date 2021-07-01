@@ -76,10 +76,12 @@ const CompetitionRoutes: React.VFC = () => {
   useSolutions()
   useTime()
 
+  const authGuard = useAuthGuard()
+
   return (
     <React.Fragment>
-      <PrivateRoute path='/competition' component={CompetitionPage} guards={[useAuthGuard]} />
-      <PrivateRoute path='/team' component={CompetitionPage} guards={[useAuthGuard]} />
+      <PrivateRoute path='/competition' component={CompetitionPage} guards={[authGuard]} />
+      <PrivateRoute path='/team' component={CompetitionPage} guards={[authGuard]} />
     </React.Fragment>
   )
 }

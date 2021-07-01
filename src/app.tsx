@@ -16,24 +16,25 @@ const CompetitionRoutes = React.lazy(() => import('./pages/competition'))
 const App: React.FC = () => {
   changeTheme(isDarkTheme() ? Theme.DARK : Theme.LIGHT)
 
+  const adminGuard = useAdminGuard()
+  const loginGuard = useLoginGuard()
+
   return (
-    <RecoilRoot>
-      <Suspense fallback={<p>Loading...</p>}>
-        <main>
-          <Router>
-            <Switch>
-              <Route path='/' exact component={LandingPage} />
-              <PrivateRoute path='/login' component={LoginPage} guards={[useLoginGuard]} />
-              <Route path='/register' component={RegisterPage} />
-              <Route path='/forgot-password' component={ForgotPasswordPage} />
-              <PrivateRoute path='/admin' component={AdminPage} guards={[useAdminGuard]} />
-              <CompetitionRoutes />
-              <Redirect to="/" />
-            </Switch>
-          </Router>
-        </main>
-      </Suspense>
-    </RecoilRoot>
+    <Suspense fallback={<p>Loading...</p>}>
+      <main>
+        <Router>
+          <Switch>
+            <Route path='/' exact component={LandingPage} />
+            <PrivateRoute path='/login' component={LoginPage} guards={[loginGuard]} />
+            <Route path='/register' component={RegisterPage} />
+            <Route path='/forgot-password' component={ForgotPasswordPage} />
+            <PrivateRoute path='/admin' component={AdminPage} guards={[adminGuard]} />
+            <CompetitionRoutes />
+            <Redirect to="/" />
+          </Switch>
+        </Router>
+      </main>
+    </Suspense>
   );
 }
 
