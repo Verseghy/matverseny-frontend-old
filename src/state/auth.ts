@@ -92,18 +92,18 @@ export const useAuthFunctions = (): {
     }
 
     return accessToken
-  })
+  }, [])
 
   const getAuth = useCallback(async () => {
     return { Authorization: `Bearer: ${await getAccessToken()}` } 
-  }, [])
+  }, [getAccessToken])
 
   const getClaims = useCallback(async () => {
     const accessToken = await getAccessToken()
     if (accessToken === '') return null
 
     return jwtDecode<JWT>(accessToken)
-  }, []) 
+  }, [getAccessToken]) 
 
   return {login, logout, getAuth, getClaims}
 }

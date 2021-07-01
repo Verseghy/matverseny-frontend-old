@@ -44,7 +44,7 @@ export const useProblems = <T extends AdminClient | CompetitionClient>(service: 
     })
 
     solutionsStream.current = stream
-  })()}, [service])
+  })()}, [])
 
   useEffect(() => { (async () => {
     const s = service.getProblems(
@@ -97,5 +97,5 @@ export const useProblems = <T extends AdminClient | CompetitionClient>(service: 
     })
 
     stream.current = s
-  })()}, [service])
+  })()}, [])
 }

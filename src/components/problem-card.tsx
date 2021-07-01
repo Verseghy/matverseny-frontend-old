@@ -51,14 +51,14 @@ const ProblemCard: React.VFC<ProblemCardProps> = ({
   useEffect(() => {
     if (!solutions || admin) return
     setProblemSolution(solutions[problem.id] ?? '')
-  }, [solutions])
+  }, [solutions, problem.id, admin])
 
   useEffect(() => {
     setUpdate(false)
     setProblemText(problem.body)
     setImage(problem.image)
     if (admin) setProblemSolution(problem.solution)
-  }, [problem.body, problem.solution, problem.image])
+  }, [problem.body, problem.solution, problem.image, admin])
 
   useNotFirstEffect(() => {
     if (!onUpdate || !update) return

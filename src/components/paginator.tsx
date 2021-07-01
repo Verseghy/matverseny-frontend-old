@@ -1,6 +1,6 @@
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { createContext, useCallback, useContext, useEffect, useState } from 'react'
+import React, { createContext, useCallback, useContext, useState } from 'react'
 import Button from './button'
 import styles from '../styles/paginator.module.scss'
 
@@ -22,15 +22,11 @@ export const Paginator: React.FC<PaginatorProps> = ({ pageSize, totalItems, onPa
   const [currentPage, setCurrentPage] = useState(1)
   const lastPage = Math.ceil(totalItems / pageSize)
 
-  useEffect(() => {
-    onPageSwitch(1)
-  }, [])
-
   const pageSwitch = useCallback((diff: number) => {
     const nextPage = currentPage + diff
     setCurrentPage(nextPage)
     onPageSwitch(nextPage)
-  }, [onPageSwitch])
+  }, [currentPage, onPageSwitch])
 
   return (
     <PaginatorContext.Provider value={{ currentPage, lastPage, pageSwitch }}>

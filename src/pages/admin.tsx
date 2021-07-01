@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import Button from '../components/button'
 import { CreateRequest, DeleteRequest, SwapRequest, UpdateRequest } from '../proto/admin_pb'
 import ProblemCard from '../components/problem-card'
@@ -30,7 +30,7 @@ const AdminPage: React.VFC = () => {
       .setId(id)
 
     await adminService.deleteProblem(req, await getAuth())
-  }, [])
+  }, [getAuth])
 
   const updateProblem = useCallback(async (problem: Problem) => {
     const problemPB = new ProblemPB()
@@ -49,7 +49,7 @@ const AdminPage: React.VFC = () => {
       .setProblem(problemPB)
     
     await adminService.updateProblem(req, await getAuth())
-  }, [])
+  }, [getAuth])
 
   const swapProblem = useCallback(async (posA: number, posB: number) => {
     const problemA = await getProblemFromPos(posA)
@@ -62,7 +62,7 @@ const AdminPage: React.VFC = () => {
       .setB(problemB.id)
     
     await adminService.swapProblem(req, await getAuth())
-  }, [])
+  }, [getAuth, getProblemFromPos])
 
   return (
     <div className={styles.container}>

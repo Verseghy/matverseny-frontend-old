@@ -33,7 +33,7 @@ const CompetitionPage: React.VFC = () => {
       .setDelete(problem.solution === '')
     
     await competitionService.setSolutions(req, await getAuth())
-  }, [])
+  }, [getAuth])
 
   return (
     <div className={styles.container}>
