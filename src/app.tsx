@@ -13,6 +13,7 @@ const RegisterPage = React.lazy(() => import('./pages/register'))
 const ForgotPasswordPage = React.lazy(() => import('./pages/forgot-password'))
 const AdminPage = React.lazy(() => import('./pages/admin'))
 const CompetitionPage = React.lazy(() => import('./pages/competition'))
+const WaitPage = React.lazy(() => import('./pages/wait'))
 
 const App: React.FC = () => {
   changeTheme(isDarkTheme() ? Theme.DARK : Theme.LIGHT)
@@ -32,6 +33,7 @@ const App: React.FC = () => {
             <Route path="/register" component={RegisterPage} />
             <Route path="/forgot-password" component={ForgotPasswordPage} />
             <PrivateRoute path="/admin" component={AdminPage} guards={[adminGuard]} />
+            <PrivateRoute path="/wait" component={WaitPage} guards={[authGuard]} />
             <PrivateRoute path="/competition" component={CompetitionPage} guards={[authGuard]} />
             <PrivateRoute path="/team" component={() => null} guards={[authGuard]} />
             <Redirect to="/" />

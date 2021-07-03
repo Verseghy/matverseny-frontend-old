@@ -1,0 +1,17 @@
+.container {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 100vh;
+  text-align: center;
+
+  h1 {
+    margin: 0;
+  }
+
+  .time {
+    margin-top: 2.4rem;
+    font-size: 7.2rem;
+    line-height: 1;
+  }
+}
