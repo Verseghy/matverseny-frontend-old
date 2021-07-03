@@ -16,6 +16,7 @@ const ForgotPasswordPage = React.lazy(() => import('./pages/forgot-password'))
 const AdminPage = React.lazy(() => import('./pages/admin'))
 const CompetitionPage = React.lazy(() => import('./pages/competition'))
 const WaitPage = React.lazy(() => import('./pages/wait'))
+const EndPage = React.lazy(() => import('./pages/end'))
 
 const App: React.FC = () => {
   changeTheme(isDarkTheme() ? Theme.DARK : Theme.LIGHT)
@@ -25,6 +26,7 @@ const App: React.FC = () => {
   const authGuard = useAuthGuard()
   const waitGuard = useTimeGuard(TimeState.BEFORE_COMP)
   const competitionGuard = useTimeGuard(TimeState.IN_COMP)
+  const endGuard = useTimeGuard(TimeState.AFTER_COMP)
 
   return (
     <Suspense fallback={<p>Loading...</p>}>
@@ -48,6 +50,7 @@ const App: React.FC = () => {
               component={() => null}
               guards={[authGuard, competitionGuard]}
             />
+            <PrivateRoute path="/end" component={EndPage} guards={[authGuard, endGuard]} />
             <Redirect to="/" />
           </Switch>
         </Router>
