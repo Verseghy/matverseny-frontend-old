@@ -2,12 +2,7 @@ import React, { useCallback, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import Button from '../components/button'
 import { Paginator, PaginatorControls } from '../components/paginator'
-import PrivateRoute from '../components/private-route'
 import ProblemCard from '../components/problem-card'
-import { useSolutions } from '../components/solutions'
-import { useAuthGuard } from '../guards/auth'
-import { useProblems } from '../hooks/problems'
-import { useTime } from '../hooks/time'
 import { Problem } from '../models/problem'
 import { SetSolutionsRequest } from '../proto/competition_pb'
 import { competitionService } from '../services'
@@ -84,19 +79,4 @@ const CompetitionPage: React.VFC = () => {
   )
 }
 
-const CompetitionRoutes: React.VFC = () => {
-  useProblems(competitionService)
-  useSolutions()
-  useTime()
-
-  const authGuard = useAuthGuard()
-
-  return (
-    <React.Fragment>
-      <PrivateRoute path="/competition" component={CompetitionPage} guards={[authGuard]} />
-      <PrivateRoute path="/team" component={CompetitionPage} guards={[authGuard]} />
-    </React.Fragment>
-  )
-}
-
-export default CompetitionRoutes
+export default CompetitionPage
