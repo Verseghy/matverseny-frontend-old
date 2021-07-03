@@ -2,12 +2,6 @@ import { atom, selector, selectorFamily } from 'recoil'
 import { TimeState } from '../models/time'
 import { problemsData, sortedProblems as problemsSortedProblems } from './problems'
 
-export enum CompetitionState {
-  BEFORE,
-  IN,
-  AFTER,
-}
-
 export const solutionsData = atom<{ [key: string]: string }>({
   key: 'competition_solutionsData',
   default: {},
@@ -16,6 +10,7 @@ export const solutionsData = atom<{ [key: string]: string }>({
 export const competitionTime = atom({
   key: 'competition_time',
   default: {
+    gotTime: false,
     start: new Date().getTime(),
     end: new Date().getTime(),
   },

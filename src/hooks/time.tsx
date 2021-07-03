@@ -21,6 +21,7 @@ export const useTime = () => {
 
       stream.on('data', (res: GetTimesResponse) => {
         setTimes({
+          gotTime: true,
           start: new Date(res.getStart()).getTime(),
           end: new Date(res.getEnd()).getTime(),
         })
