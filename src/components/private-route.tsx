@@ -17,6 +17,8 @@ const PrivateRoute: React.VFC<PrivateRouteProps> = ({ path, component: Component
       for (const guard of guards) {
         const result = await guard
 
+        if (result === 'wait') return
+
         if (result.valid === false) {
           setFinalGuard(result)
           setLoaded(true)
@@ -35,7 +37,7 @@ const PrivateRoute: React.VFC<PrivateRouteProps> = ({ path, component: Component
     <Route
       path={path}
       render={() => {
-        if (!loaded) return null
+        if (!loaded || finalGuard === 'wait') return null
 
         if (finalGuard!.valid) return <Component />
 

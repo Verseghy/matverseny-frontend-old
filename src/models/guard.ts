@@ -7,5 +7,7 @@ export interface InvalidGuard {
   redirect: string
 }
 
-export type Guard = ValidGuard | InvalidGuard
+export type WaitGuard = 'wait'
+
+export type Guard = ValidGuard | InvalidGuard | WaitGuard
 export type GuardHook = () => Promise<Guard>
