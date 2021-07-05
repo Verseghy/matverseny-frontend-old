@@ -60,6 +60,16 @@ const CompetitionPage: React.VFC = () => {
               className={styles.problemButton}
               kind={problem.solution ? 'primary' : undefined}
               key={problem.id}
+              onClick={() => {
+                window.scrollTo({
+                  top: document.getElementById(`card_${problem.id}`)!.offsetTop - 24,
+                  behavior: 'smooth',
+                })
+                const input = document.querySelector(`#card_${problem.id} input`) as HTMLInputElement
+                input.focus({
+                  preventScroll: true,
+                })
+              }}
             >
               {problem.position}
             </Button>
@@ -67,6 +77,7 @@ const CompetitionPage: React.VFC = () => {
         </div>
         {pageData.map((problem) => (
           <ProblemCard
+            id={`card_${problem.id}`}
             key={problem.id}
             className={styles.card}
             problemID={problem.id}
