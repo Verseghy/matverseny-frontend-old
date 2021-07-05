@@ -78,6 +78,13 @@ const ProblemCard: React.VFC<ProblemCardProps> = ({
   const uploadImage = () => {
     const reader = new FileReader()
     reader.onload = () => {
+      const base64 = reader.result!.toString()
+
+      if (base64.length > 1048576) {
+        // TODO: create error message
+        return
+      }
+
       setUpdate(true)
       setImage(reader.result!.toString())
     }
