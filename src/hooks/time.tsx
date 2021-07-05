@@ -1,16 +1,18 @@
 import { ClientReadableStream } from 'grpc-web'
 import { useEffect } from 'react'
-import { useSetRecoilState } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { TimeState } from '../models/time'
 import { GetTimesRequest, GetTimesResponse } from '../proto/competition_pb'
 import { competitionService } from '../services'
 import { useAuthFunctions } from '../state/auth'
-import { competitionTime, currentTime } from '../state/competition'
+import { competitionState, competitionTime, currentTime } from '../state/competition'
 import { useInterval } from './interval'
 
 export const useTime = () => {
   const { getAuth } = useAuthFunctions()
   const setTimes = useSetRecoilState(competitionTime)
   const setCurrentTime = useSetRecoilState(currentTime)
+  const state = useRecoilValue(competitionState)
 
   useEffect(() => {
     const getTimes = async () => {
@@ -35,7 +37,6 @@ export const useTime = () => {
     () => {
       setCurrentTime(new Date().getTime())
     },
-    [],
-    1000
+    state !== TimeState.AFTER_COMP ? 1000 : null
   )
 }
