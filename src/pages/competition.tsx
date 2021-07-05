@@ -65,7 +65,9 @@ const CompetitionPage: React.VFC = () => {
                   top: document.getElementById(`card_${problem.id}`)!.offsetTop - 24,
                   behavior: 'smooth',
                 })
-                const input = document.querySelector(`#card_${problem.id} input`) as HTMLInputElement
+                const input = document.querySelector(
+                  `#card_${problem.id} input`
+                ) as HTMLInputElement
                 input.focus({
                   preventScroll: true,
                 })
