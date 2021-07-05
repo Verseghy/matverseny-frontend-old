@@ -17,4 +17,4 @@ export const creators = [
   'Szarvas Natália (VFG)',
   'Szepesi Zoltán (BME)',
   'Veres Dénes (VFG)',
-] 
+]
