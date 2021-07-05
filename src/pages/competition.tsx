@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from 'react'
-import { useRecoilValue } from 'recoil'
+import React, { useCallback } from 'react'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import Button from '../components/button'
 import { Paginator, PaginatorControls } from '../components/paginator'
 import ProblemCard from '../components/problem-card'
@@ -7,17 +7,15 @@ import { Problem } from '../models/problem'
 import { SetSolutionsRequest } from '../proto/competition_pb'
 import { competitionService } from '../services'
 import { useAuthFunctions } from '../state/auth'
-import { sortedProblems, timeString } from '../state/competition'
+import { paginatedProblems, timeString } from '../state/competition'
+import { pageSize, problemsPage } from '../state/problems'
 import styles from '../styles/competition.module.scss'
 
 const CompetitionPage: React.VFC = () => {
-  const [activePage, setActivePage] = useState(1)
   const time = useRecoilValue(timeString)
-  const pageSize = 10
-  const problems = useRecoilValue(sortedProblems)
+  const problems = useRecoilValue(paginatedProblems)
+  const setActivePage = useSetRecoilState(problemsPage)
   const { getAuth, logout } = useAuthFunctions()
-
-  const pageData = problems.slice((activePage - 1) * pageSize, activePage * pageSize)
 
   const onUpdate = useCallback(
     async (problem: Problem) => {
@@ -46,8 +44,6 @@ const CompetitionPage: React.VFC = () => {
         </Button>
       </div>
       <Paginator
-        totalItems={problems.length}
-        pageSize={pageSize}
         onPageSwitch={(page: number) => {
           setActivePage(page)
           window.scrollTo(0, 0)
@@ -55,7 +51,7 @@ const CompetitionPage: React.VFC = () => {
       >
         <PaginatorControls />
         <div className={styles.buttonsContainer}>
-          {pageData.map((problem) => (
+          {problems.map((problem) => (
             <Button
               className={styles.problemButton}
               kind={problem.solution ? 'primary' : undefined}
@@ -77,7 +73,7 @@ const CompetitionPage: React.VFC = () => {
             </Button>
           ))}
         </div>
-        {pageData.map((problem) => (
+        {problems.map((problem) => (
           <ProblemCard
             id={`card_${problem.id}`}
             key={problem.id}

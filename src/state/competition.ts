@@ -1,6 +1,11 @@
 import { atom, selector, selectorFamily } from 'recoil'
 import { TimeState } from '../models/time'
-import { problemsData, sortedProblems as problemsSortedProblems } from './problems'
+import {
+  pageSize,
+  problemsData,
+  problemsPage,
+  sortedProblems as problemsSortedProblems,
+} from './problems'
 
 export const solutionsData = atom<{ [key: string]: string }>({
   key: 'competition_solutionsData',
@@ -87,5 +92,14 @@ export const sortedProblems = selector({
       ...problem,
       solution: solutions[problem.id],
     }))
+  },
+})
+
+export const paginatedProblems = selector({
+  key: 'competition_paginatedProblems',
+  get: ({ get }) => {
+    const problems = get(sortedProblems)
+    const page = get(problemsPage)
+    return problems.slice((page - 1) * pageSize, page * pageSize)
   },
 })

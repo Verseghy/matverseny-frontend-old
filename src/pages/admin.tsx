@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback } from 'react'
 import Button from '../components/button'
 import { CreateRequest, DeleteRequest, SwapRequest, UpdateRequest } from '../proto/admin_pb'
 import ProblemCard from '../components/problem-card'
@@ -6,20 +6,18 @@ import styles from '../styles/admin.module.scss'
 import { Paginator, PaginatorControls } from '../components/paginator'
 import { Problem } from '../models/problem'
 import { Problem as ProblemPB } from '../proto/shared_pb'
-import { useRecoilValue } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { useAuthFunctions } from '../state/auth'
-import { sortedProblemIDs, useProblemFunctions } from '../state/problems'
+import { useProblemFunctions, paginatedProblems, problemsPage } from '../state/problems'
 import { adminService } from '../services'
 import { useProblems } from '../hooks/problems'
 
 const AdminPage: React.VFC = () => {
-  const [activePage, setActivePage] = useState(1)
-  const problems = useRecoilValue(sortedProblemIDs)
+  const setActivePage = useSetRecoilState(problemsPage)
+  const problems = useRecoilValue(paginatedProblems)
   const { getProblemFromPos } = useProblemFunctions()
   const { getAuth } = useAuthFunctions()
   useProblems(adminService)
-
-  const pageSize = 10
 
   const newProblem = async () => {
     adminService.createProblem(new CreateRequest().setAt(problems.length + 1), await getAuth())
@@ -72,8 +70,6 @@ const AdminPage: React.VFC = () => {
   return (
     <div className={styles.container}>
       <Paginator
-        totalItems={problems.length}
-        pageSize={pageSize}
         onPageSwitch={(page: number) => {
           setActivePage(page)
           window.scrollTo(0, 0)
@@ -83,11 +79,11 @@ const AdminPage: React.VFC = () => {
         <Button kind="primary" onClick={async () => newProblem()}>
           Új
         </Button>
-        {problems.slice((activePage - 1) * pageSize, activePage * pageSize).map((problem) => (
+        {problems.map((problem) => (
           <ProblemCard
-            key={problem}
+            key={problem.id}
             admin
-            problemID={problem}
+            problemID={problem.id}
             className={styles.card}
             onUpdate={updateProblem}
             onDelete={deleteProblem}

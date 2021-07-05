@@ -1,9 +1,24 @@
 import { atom, selector, selectorFamily, useRecoilCallback } from 'recoil'
 import { Problem } from '../models/problem'
 
+export const pageSize = 10
+
 export const problemsData = atom<{ [key: string]: Problem }>({
   key: 'problems_data',
   default: {},
+})
+
+export const problemsPage = atom({
+  key: 'problems_page',
+  default: 1,
+})
+
+export const problemsLength = selector({
+  key: 'problems_length',
+  get: ({ get }) => {
+    const problems = get(problemsData)
+    return Object.keys(problems).length
+  },
 })
 
 export const sortedProblems = selector({
@@ -18,6 +33,15 @@ export const sortedProblemIDs = selector({
   get: ({ get }) => {
     const problems = get(sortedProblems)
     return problems.map((problem) => problem.id)
+  },
+})
+
+export const paginatedProblems = selector({
+  key: 'problems_paginatedProblems',
+  get: ({ get }) => {
+    const problems = get(sortedProblems)
+    const page = get(problemsPage)
+    return problems.slice((page - 1) * pageSize, page * pageSize)
   },
 })
 
