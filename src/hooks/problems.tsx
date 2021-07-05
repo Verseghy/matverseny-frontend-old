@@ -69,5 +69,6 @@ export const useProblems = <T extends AdminClient | CompetitionClient>(service: 
 
       stream.current = s
     })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 }
