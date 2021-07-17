@@ -6,7 +6,7 @@ export interface SwitchProps {
   onClick?: (value: boolean) => void
 }
 
-const Switch: React.FC<SwitchProps> = ({ children, value, onClick }) => {
+export const Switch: React.FC<SwitchProps> = ({ children, value, onClick }) => {
   const [internalValue, setIntervalValue] = useState(value ? value : false)
 
   const handleClick = () => {
@@ -40,5 +40,3 @@ const Switch: React.FC<SwitchProps> = ({ children, value, onClick }) => {
     </label>
   )
 }
-
-export default Switch

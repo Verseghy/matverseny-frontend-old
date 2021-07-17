@@ -1,7 +1,7 @@
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { createContext, useCallback, useContext, useState } from 'react'
-import Button from './button'
+import { Button } from '../components'
 import styles from '../styles/paginator.module.scss'
 import { useRecoilValue } from 'recoil'
 import { problemsLength, pageSize } from '../state/problems'

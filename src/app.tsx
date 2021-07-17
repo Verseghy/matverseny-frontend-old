@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
-import PrivateRoute from './components/private-route'
+import { PrivateRoute } from './components/'
 import { changeTheme, isDarkTheme, Theme } from './utils/theme'
 import { useLoginGuard } from './guards/login'
 import { useAdminGuard } from './guards/admin'

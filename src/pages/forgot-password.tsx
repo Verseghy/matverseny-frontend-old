@@ -1,7 +1,5 @@
 import React from 'react'
-import Card from '../components/card'
-import Input from '../components/input'
-import Button from '../components/button'
+import { Button, Card, Input } from '../components'
 import styles from '../styles/forgot-password.module.scss'
 import { Formik, Form, Field, FieldProps, ErrorMessage } from 'formik'
 import * as Yup from 'yup'

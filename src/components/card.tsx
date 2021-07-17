@@ -6,7 +6,7 @@ export interface CardProps extends React.HTMLProps<HTMLDivElement> {
   className?: string
 }
 
-const Card: React.FC<CardProps> = ({ children, className, ...rest }) => {
+export const Card: React.FC<CardProps> = ({ children, className, ...rest }) => {
   const classes = classnames(styles.card, className)
 
   return (
@@ -15,5 +15,3 @@ const Card: React.FC<CardProps> = ({ children, className, ...rest }) => {
     </div>
   )
 }
-
-export default Card

@@ -1,8 +1,6 @@
 import React from 'react'
 import styles from '../styles/landing.module.scss'
-import Button from '../components/button'
-import Switch from '../components/switch'
-import Card from '../components/card'
+import { Button, Switch, Card } from '../components'
 import { changeTheme, isDarkTheme, Theme } from '../utils/theme'
 
 const LandingPage: React.FC = () => {

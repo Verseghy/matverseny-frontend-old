@@ -28,7 +28,7 @@ const errorMessages: { [key: string]: string } = {
   E0019: 'Hibás token',
 }
 
-const ErrorMessage: React.VFC<ErrorMessageProps> = ({ message }) => {
+export const ErrorMessage: React.VFC<ErrorMessageProps> = ({ message }) => {
   if (message === '') return null
 
   let error
@@ -37,5 +37,3 @@ const ErrorMessage: React.VFC<ErrorMessageProps> = ({ message }) => {
 
   return <div className={styles.error}>{error}</div>
 }
-
-export default ErrorMessage

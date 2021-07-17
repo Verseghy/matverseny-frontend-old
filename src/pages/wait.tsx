@@ -1,6 +1,6 @@
 import React from 'react'
 import { useRecoilValue } from 'recoil'
-import Card from '../components/card'
+import { Card } from '../components'
 import { timeString } from '../state/competition'
 import styles from '../styles/wait.module.scss'
 

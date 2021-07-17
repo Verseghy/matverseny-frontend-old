@@ -1,7 +1,4 @@
-import Card, { CardProps } from '../components/card'
-import Textarea from '../components/textarea'
-import Button from '../components/button'
-import Input from '../components/input'
+import { Button, Card, CardProps, Textarea, Input } from '../components'
 import styles from '../styles/problem-card.module.scss'
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { useFormatedProblem } from '../hooks/formatted-problem'
@@ -22,7 +19,7 @@ export interface ProblemCardProps extends CardProps {
   onSwap?: (posA: number, posB: number) => void
 }
 
-const ProblemCard: React.VFC<ProblemCardProps> = ({
+export const ProblemCard: React.VFC<ProblemCardProps> = ({
   problemID,
   admin,
   onDelete,
@@ -165,5 +162,3 @@ const ProblemCard: React.VFC<ProblemCardProps> = ({
     </Card>
   )
 }
-
-export default ProblemCard
