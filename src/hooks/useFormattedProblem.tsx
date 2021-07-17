@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import KaTeX from 'katex'
 
-export const useFormatedProblem = (problemText: string) => {
+export const useFormattedProblem = (problemText: string) => {
   const [formattedProblemText, setFormattedProblemText] = useState(problemText)
 
   useEffect(() => {

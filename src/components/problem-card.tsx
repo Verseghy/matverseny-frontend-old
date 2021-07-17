@@ -1,7 +1,7 @@
 import { Button, Card, CardProps, Textarea, Input } from '../components'
 import styles from '../styles/problem-card.module.scss'
 import { Fragment, useEffect, useRef, useState } from 'react'
-import { useDebounce, useFormatedProblem, useNotFirstEffect } from '../hooks'
+import { useDebounce, useFormattedProblem, useNotFirstEffect } from '../hooks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowDown, faArrowUp, faImages, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { useRecoilValue } from 'recoil'
@@ -36,7 +36,7 @@ export const ProblemCard: React.VFC<ProblemCardProps> = ({
   const [update, setUpdate] = useState(false)
   const uploadElement = useRef<HTMLInputElement>(null)
 
-  const formattedProblemText = useFormatedProblem(problemText)
+  const formattedProblemText = useFormattedProblem(problemText)
   const debouncedText = useDebounce(problemText, 1000)
   const debouncedSolution = useDebounce(problemSolution, 1000)
 
