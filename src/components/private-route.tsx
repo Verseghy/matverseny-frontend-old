@@ -8,7 +8,11 @@ export interface PrivateRouteProps {
   guards: Promise<Guard>[]
 }
 
-export const PrivateRoute: React.VFC<PrivateRouteProps> = ({ path, component: Component, guards }) => {
+export const PrivateRoute: React.VFC<PrivateRouteProps> = ({
+  path,
+  component: Component,
+  guards,
+}) => {
   const [loaded, setLoaded] = useState(false)
   const [finalGuard, setFinalGuard] = useState<Guard>()
 
