@@ -1,8 +1,6 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
-import { useSolutions } from '../hooks/solutions'
-import { useProblems } from '../hooks/problems'
-import { useTime } from '../hooks/time'
+import { useProblems, useSolutions, useTime } from '../hooks'
 import { competitionService } from '../services'
 
 const CompetitionServiceInner: React.VFC = () => {

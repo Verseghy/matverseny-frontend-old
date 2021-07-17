@@ -6,7 +6,7 @@ import { GetTimesRequest, GetTimesResponse } from '../proto/competition_pb'
 import { competitionService } from '../services'
 import { useAuthFunctions } from '../state/auth'
 import { competitionState, competitionTime, currentTime } from '../state/competition'
-import { useInterval } from './interval'
+import { useInterval } from '.'
 
 export const useTime = () => {
   const { getAuth } = useAuthFunctions()

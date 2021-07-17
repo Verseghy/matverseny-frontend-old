@@ -10,7 +10,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { useAuthFunctions } from '../state/auth'
 import { useProblemFunctions, paginatedProblems, problemsPage } from '../state/problems'
 import { adminService } from '../services'
-import { useProblems } from '../hooks/problems'
+import { useProblems } from '../hooks'
 
 const AdminPage: React.VFC = () => {
   const setActivePage = useSetRecoilState(problemsPage)
