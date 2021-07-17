@@ -8,7 +8,7 @@ import { SetSolutionsRequest } from '../proto/competition_pb'
 import { competitionService } from '../services'
 import { useAuthFunctions } from '../state/auth'
 import { paginatedProblems, timeString } from '../state/competition'
-import { pageSize, problemsPage } from '../state/problems'
+import { problemsPage } from '../state/problems'
 import styles from '../styles/competition.module.scss'
 
 const CompetitionPage: React.VFC = () => {
