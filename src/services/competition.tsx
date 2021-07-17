@@ -1,6 +1,6 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
-import { useSolutions } from '../components/solutions'
+import { useSolutions } from '../hooks/solutions'
 import { useProblems } from '../hooks/problems'
 import { useTime } from '../hooks/time'
 import { competitionService } from '../services'
