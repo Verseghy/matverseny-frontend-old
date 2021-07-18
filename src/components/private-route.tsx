@@ -17,11 +17,11 @@ export const PrivateRoute: React.VFC<PrivateRouteProps> = ({
   const [finalGuard, setFinalGuard] = useState<Guard>()
 
   useEffect(() => {
+    let isUnmounted = false
     const checkGuards = async () => {
       for (const guard of guards) {
         const result = await guard
-
-        if (result === 'wait') return
+        if (result === 'wait' || isUnmounted) return
 
         if (result.valid === false) {
           setFinalGuard(result)
@@ -35,6 +35,10 @@ export const PrivateRoute: React.VFC<PrivateRouteProps> = ({
     }
 
     checkGuards()
+
+    return () => {
+      isUnmounted = true
+    }
   }, [guards])
 
   return (
