@@ -1,8 +1,14 @@
+@import 'utils';
+
 .container {
   display: grid;
   place-items: center;
   min-width: 100%;
-  min-height: 100%;
+  min-height: 100vh;
+
+  @include mobile {
+    padding: 0 1.6rem;
+  }
 
   .card {
     width: min(100%, 45ch);

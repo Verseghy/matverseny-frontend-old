@@ -1,6 +1,13 @@
+@import 'utils';
+
 .container {
   width: 75rem;
   margin: 2rem auto;
+
+  @include mobile {
+    width: 100%;
+    padding: 0 1.6rem;
+  }
 
   .card {
     display: block;
@@ -12,23 +19,33 @@
     gap: 1rem;
     margin: 2rem 0;
 
+    @include mobile {
+      flex-wrap: wrap;
+    }
+
     .problemButton {
       width: 6rem;
     }
   }
 
   .logoutContainer {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 12rem 1fr 12rem;
     align-items: center;
     margin: 0 0 2rem;
+    grid-gap: 1.6rem;
+
+    @include mobile {
+      grid-template-columns: 1fr;
+    }
 
     .timer {
       font-size: 3.6rem;
-    }
+      text-align: center;
 
-    .button {
-      width: 120px;
+      @include mobile {
+        grid-row: 1;
+      }
     }
   }
 }

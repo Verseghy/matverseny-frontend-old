@@ -1,6 +1,13 @@
+@import 'utils';
+
 .container {
   width: 75rem;
   margin: 2rem auto;
+
+  @include mobile {
+    width: 100%;
+    padding: 0 1.6rem;
+  }
 
   .card {
     display: block;

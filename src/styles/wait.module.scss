@@ -1,9 +1,15 @@
+@import 'utils';
+
 .container {
   display: grid;
   place-items: center;
   width: 100%;
   min-height: 100vh;
   text-align: center;
+
+  @include mobile {
+    padding: 0 1.6rem;
+  }
 
   h1 {
     font-family: 'Inter', sans-serif;
@@ -16,5 +22,9 @@
     margin-top: 2.4rem;
     font-size: 7.2rem;
     line-height: 1;
+
+    @include mobile {
+      font-size: 6.5rem;
+    }
   }
 }
