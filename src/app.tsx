@@ -18,26 +18,25 @@ const CompetitionPage = React.lazy(() => import('./pages/competition'))
 const WaitPage = React.lazy(() => import('./pages/wait'))
 const EndPage = React.lazy(() => import('./pages/end'))
 
-
 const LoginRoute: React.VFC = () => {
   const loginGuard = useLoginGuard()
-  return <GuardedRoute guards={[loginGuard]} component={LoginPage}/>
+  return <GuardedRoute guards={[loginGuard]} component={LoginPage} />
 }
 
 const AdminRoute: React.VFC = () => {
   const adminGuard = useAdminGuard()
-  return <GuardedRoute guards={[adminGuard]} component={AdminPage}/>
+  return <GuardedRoute guards={[adminGuard]} component={AdminPage} />
 }
 
 interface CompetitionPageProps {
   component: React.ComponentType<any>
-  state: TimeState,
+  state: TimeState
 }
 
 const CompetitionRoute: React.VFC<CompetitionPageProps> = ({ component, state }) => {
   const authGuard = useAuthGuard()
   const timeGuard = useTimeGuard(state)
-  return <GuardedRoute guards={[authGuard, timeGuard]} component={component}/>
+  return <GuardedRoute guards={[authGuard, timeGuard]} component={component} />
 }
 
 const App: React.FC = () => {

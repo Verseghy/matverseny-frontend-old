@@ -1,15 +1,22 @@
 import { useEffect, useRef, useState } from 'react'
 import { Guard } from '../models/guard'
 
-export const useResolveGuards = (guards: Promise<Guard>[]): {
-  isPending: boolean,
+export const useResolveGuards = (
+  guards: Promise<Guard>[]
+): {
+  isPending: boolean
   guard: Guard | null
 } => {
   const [isPending, setIsPending] = useState(true)
   const finalGuard = useRef<Guard | null>(null)
   const isUnmounted = useRef(false)
 
-  useEffect(() => () => { isUnmounted.current = true }, [])
+  useEffect(
+    () => () => {
+      isUnmounted.current = true
+    },
+    []
+  )
 
   const checkGuards = async () => {
     for (const guard of guards) {
@@ -42,4 +49,3 @@ export const useResolveGuards = (guards: Promise<Guard>[]): {
     guard: finalGuard.current,
   }
 }
-
