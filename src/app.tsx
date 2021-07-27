@@ -1,13 +1,13 @@
 import React, { Suspense } from 'react'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
-import { PrivateRoute } from './components/'
 import { changeTheme, isDarkTheme, Theme } from './utils/theme'
-import { useLoginGuard } from './guards/login'
-import { useAdminGuard } from './guards/admin'
 import { useAuthGuard } from './guards/auth'
 import CompetitionService from './services/competition'
 import { TimeState } from './models/time'
 import { useTimeGuard } from './guards/time'
+import { useLoginGuard } from './guards/login'
+import { useAdminGuard } from './guards/admin'
+import { GuardedRoute } from './components'
 
 const LandingPage = React.lazy(() => import('./pages/landing'))
 const LoginPage = React.lazy(() => import('./pages/login'))
@@ -18,15 +18,30 @@ const CompetitionPage = React.lazy(() => import('./pages/competition'))
 const WaitPage = React.lazy(() => import('./pages/wait'))
 const EndPage = React.lazy(() => import('./pages/end'))
 
+
+const LoginRoute: React.VFC = () => {
+  const loginGuard = useLoginGuard()
+  return <GuardedRoute guards={[loginGuard]} component={LoginPage}/>
+}
+
+const AdminRoute: React.VFC = () => {
+  const adminGuard = useAdminGuard()
+  return <GuardedRoute guards={[adminGuard]} component={AdminPage}/>
+}
+
+interface CompetitionPageProps {
+  component: React.ComponentType<any>
+  state: TimeState,
+}
+
+const CompetitionRoute: React.VFC<CompetitionPageProps> = ({ component, state }) => {
+  const authGuard = useAuthGuard()
+  const timeGuard = useTimeGuard(state)
+  return <GuardedRoute guards={[authGuard, timeGuard]} component={component}/>
+}
+
 const App: React.FC = () => {
   changeTheme(isDarkTheme() ? Theme.DARK : Theme.LIGHT)
-
-  const adminGuard = useAdminGuard()
-  const loginGuard = useLoginGuard()
-  const authGuard = useAuthGuard()
-  const waitGuard = useTimeGuard(TimeState.BEFORE_COMP)
-  const competitionGuard = useTimeGuard(TimeState.IN_COMP)
-  const endGuard = useTimeGuard(TimeState.AFTER_COMP)
 
   return (
     <Suspense fallback={<p>Loading...</p>}>
@@ -34,23 +49,30 @@ const App: React.FC = () => {
         <Router>
           <CompetitionService />
           <Switch>
-            <Route path="/" exact component={LandingPage} />
-            <PrivateRoute path="/login" component={LoginPage} guards={[loginGuard]} />
-            <Route path="/register" component={RegisterPage} />
-            <Route path="/forgot-password" component={ForgotPasswordPage} />
-            <PrivateRoute path="/admin" component={AdminPage} guards={[adminGuard]} />
-            <PrivateRoute path="/wait" component={WaitPage} guards={[authGuard, waitGuard]} />
-            <PrivateRoute
-              path="/competition"
-              component={CompetitionPage}
-              guards={[authGuard, competitionGuard]}
-            />
-            <PrivateRoute
-              path="/team"
-              component={() => null}
-              guards={[authGuard, competitionGuard]}
-            />
-            <PrivateRoute path="/end" component={EndPage} guards={[authGuard, endGuard]} />
+            <Route path="/" exact>
+              <LandingPage />
+            </Route>
+            <Route path="/login">
+              <LoginRoute />
+            </Route>
+            <Route path="/register">
+              <RegisterPage />
+            </Route>
+            <Route path="/forgot-password">
+              <ForgotPasswordPage />
+            </Route>
+            <Route path="/admin">
+              <AdminRoute />
+            </Route>
+            <Route path="/wait">
+              <CompetitionRoute component={WaitPage} state={TimeState.BEFORE_COMP} />
+            </Route>
+            <Route path="/competition">
+              <CompetitionRoute component={CompetitionPage} state={TimeState.IN_COMP} />
+            </Route>
+            <Route path="/end">
+              <CompetitionRoute component={EndPage} state={TimeState.AFTER_COMP} />
+            </Route>
             <Redirect to="/" />
           </Switch>
         </Router>
