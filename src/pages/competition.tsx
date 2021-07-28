@@ -10,8 +10,13 @@ import { paginatedProblems, timeString } from '../state/competition'
 import { problemsPage } from '../state/problems'
 import styles from '../styles/competition.module.scss'
 
-const CompetitionPage: React.VFC = () => {
+const Timer: React.VFC = () => {
   const time = useRecoilValue(timeString)
+
+  return <span className={styles.timer}>{time}</span>
+}
+
+const CompetitionPage: React.VFC = () => {
   const problems = useRecoilValue(paginatedProblems)
   const setActivePage = useSetRecoilState(problemsPage)
   const { getAuth, logout } = useAuthFunctions()
@@ -37,7 +42,7 @@ const CompetitionPage: React.VFC = () => {
         <Button to="/team" className={styles.button}>
           Csapat
         </Button>
-        <span className={styles.timer}>{time}</span>
+        <Timer />
         <Button onClick={logout} className={styles.button}>
           Kijelentkezés
         </Button>
@@ -87,4 +92,4 @@ const CompetitionPage: React.VFC = () => {
   )
 }
 
-export default CompetitionPage
+export default React.memo(CompetitionPage)
