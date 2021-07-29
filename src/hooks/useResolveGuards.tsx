@@ -7,8 +7,8 @@ export const useResolveGuards = (
   isPending: boolean
   guard: Guard | null
 } => {
-  const [isPending, setIsPending] = useState(true)
-  const finalGuard = useRef<Guard | null>(null)
+  const isPending = useRef(true)
+  const [finalGuard, setFinalGuard] = useState<Guard | null>(null)
   const isUnmounted = useRef(false)
 
   useEffect(
@@ -18,34 +18,42 @@ export const useResolveGuards = (
     []
   )
 
-  const checkGuards = async () => {
-    for (const guard of guards) {
-      const result = await guard
+  useEffect(() => {
+    console.log('useResolveGuards; isPending:', isPending.current, 'guard:', finalGuard)
+  }, [isPending.current, finalGuard])
 
-      if (isUnmounted.current === true) return
+  useEffect(() => {
+    const checkGuards = async () => {
+      for (const guard of guards) {
+        const result = await guard
 
-      if (result === 'wait' || result.valid === false) {
-        finalGuard.current = result
-        setIsPending(false)
-        return
+        if (isUnmounted.current === true) return
+
+        if (result === 'wait' || result.valid === false) {
+          isPending.current = false
+          setFinalGuard(result)
+          return
+        }
       }
+
+      isPending.current = false
+      setFinalGuard(await guards[guards.length - 1])
     }
 
-    finalGuard.current = await guards[guards.length - 1]
-    setIsPending(false)
-  }
+    isPending.current = true
 
-  if (guards.length === 0) {
-    finalGuard.current = {
-      valid: true,
+    if (guards.length === 0) {
+      isPending.current = false
+      setFinalGuard({
+        valid: true,
+      })
+    } else {
+      checkGuards()
     }
-    setIsPending(false)
-  } else {
-    checkGuards()
-  }
+  }, [guards])
 
   return {
-    isPending,
-    guard: finalGuard.current,
+    isPending: isPending.current,
+    guard: finalGuard,
   }
 }
