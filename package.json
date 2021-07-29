@@ -21,10 +21,12 @@
     "yup": "^0.32.9"
   },
   "scripts": {
+    "postinstall": "husky install",
     "start": "cross-env BROWSER=none react-scripts start",
     "build": "react-scripts build",
     "proto": "cd ./src/proto && protoc -I=. --js_out=import_style=commonjs,binary:. --grpc-web_out=import_style=typescript,mode=grpcwebtext:. *.proto",
-    "format": "prettier --write ./src"
+    "format": "prettier --write ./src",
+    "test-format": "prettier --check ./src"
   },
   "eslintConfig": {
     "extends": [
@@ -51,6 +53,7 @@
     "@types/react-router-dom": "^5.1.7",
     "@types/recoil": "^0.0.9",
     "cross-env": "^7.0.3",
+    "husky": "^7.0.1",
     "prettier": "^2.3.2",
     "sass": "^1.34.1",
     "typescript": "^4.2.0"
