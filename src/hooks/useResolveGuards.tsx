@@ -19,10 +19,6 @@ export const useResolveGuards = (
   )
 
   useEffect(() => {
-    console.log('useResolveGuards; isPending:', isPending.current, 'guard:', finalGuard)
-  }, [isPending.current, finalGuard])
-
-  useEffect(() => {
     const checkGuards = async () => {
       for (const guard of guards) {
         const result = await guard
