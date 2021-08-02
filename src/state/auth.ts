@@ -35,6 +35,7 @@ export const useAuthFunctions = (): {
   logout: () => void
   getAuth: () => Promise<Metadata>
   getClaims: () => Promise<JWT | null>
+  newToken: () => Promise<void>
 } => {
   const history = useHistory()
 
@@ -121,5 +122,14 @@ export const useAuthFunctions = (): {
     return jwtDecode<JWT>(accessToken)
   }, [getAccessToken])
 
-  return { login, logout, getAuth, getClaims }
+  const newToken = useRecoilCallback(
+    ({ snapshot }) =>
+      async () => {
+        const tokens = await snapshot.getPromise(authTokens)
+        await getNewToken(tokens.refreshToken)
+      },
+    []
+  )
+
+  return { login, logout, getAuth, getClaims, newToken }
 }
