@@ -17,6 +17,7 @@ const AdminPage = React.lazy(() => import('./pages/admin'))
 const CompetitionPage = React.lazy(() => import('./pages/competition'))
 const WaitPage = React.lazy(() => import('./pages/wait'))
 const EndPage = React.lazy(() => import('./pages/end'))
+const TeamPage = React.lazy(() => import('./pages/team'))
 
 const LoginRoute: React.VFC = () => {
   const loginGuard = useLoginGuard()
@@ -37,6 +38,11 @@ const CompetitionRoute: React.VFC<CompetitionPageProps> = ({ component, state })
   const authGuard = useAuthGuard()
   const timeGuard = useTimeGuard(state)
   return <GuardedRoute guards={[authGuard, timeGuard]} component={component} />
+}
+
+const TeamRoute: React.VFC = () => {
+  const authGuard = useAuthGuard()
+  return <GuardedRoute guards={[authGuard]} component={TeamPage} />
 }
 
 const App: React.FC = () => {
@@ -71,6 +77,9 @@ const App: React.FC = () => {
             </Route>
             <Route path="/end">
               <CompetitionRoute component={EndPage} state={TimeState.AFTER_COMP} />
+            </Route>
+            <Route path="/team">
+              <TeamRoute />
             </Route>
             <Redirect to="/" />
           </Switch>

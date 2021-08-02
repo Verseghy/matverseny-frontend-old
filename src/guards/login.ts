@@ -11,7 +11,7 @@ export const useLoginGuard = async (): Promise<Guard> => {
   if (claims.is_admin) {
     redirect = '/admin'
   } else if (claims.team === '') {
-    redirect = '/teams'
+    redirect = '/team'
   }
 
   return {

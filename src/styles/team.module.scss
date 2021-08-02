@@ -1,0 +1,61 @@
+@import 'utils';
+
+.container {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 100vh;
+
+  @include mobile {
+    padding: 0 1.6rem;
+  }
+}
+
+.card {
+  width: min(100%, 49ch);
+
+  .section {
+    text-align: center;
+
+    .join {
+      display: inline-flex;
+      gap: 1.6rem;
+
+      @include mobile {
+        flex-direction: column;
+      }
+    }
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    margin: 3.2rem 0;
+
+    &::before,
+    &::after {
+      content: '';
+      display: block;
+      height: 2px;
+      width: 100%;
+      background: var(--gray);
+    }
+
+    span {
+      white-space: nowrap;
+      padding: 0 2rem;
+    }
+  }
+
+  h1 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 3rem;
+  }
+
+  .errorMessage {
+    margin-bottom: 3.2rem;
+  }
+}
