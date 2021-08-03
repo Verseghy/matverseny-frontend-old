@@ -58,4 +58,19 @@
   .errorMessage {
     margin-bottom: 3.2rem;
   }
+
+  .nameInput {
+    width: 100%;
+  }
+
+  .buttons {
+    display: flex;
+    gap: 1.6rem;
+    margin-top: 3.2rem;
+  }
+
+  .fieldError {
+    font-size: 1.4rem;
+    color: var(--red);
+  }
 }
