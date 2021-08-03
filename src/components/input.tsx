@@ -7,8 +7,8 @@ export interface InputProps extends React.HTMLProps<HTMLInputElement> {
   error?: boolean
 }
 
-export const Input: React.VFC<InputProps> = ({ block, error, ...props }) => {
-  const classes = classnames(styles.input, {
+export const Input: React.VFC<InputProps> = ({ block, error, className, ...props }) => {
+  const classes = classnames(styles.input, className, {
     [styles.block]: block,
     [styles.error]: error,
   })
