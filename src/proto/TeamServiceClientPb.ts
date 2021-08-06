@@ -155,44 +155,44 @@ export class TeamClient {
     this.methodInfoLeaveTeam);
   }
 
-  methodInfoListMembers = new grpcWeb.AbstractClientBase.MethodInfo(
-    team_pb.ListMembersResponse,
-    (request: team_pb.ListMembersRequest) => {
+  methodInfoGetTeamInfo = new grpcWeb.AbstractClientBase.MethodInfo(
+    team_pb.GetTeamInfoResponse,
+    (request: team_pb.GetTeamInfoRequest) => {
       return request.serializeBinary();
     },
-    team_pb.ListMembersResponse.deserializeBinary
+    team_pb.GetTeamInfoResponse.deserializeBinary
   );
 
-  listMembers(
-    request: team_pb.ListMembersRequest,
-    metadata: grpcWeb.Metadata | null): Promise<team_pb.ListMembersResponse>;
+  getTeamInfo(
+    request: team_pb.GetTeamInfoRequest,
+    metadata: grpcWeb.Metadata | null): Promise<team_pb.GetTeamInfoResponse>;
 
-  listMembers(
-    request: team_pb.ListMembersRequest,
+  getTeamInfo(
+    request: team_pb.GetTeamInfoRequest,
     metadata: grpcWeb.Metadata | null,
     callback: (err: grpcWeb.Error,
-               response: team_pb.ListMembersResponse) => void): grpcWeb.ClientReadableStream<team_pb.ListMembersResponse>;
+               response: team_pb.GetTeamInfoResponse) => void): grpcWeb.ClientReadableStream<team_pb.GetTeamInfoResponse>;
 
-  listMembers(
-    request: team_pb.ListMembersRequest,
+  getTeamInfo(
+    request: team_pb.GetTeamInfoRequest,
     metadata: grpcWeb.Metadata | null,
     callback?: (err: grpcWeb.Error,
-               response: team_pb.ListMembersResponse) => void) {
+               response: team_pb.GetTeamInfoResponse) => void) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/team.Team/ListMembers',
+          '/team.Team/GetTeamInfo',
         request,
         metadata || {},
-        this.methodInfoListMembers,
+        this.methodInfoGetTeamInfo,
         callback);
     }
     return this.client_.unaryCall(
     this.hostname_ +
-      '/team.Team/ListMembers',
+      '/team.Team/GetTeamInfo',
     request,
     metadata || {},
-    this.methodInfoListMembers);
+    this.methodInfoGetTeamInfo);
   }
 
   methodInfoUpdateTeam = new grpcWeb.AbstractClientBase.MethodInfo(
