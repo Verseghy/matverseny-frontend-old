@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Route, useHistory } from 'react-router-dom'
-import { Button, Card, ErrorMessage, Input } from '../components'
+import { Button, Card, ErrorMessage, GuardedRoute, Input } from '../components'
 import {
   CreateTeamRequest,
   GenerateJoinCodeRequest,
@@ -26,6 +26,7 @@ import {
   faStar,
   faTimes,
 } from '@fortawesome/free-solid-svg-icons'
+import { useTeamGuard } from '../guards/team'
 
 const JoinTeamPage: React.VFC = () => {
   const [teamCode, setTeamCode] = useState('')
@@ -155,7 +156,7 @@ const ManageTeamPage: React.VFC = () => {
   const [errorMessage, setErrorMessage] = useState('')
   const [memberRank, setMemberRank] = useState(MemberRank.MEMBER)
   const [userID, setUserID] = useState('')
-  const { getAuth, getClaims } = useAuthFunctions()
+  const { getAuth, getClaims, newToken } = useAuthFunctions()
   const history = useHistory()
 
   useEffect(() => {
@@ -192,6 +193,8 @@ const ManageTeamPage: React.VFC = () => {
     const req = new LeaveTeamRequest()
     try {
       await teamService.leaveTeam(req, await getAuth())
+      await newToken()
+      // TODO: make guards reactive
       history.push('/team')
     } catch (err: any) {
       const error = err as Error
@@ -313,17 +316,31 @@ const ManageTeamPage: React.VFC = () => {
   )
 }
 
+interface TeamRouteProps {
+  component: React.ComponentType<any>
+}
+
+const NoTeamRoute: React.VFC<TeamRouteProps> = ({ component }) => {
+  const teamGuard = useTeamGuard('noTeam')
+  return <GuardedRoute component={component} guards={[teamGuard]} />
+}
+
+const HasTeamRoute: React.VFC<TeamRouteProps> = ({ component }) => {
+  const teamGuard = useTeamGuard('hasTeam')
+  return <GuardedRoute component={component} guards={[teamGuard]} />
+}
+
 const TeamPage: React.VFC = () => {
   return (
     <>
       <Route path="/team" exact>
-        <JoinTeamPage />
+        <NoTeamRoute component={JoinTeamPage} />
       </Route>
       <Route path="/team/create">
-        <CreateTeamPage />
+        <NoTeamRoute component={CreateTeamPage} />
       </Route>
       <Route path="/team/manage">
-        <ManageTeamPage />
+        <HasTeamRoute component={ManageTeamPage} />
       </Route>
     </>
   )
