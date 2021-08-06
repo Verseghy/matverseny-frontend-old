@@ -3,22 +3,26 @@
 :root {
   --red: hsl(0, 72%, 51%);
   --green: hsl(142, 76%, 36%);
+  --yellow: hsl(45, 93%, 47%);
   --gray: hsl(220, 13%, 91%);
   --primary: var(--green);
 
   --text-color: #000;
   --text-on-red: #fff;
   --text-on-green: #fff;
+  --text-on-yellow: #000;
   --text-on-gray: #000;
   --text-on-primary: var(--text-on-green);
 
   --red-disabled: hsla(0, 72%, 51%, 0.25);
   --green-disabled: hsla(142, 76%, 36%, 0.25);
+  --yellow-disabled: hsla(45, 93%, 47%, 0.25);
   --gray-disabled: hsla(220, 13%, 91%, 0.25);
   --primary-disabled: var(--green-disabled);
 
   --text-on-red-disabled: hsla(0, 100%, 100%, 0.5);
   --text-on-green-disabled: hsla(0, 100%, 100%, 0.5);
+  --text-on-yellow-disabled: hsla(0, 0%, 0%, 0.25);
   --text-on-gray-disabled: hsla(0, 0%, 0%, 0.25);
   --text-on-primary-disabled: var(--text-on-green-disabled);
 
@@ -38,22 +42,26 @@
 :root.dark-theme {
   --red: hsl(0, 91%, 71%);
   --green: hsl(142, 69%, 58%);
+  --yellow: hsl(50, 98%, 64%);
   --gray: hsl(240, 5%, 34%);
   --primary: var(--green);
 
   --text-color: #fff;
   --text-on-red: #000;
   --text-on-green: #000;
+  --text-on-yellow: #000;
   --text-on-gray: #fff;
   --text-on-primary: var(--text-on-green);
 
   --red-disabled: hsla(0, 91%, 71%, 0.25);
   --green-disabled: hsla(142, 69%, 58%, 0.25);
+  --yellow-disabled: hsla(50, 98%, 64%, 0.25);
   --gray-disabled: hsla(240, 5%, 34%, 0.25);
   --primary-disabled: var(--green-disabled);
 
   --text-on-red-disabled: hsla(0, 0%, 0%, 0.5);
   --text-on-green-disabled: hsla(0, 0%, 0%, 0.5);
+  --text-on-yellow-disabled: hsla(0, 100%, 100%, 0.25);
   --text-on-gray-disabled: hsla(0, 100%, 100%, 0.25);
   --text-on-primary-disabled: var(--text-on-green-disabled);
 
