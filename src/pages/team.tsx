@@ -18,14 +18,7 @@ import * as Yup from 'yup'
 import { Field, Form, Formik, FieldProps, ErrorMessage as FormikErrorMessage } from 'formik'
 import { convertTeamInfo, Member, MemberRank } from '../models/team'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faCrow,
-  faCrown,
-  faKey,
-  faRedoAlt,
-  faStar,
-  faTimes,
-} from '@fortawesome/free-solid-svg-icons'
+import { faCrown, faKey, faRedoAlt, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { useTeamGuard } from '../guards/team'
 
 const JoinTeamPage: React.VFC = () => {
