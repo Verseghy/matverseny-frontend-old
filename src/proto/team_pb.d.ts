@@ -94,37 +94,45 @@ export namespace LeaveTeamResponse {
   }
 }
 
-export class ListMembersRequest extends jspb.Message {
+export class GetTeamInfoRequest extends jspb.Message {
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): ListMembersRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: ListMembersRequest): ListMembersRequest.AsObject;
-  static serializeBinaryToWriter(message: ListMembersRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): ListMembersRequest;
-  static deserializeBinaryFromReader(message: ListMembersRequest, reader: jspb.BinaryReader): ListMembersRequest;
+  toObject(includeInstance?: boolean): GetTeamInfoRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetTeamInfoRequest): GetTeamInfoRequest.AsObject;
+  static serializeBinaryToWriter(message: GetTeamInfoRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetTeamInfoRequest;
+  static deserializeBinaryFromReader(message: GetTeamInfoRequest, reader: jspb.BinaryReader): GetTeamInfoRequest;
 }
 
-export namespace ListMembersRequest {
+export namespace GetTeamInfoRequest {
   export type AsObject = {
   }
 }
 
-export class ListMembersResponse extends jspb.Message {
-  getMembersList(): Array<ListMembersResponse.Member>;
-  setMembersList(value: Array<ListMembersResponse.Member>): ListMembersResponse;
-  clearMembersList(): ListMembersResponse;
-  addMembers(value?: ListMembersResponse.Member, index?: number): ListMembersResponse.Member;
+export class GetTeamInfoResponse extends jspb.Message {
+  getName(): string;
+  setName(value: string): GetTeamInfoResponse;
+
+  getJoinCode(): string;
+  setJoinCode(value: string): GetTeamInfoResponse;
+
+  getMembersList(): Array<GetTeamInfoResponse.Member>;
+  setMembersList(value: Array<GetTeamInfoResponse.Member>): GetTeamInfoResponse;
+  clearMembersList(): GetTeamInfoResponse;
+  addMembers(value?: GetTeamInfoResponse.Member, index?: number): GetTeamInfoResponse.Member;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): ListMembersResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: ListMembersResponse): ListMembersResponse.AsObject;
-  static serializeBinaryToWriter(message: ListMembersResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): ListMembersResponse;
-  static deserializeBinaryFromReader(message: ListMembersResponse, reader: jspb.BinaryReader): ListMembersResponse;
+  toObject(includeInstance?: boolean): GetTeamInfoResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetTeamInfoResponse): GetTeamInfoResponse.AsObject;
+  static serializeBinaryToWriter(message: GetTeamInfoResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetTeamInfoResponse;
+  static deserializeBinaryFromReader(message: GetTeamInfoResponse, reader: jspb.BinaryReader): GetTeamInfoResponse;
 }
 
-export namespace ListMembersResponse {
+export namespace GetTeamInfoResponse {
   export type AsObject = {
-    membersList: Array<ListMembersResponse.Member.AsObject>,
+    name: string,
+    joinCode: string,
+    membersList: Array<GetTeamInfoResponse.Member.AsObject>,
   }
 
   export class Member extends jspb.Message {
@@ -134,11 +142,11 @@ export namespace ListMembersResponse {
     getName(): string;
     setName(value: string): Member;
 
-    getClass(): ListMembersResponse.Member.Class;
-    setClass(value: ListMembersResponse.Member.Class): Member;
+    getClass(): GetTeamInfoResponse.Member.Class;
+    setClass(value: GetTeamInfoResponse.Member.Class): Member;
 
-    getRank(): ListMembersResponse.Member.Rank;
-    setRank(value: ListMembersResponse.Member.Rank): Member;
+    getRank(): GetTeamInfoResponse.Member.Rank;
+    setRank(value: GetTeamInfoResponse.Member.Rank): Member;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Member.AsObject;
@@ -152,8 +160,8 @@ export namespace ListMembersResponse {
     export type AsObject = {
       id: string,
       name: string,
-      pb_class: ListMembersResponse.Member.Class,
-      rank: ListMembersResponse.Member.Rank,
+      pb_class: GetTeamInfoResponse.Member.Class,
+      rank: GetTeamInfoResponse.Member.Rank,
     }
 
     export enum Class { 
