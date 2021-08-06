@@ -95,8 +95,8 @@
     padding: 0.6rem 0;
 
     .memberName {
-      vertical-align: middle;
-      display: inline;
+      display: flex;
+      align-items: center;
 
       .star {
         color: var(--yellow);

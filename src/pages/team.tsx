@@ -272,7 +272,7 @@ const ManageTeamPage: React.VFC = () => {
           {members.map((m) => (
             <div key={m.id} className={styles.member}>
               <span className={styles.memberName}>
-                {m.name}
+                <span>{m.name}</span>
                 {m.rank === MemberRank.OWNER && (
                   <FontAwesomeIcon size={'xs'} className={styles.star} icon={faCrown} />
                 )}
