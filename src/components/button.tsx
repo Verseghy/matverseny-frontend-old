@@ -17,18 +17,24 @@ export const Button: React.FC<ButtonProps> = ({
   label,
   to,
   className,
+  disabled,
   ...props
 }) => {
   const classes = classnames(styles.button, styles[kind as string], className, {
     [styles.block]: block,
   })
 
-  if (to)
+  if (to) {
+    const linkClasses = classnames(classes, {
+      [styles.disabled]: disabled,
+    })
+
     return (
-      <Link to={to} className={classes}>
+      <Link to={disabled ? '#' : to} className={linkClasses}>
         {children}
       </Link>
     )
+  }
 
   if (label)
     return (
