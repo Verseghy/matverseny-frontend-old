@@ -230,9 +230,12 @@ const ManageTeamPage: React.VFC = () => {
 
       await teamService.changeCoOwnerStatus(req, await getAuth())
       setMembers((state) =>
-        state.map((m) =>
-          m.id === id ? { ...m, rank: shouldCoowner ? MemberRank.COOWNER : MemberRank.MEMBER } : m
-        )
+        state.map((m) => {
+          if (m.rank === MemberRank.COOWNER) return { ...m, rank: MemberRank.MEMBER }
+          return m.id === id
+            ? { ...m, rank: shouldCoowner ? MemberRank.COOWNER : MemberRank.MEMBER }
+            : m
+        })
       )
       setErrorMessage('')
     } catch (err: any) {
