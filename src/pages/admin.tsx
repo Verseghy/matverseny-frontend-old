@@ -15,7 +15,7 @@ const AdminPage: React.VFC = () => {
   const setActivePage = useSetRecoilState(problemsPage)
   const problems = useRecoilValue(paginatedProblems)
   const { getProblemFromPos } = useProblemFunctions()
-  const { getAuth } = useAuthFunctions()
+  const { getAuth, logout } = useAuthFunctions()
   useProblems(adminService)
 
   const newProblem = async () => {
@@ -68,6 +68,12 @@ const AdminPage: React.VFC = () => {
 
   return (
     <div className={styles.container}>
+      <div className={styles.buttonsContainer}>
+        <Button kind="primary" onClick={async () => newProblem()}>
+          Új feladat
+        </Button>
+        <Button onClick={logout}>Kijelentkezés</Button>
+      </div>
       <Paginator
         onPageSwitch={(page: number) => {
           setActivePage(page)
@@ -75,9 +81,6 @@ const AdminPage: React.VFC = () => {
         }}
       >
         <PaginatorControls />
-        <Button kind="primary" onClick={async () => newProblem()}>
-          Új
-        </Button>
         {problems.map((problem) => (
           <ProblemCard
             key={problem.id}
