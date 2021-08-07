@@ -20,16 +20,22 @@
     box-shadow: 0 0 0 0.2rem var(--outline);
   }
 
+  &.disabled,
   &:disabled {
     cursor: auto;
     color: var(--text-on-gray-disabled);
     background: var(--gray-disabled);
+
+    &:focus {
+      box-shadow: none;
+    }
   }
 
   &.primary {
     color: var(--text-on-primary);
     background: var(--primary);
 
+    &.disabled,
     &:disabled {
       color: var(--text-on-primary-disabled);
       background: var(--primary-disabled);
@@ -40,6 +46,7 @@
     color: var(--text-on-red);
     background: var(--red);
 
+    &.disabled,
     &:disabled {
       color: var(--text-on-red-disabled);
       background: var(--red-disabled);
