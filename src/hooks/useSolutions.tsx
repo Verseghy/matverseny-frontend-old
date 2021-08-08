@@ -5,6 +5,7 @@ import { GetSolutionsRequest, GetSolutionsResponse } from '../proto/competition_
 import { competitionService } from '../services'
 import { useAuthFunctions } from '../state/auth'
 import { solutionsData } from '../state/competition'
+import { retry } from '../utils/retry'
 
 export const useSolutions = () => {
   const { getAuth } = useAuthFunctions()
@@ -12,33 +13,43 @@ export const useSolutions = () => {
   const streamRef = useRef<ClientReadableStream<GetSolutionsResponse>>()
 
   useEffect(() => {
-    const getSolutions = async () => {
-      const stream = competitionService.getSolutions(
-        new GetSolutionsRequest(),
-        await getAuth()
-      ) as ClientReadableStream<GetSolutionsResponse>
+    const getSolutions = (): Promise<void> => {
+      return new Promise(async (resolve, reject) => {
+        const stream = competitionService.getSolutions(
+          new GetSolutionsRequest(),
+          await getAuth()
+        ) as ClientReadableStream<GetSolutionsResponse>
 
-      stream.on('data', (res: GetSolutionsResponse) => {
-        if (res.getType() === GetSolutionsResponse.Modification.K_CHANGE) {
-          setSolutions((state) => {
-            return {
-              ...state,
-              [res.getId()]: res.getValue().toString(),
-            }
-          })
-          return
-        }
+        stream.on('data', (res: GetSolutionsResponse) => {
+          if (res.getType() === GetSolutionsResponse.Modification.K_CHANGE) {
+            setSolutions((state) => {
+              return {
+                ...state,
+                [res.getId()]: res.getValue().toString(),
+              }
+            })
+            return
+          }
 
-        setSolutions((state) => ({
-          ...state,
-          [res.getId()]: '',
-        }))
+          setSolutions((state) => ({
+            ...state,
+            [res.getId()]: '',
+          }))
+        })
+
+        stream.on('end', () => {
+          resolve()
+        })
+
+        stream.on('error', () => {
+          reject()
+        })
+
+        streamRef.current = stream
       })
-
-      streamRef.current = stream
     }
 
-    getSolutions()
+    retry(getSolutions, 2000)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 }
