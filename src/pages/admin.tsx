@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { Button } from '../components'
 import { CreateRequest, DeleteRequest, SwapRequest, UpdateRequest } from '../proto/admin_pb'
 import { ProblemCard, Paginator, PaginatorControls } from '../components'
@@ -12,6 +12,8 @@ import { adminService } from '../services'
 import { useProblems } from '../hooks'
 
 const AdminPage: React.VFC = () => {
+  const [isLoading, setIsLoading] = useState<{ [key: string]: boolean | null }>({})
+  const loadingIntervalRef = useRef<NodeJS.Timeout>()
   const setActivePage = useSetRecoilState(problemsPage)
   const problems = useRecoilValue(paginatedProblems)
   const { getProblemFromPos } = useProblemFunctions()
@@ -33,6 +35,8 @@ const AdminPage: React.VFC = () => {
 
   const updateProblem = useCallback(
     async (problem: Problem) => {
+      if (loadingIntervalRef.current) clearTimeout(loadingIntervalRef.current)
+
       const problemPB = new ProblemPB()
         .setId(problem.id)
         .setBody(problem.body)
@@ -47,7 +51,21 @@ const AdminPage: React.VFC = () => {
 
       const req = new UpdateRequest().setProblem(problemPB)
 
+      setIsLoading((state) => ({
+        ...state,
+        [problem.id]: true,
+      }))
       await adminService.updateProblem(req, await getAuth())
+      setIsLoading((state) => ({
+        ...state,
+        [problem.id]: false,
+      }))
+      loadingIntervalRef.current = setTimeout(() => {
+        setIsLoading((state) => ({
+          ...state,
+          [problem.id]: null,
+        }))
+      }, 5000)
     },
     [getAuth]
   )
@@ -90,6 +108,7 @@ const AdminPage: React.VFC = () => {
             onUpdate={updateProblem}
             onDelete={deleteProblem}
             onSwap={swapProblem}
+            isLoading={isLoading[problem.id] ?? undefined}
           />
         ))}
         <PaginatorControls />

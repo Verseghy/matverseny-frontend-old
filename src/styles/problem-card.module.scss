@@ -12,11 +12,31 @@
     gap: 1.6rem;
   }
 
-  .title {
-    font-size: 1.6rem;
-    font-family: 'Inter';
-    font-weight: 900;
-    margin: 0;
+  .titleContainer {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+
+    .title {
+      font-size: 1.6rem;
+      font-family: 'Inter';
+      font-weight: 900;
+      margin: 0;
+    }
+
+    .spinner {
+      width: 1em;
+      height: 1em;
+      border-radius: 50%;
+      border: 0.3rem solid var(--primary);
+      border-bottom-color: transparent;
+      display: inline-block;
+      animation: spin 1.5s linear infinite;
+    }
+
+    .check {
+      color: var(--primary);
+    }
   }
 
   .buttons {
@@ -38,4 +58,13 @@
   margin: 0 auto 3.2rem;
   border-radius: 0.6rem;
   display: block;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

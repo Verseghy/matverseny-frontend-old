@@ -3,7 +3,13 @@ import styles from '../styles/problem-card.module.scss'
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { useDebounce, useFormattedProblem, useNotFirstEffect } from '../hooks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowDown, faArrowUp, faImages, faTrash } from '@fortawesome/free-solid-svg-icons'
+import {
+  faArrowDown,
+  faArrowUp,
+  faCheck,
+  faImages,
+  faTrash,
+} from '@fortawesome/free-solid-svg-icons'
 import { useRecoilValue } from 'recoil'
 import { getProblemByID as competitionGetProblemByID } from '../state/competition'
 import { sortedProblemIDs, getProblemByID } from '../state/problems'
@@ -15,6 +21,7 @@ export interface ProblemCardProps extends CardProps {
   onDelete?: (id: string) => void
   onUpdate?: (problem: Problem) => void
   onSwap?: (posA: number, posB: number) => void
+  isLoading?: boolean
 }
 
 export const ProblemCard: React.VFC<ProblemCardProps> = ({
@@ -23,6 +30,7 @@ export const ProblemCard: React.VFC<ProblemCardProps> = ({
   onDelete,
   onUpdate,
   onSwap,
+  isLoading,
   ...rest
 }) => {
   const problem = useRecoilValue(
@@ -89,7 +97,18 @@ export const ProblemCard: React.VFC<ProblemCardProps> = ({
   return (
     <Card {...rest}>
       <div className={styles.header}>
-        <h1 className={styles.title}>{problem.position}. feladat</h1>
+        <div className={styles.titleContainer}>
+          <h1 className={styles.title}>{problem.position}. feladat</h1>
+          {isLoading !== undefined && (
+            <span>
+              {isLoading ? (
+                <span className={styles.spinner}></span>
+              ) : (
+                <FontAwesomeIcon className={styles.check} icon={faCheck} />
+              )}
+            </span>
+          )}
+        </div>
         {!!admin && (
           <div className={styles.buttons}>
             {problem.image === '' ? (
