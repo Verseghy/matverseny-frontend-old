@@ -100,13 +100,13 @@ export const ProblemCard: React.VFC<ProblemCardProps> = ({
         <div className={styles.titleContainer}>
           <h1 className={styles.title}>{problem.position}. feladat</h1>
           {isLoading !== undefined && (
-            <span>
+            <>
               {isLoading ? (
                 <span className={styles.spinner}></span>
               ) : (
                 <FontAwesomeIcon className={styles.check} icon={faCheck} />
               )}
-            </span>
+            </>
           )}
         </div>
         {!!admin && (
