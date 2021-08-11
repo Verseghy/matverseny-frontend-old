@@ -15,6 +15,7 @@ import { getProblemByID as competitionGetProblemByID } from '../state/competitio
 import { sortedProblemIDs, getProblemByID } from '../state/problems'
 import { Problem } from '../models/problem'
 import { ErrorMessage } from './error-message'
+import { processFile, ProcessFileError } from '../utils/image'
 
 export interface ProblemCardProps extends CardProps {
   problemID: string
@@ -95,22 +96,20 @@ export const ProblemCard: React.VFC<ProblemCardProps> = ({
     }, 5000)
   }
 
-  const uploadImage = () => {
-    const reader = new FileReader()
-    reader.onload = () => {
-      const base64 = reader.result!.toString()
-
-      if (base64.length > 1048576) {
-        setError('Túl nagy fájl, maximális méret 1MiB!')
-        return
-      }
-
-      setError('')
-
+  const uploadImage = async () => {
+    try {
+      const imageBase64 = await processFile(uploadElement.current!.files![0])
       setUpdate(true)
-      setImage(reader.result!.toString())
+      setImage(imageBase64)
+    } catch (error: any) {
+      if (error === ProcessFileError.NOT_ALLOWED) {
+        setError('Nem megengedett fájl formátum')
+      } else if (error === ProcessFileError.LARGE_SIZE) {
+        setError('Túl nagy fájl, maximális méret 1MiB')
+      } else {
+        setError('Ismeretlen hiba!')
+      }
     }
-    reader.readAsDataURL(uploadElement.current!.files![0])
   }
 
   return (
