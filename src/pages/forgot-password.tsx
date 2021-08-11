@@ -1,7 +1,7 @@
 import React from 'react'
-import { Button, Card, Input } from '../components'
+import { Button, Card, FormField } from '../components'
 import styles from '../styles/forgot-password.module.scss'
-import { Formik, Form, Field, FieldProps, ErrorMessage } from 'formik'
+import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { ForgotPasswordRequest } from '../proto/auth_pb'
 import { authService } from '../services'
@@ -30,17 +30,7 @@ const ForgotPasswordPage: React.VFC = () => {
           {({ isSubmitting }) => (
             <Form>
               <h1>Elfelejtett jelszó</h1>
-              <div className={styles.field}>
-                <span>Email</span>
-                <Field name="email">
-                  {({ field, meta }: FieldProps) => (
-                    <Input type="email" block {...field} error={!!meta.touched && !!meta.error} />
-                  )}
-                </Field>
-                <ErrorMessage name="email">
-                  {(msg) => <span className={styles.error}>{msg}</span>}
-                </ErrorMessage>
-              </div>
+              <FormField name="email" display="Email" className={styles.field} />
               <div className={styles.controls}>
                 <Button
                   className={styles.button}

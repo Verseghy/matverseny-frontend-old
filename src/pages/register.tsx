@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { Button, Card, Input, ErrorMessage as Message } from '../components'
+import { Button, Card, ErrorMessage, FormField } from '../components'
 import styles from '../styles/register.module.scss'
-import { Formik, Form, Field, FieldProps, ErrorMessage } from 'formik'
+import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { RegisterRequest } from '../proto/auth_pb'
 import { useAuthFunctions } from '../state/auth'
@@ -68,83 +68,23 @@ const RegisterPage: React.VFC = () => {
           {({ isSubmitting }) => (
             <Form>
               <h1>Regisztráció</h1>
-              <Message message={error} />
-              <div className={styles.field}>
-                <span>Email</span>
-                <Field name="email">
-                  {({ field, meta }: FieldProps) => (
-                    <Input type="name" block {...field} error={!!meta.touched && !!meta.error} />
-                  )}
-                </Field>
-                <ErrorMessage name="email">
-                  {(msg) => <span className={styles.error}>{msg}</span>}
-                </ErrorMessage>
-              </div>
-              <div className={styles.field}>
-                <span>Jelszó</span>
-                <Field name="password">
-                  {({ field, meta }: FieldProps) => (
-                    <Input
-                      block
-                      type="password"
-                      {...field}
-                      error={!!meta.touched && !!meta.error}
-                    />
-                  )}
-                </Field>
-                <ErrorMessage name="password">
-                  {(msg) => <span className={styles.error}>{msg}</span>}
-                </ErrorMessage>
-              </div>
-              <div className={styles.field}>
-                <span>Jelszó ismétlés</span>
-                <Field name="passwordRe">
-                  {({ field, meta }: FieldProps) => (
-                    <Input
-                      block
-                      type="password"
-                      {...field}
-                      error={!!meta.touched && !!meta.error}
-                    />
-                  )}
-                </Field>
-                <ErrorMessage name="passwordRe">
-                  {(msg) => <span className={styles.error}>{msg}</span>}
-                </ErrorMessage>
-              </div>
-              <div className={styles.field}>
-                <span>Név</span>
-                <Field name="name">
-                  {({ field, meta }: FieldProps) => (
-                    <Input block {...field} error={!!meta.touched && !!meta.error} />
-                  )}
-                </Field>
-                <ErrorMessage name="name">
-                  {(msg) => <span className={styles.error}>{msg}</span>}
-                </ErrorMessage>
-              </div>
-              <div className={styles.field}>
-                <span>Iskola</span>
-                <Field name="school">
-                  {({ field, meta }: FieldProps) => (
-                    <Input block {...field} error={!!meta.touched && !!meta.error} />
-                  )}
-                </Field>
-                <ErrorMessage name="school">
-                  {(msg) => <span className={styles.error}>{msg}</span>}
-                </ErrorMessage>
-              </div>
-              <div className={styles.field}>
-                <span>Évfolyam</span>
-                <Field name="class">
-                  {({ field, meta }: FieldProps) => (
-                    <Input type="number" block {...field} error={!!meta.touched && !!meta.error} />
-                  )}
-                </Field>
-                <ErrorMessage name="class">
-                  {(msg) => <span className={styles.error}>{msg}</span>}
-                </ErrorMessage>
-              </div>
+              <ErrorMessage message={error} />
+              <FormField name="email" display="Email" className={styles.field} />
+              <FormField
+                name="password"
+                display="Jelszó"
+                type="password"
+                className={styles.field}
+              />
+              <FormField
+                name="passwordRe"
+                display="Jelszó ismétlés"
+                type="password"
+                className={styles.field}
+              />
+              <FormField name="name" display="Név" className={styles.field} />
+              <FormField name="school" display="Iskola" className={styles.field} />
+              <FormField name="class" display="Évfolyam" type="number" className={styles.field} />
               <div className={styles.controls}>
                 <Button
                   className={styles.button}

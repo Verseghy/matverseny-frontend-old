@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Button, Input, Card, ErrorMessage as Message } from '../components'
+import { Button, Card, ErrorMessage, FormField } from '../components'
 import styles from '../styles/login.module.scss'
-import { Formik, Form, Field, FieldProps, ErrorMessage } from 'formik'
+import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { LoginRequest } from '../proto/auth_pb'
 import { Error } from 'grpc-web'
@@ -47,34 +47,14 @@ const LoginPage: React.VFC = () => {
               <h2>
                 A <span>191</span> matematikaverseny oldalára
               </h2>
-              <Message message={error} />
-              <div className={styles.field}>
-                <span>Email</span>
-                <Field name="email">
-                  {({ field, meta }: FieldProps) => (
-                    <Input type="email" block {...field} error={!!meta.touched && !!meta.error} />
-                  )}
-                </Field>
-                <ErrorMessage name="email">
-                  {(msg) => <span className={styles.error}>{msg}</span>}
-                </ErrorMessage>
-              </div>
-              <div className={styles.field}>
-                <span>Jelszó</span>
-                <Field name="password">
-                  {({ field, meta }: FieldProps) => (
-                    <Input
-                      block
-                      type="password"
-                      {...field}
-                      error={!!meta.touched && !!meta.error}
-                    />
-                  )}
-                </Field>
-                <ErrorMessage name="password">
-                  {(msg) => <span className={styles.error}>{msg}</span>}
-                </ErrorMessage>
-              </div>
+              <ErrorMessage message={error} />
+              <FormField name="email" display="Email" className={styles.field} />
+              <FormField
+                name="password"
+                display="Jelszó"
+                type="password"
+                className={styles.field}
+              />
               <Link to="/forgot-password" className={styles.forgot}>
                 Elfelejtetted a jelszavad?
               </Link>
