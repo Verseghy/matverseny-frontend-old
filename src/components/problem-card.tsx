@@ -14,6 +14,7 @@ import { useRecoilValue } from 'recoil'
 import { getProblemByID as competitionGetProblemByID } from '../state/competition'
 import { sortedProblemIDs, getProblemByID } from '../state/problems'
 import { Problem } from '../models/problem'
+import { ErrorMessage } from './error-message'
 
 export interface ProblemCardProps extends CardProps {
   problemID: string
@@ -48,6 +49,9 @@ export const ProblemCard: React.VFC<ProblemCardProps> = ({
   const debouncedText = useDebounce(problemText, 1000)
   const debouncedSolution = useDebounce(problemSolution, 1000)
 
+  const [errorMessage, setErrorMessage] = useState('')
+  const errorTimeout = useRef<NodeJS.Timeout>()
+
   const first = problem.position === 1
   const last = problem.position === totalItems
 
@@ -78,15 +82,26 @@ export const ProblemCard: React.VFC<ProblemCardProps> = ({
     onSwap(problem.position, problem.position + (swap === 'up' ? -1 : 1))
   }
 
+  const setError = (message: string) => {
+    if (errorTimeout.current) clearTimeout(errorTimeout.current)
+    setErrorMessage(message)
+
+    errorTimeout.current = setTimeout(() => {
+      setErrorMessage('')
+    }, 5000)
+  }
+
   const uploadImage = () => {
     const reader = new FileReader()
     reader.onload = () => {
       const base64 = reader.result!.toString()
 
       if (base64.length > 1048576) {
-        // TODO: create error message
+        setError('Túl nagy fájl, maximális méret 1MiB!')
         return
       }
+
+      setError('')
 
       setUpdate(true)
       setImage(reader.result!.toString())
@@ -96,6 +111,11 @@ export const ProblemCard: React.VFC<ProblemCardProps> = ({
 
   return (
     <Card {...rest}>
+      <ErrorMessage
+        className={styles.errorMessage}
+        message={errorMessage}
+        translateMessage={false}
+      />
       <div className={styles.header}>
         <div className={styles.titleContainer}>
           <h1 className={styles.title}>{problem.position}. feladat</h1>
