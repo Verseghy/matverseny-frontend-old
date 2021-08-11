@@ -23,12 +23,9 @@ const CompetitionPage: React.VFC = () => {
 
   const onUpdate = useCallback(
     async (problem: Problem) => {
-      const solution = Number(problem.solution)
-      if (isNaN(solution) || !Number.isSafeInteger(solution)) return
-
       const req = new SetSolutionsRequest()
         .setId(problem.id)
-        .setValue(solution)
+        .setValue(Number(problem.solution))
         .setDelete(problem.solution === '')
 
       await competitionService.setSolutions(req, await getAuth())

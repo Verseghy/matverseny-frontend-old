@@ -69,6 +69,10 @@ export const ProblemCard: React.VFC<ProblemCardProps> = ({
 
   useNotFirstEffect(() => {
     if (!onUpdate || !update) return
+
+    const solution = Number(debouncedSolution)
+    if (isNaN(solution) || !Number.isSafeInteger(solution)) return
+
     onUpdate({
       ...problem,
       body: debouncedText,
@@ -188,7 +192,7 @@ export const ProblemCard: React.VFC<ProblemCardProps> = ({
       )}
       <Input
         block
-        error={isNaN(Number(problemSolution))}
+        error={isNaN(Number(problemSolution)) || !Number.isSafeInteger(Number(problemSolution))}
         inputMode="numeric"
         value={problemSolution ?? ''}
         onInput={(event) => {

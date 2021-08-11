@@ -41,13 +41,7 @@ const AdminPage: React.VFC = () => {
         .setId(problem.id)
         .setBody(problem.body)
         .setImage(problem.image)
-
-      if (problem.solution !== '') {
-        const value = Number(problem.solution)
-        if (!isNaN(value) && Number.isSafeInteger(value)) {
-          problemPB.setSolution(value)
-        }
-      }
+        .setSolution(Number(problem.solution))
 
       const req = new UpdateRequest().setProblem(problemPB)
 
