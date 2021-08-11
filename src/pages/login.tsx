@@ -75,13 +75,13 @@ const LoginPage: React.VFC = () => {
                   {(msg) => <span className={styles.error}>{msg}</span>}
                 </ErrorMessage>
               </div>
-              <Link to="/forgot-password" className={styles.forgot}>
+              {/*<Link to="/forgot-password" className={styles.forgot}>
                 Elfelejtetted a jelszavad?
-              </Link>
+              </Link>*/}
               <div className={styles.controls}>
-                <Button block to="/register">
+                {/*<Button block to="/register">
                   Regisztráció
-                </Button>
+                </Button>*/}
                 <Button
                   className={styles.button}
                   kind="primary"
