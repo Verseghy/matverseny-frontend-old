@@ -121,5 +121,9 @@
     display: flex;
     gap: 1.6rem;
     margin-top: 3.2rem;
+
+    @include mobile {
+      flex-direction: column;
+    }
   }
 }
