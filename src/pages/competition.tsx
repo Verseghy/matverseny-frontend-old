@@ -1,37 +1,33 @@
 import React, { useCallback } from 'react'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { useAtom, useSetAtom } from 'yauk/react'
 import { Button } from '../components'
 import { ProblemCard, Paginator, PaginatorControls } from '../components'
 import { Problem } from '../models/problem'
 import { SetSolutionsRequest } from '../proto/competition_pb'
 import { competitionService } from '../services'
-import { useAuthFunctions } from '../state/auth'
+import { getAuth, logout } from '../state/auth'
 import { paginatedProblems, timeString } from '../state/competition'
 import { problemsPage } from '../state/problems'
 import styles from '../styles/competition.module.scss'
 
 const Timer: React.VFC = () => {
-  const time = useRecoilValue(timeString)
+  const time = useAtom(timeString)
 
   return <span className={styles.timer}>{time}</span>
 }
 
 const CompetitionPage: React.VFC = () => {
-  const problems = useRecoilValue(paginatedProblems)
-  const setActivePage = useSetRecoilState(problemsPage)
-  const { getAuth, logout } = useAuthFunctions()
+  const problems = useAtom(paginatedProblems)
+  const setActivePage = useSetAtom(problemsPage)
 
-  const onUpdate = useCallback(
-    async (problem: Problem) => {
-      const req = new SetSolutionsRequest()
-        .setId(problem.id)
-        .setValue(Number(problem.solution))
-        .setDelete(problem.solution === '')
+  const onUpdate = useCallback(async (problem: Problem) => {
+    const req = new SetSolutionsRequest()
+      .setId(problem.id)
+      .setValue(Number(problem.solution))
+      .setDelete(problem.solution === '')
 
-      await competitionService.setSolutions(req, await getAuth())
-    },
-    [getAuth]
-  )
+    await competitionService.setSolutions(req, await getAuth())
+  }, [])
 
   return (
     <div className={styles.container}>
@@ -89,4 +85,4 @@ const CompetitionPage: React.VFC = () => {
   )
 }
 
-export default React.memo(CompetitionPage)
+export default CompetitionPage

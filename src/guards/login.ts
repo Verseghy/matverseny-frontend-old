@@ -1,21 +1,31 @@
+import { useEffect, useState } from 'react'
 import { Guard } from '../models/guard'
-import { useAuthFunctions } from '../state/auth'
+import { getClaims } from '../state/auth'
 
-export const useLoginGuard = async (): Promise<Guard> => {
-  const { getClaims } = useAuthFunctions()
-  const claims = await getClaims()
+export const useLoginGuard = (): Guard => {
+  const [guard, setGuard] = useState<Guard>('wait')
 
-  if (claims === null) return { valid: true }
+  useEffect(() => {
+    getClaims()
+      .then<Guard>((claims) => {
+        if (claims === null) return { valid: true }
 
-  let redirect = '/competition'
-  if (claims.is_admin) {
-    redirect = '/admin'
-  } else if (claims.team === '') {
-    redirect = '/team'
-  }
+        let redirect = '/competition'
+        if (claims.is_admin) {
+          redirect = '/admin'
+        } else if (claims.team === '') {
+          redirect = '/team'
+        }
 
-  return {
-    valid: false,
-    redirect,
-  }
+        return {
+          valid: false,
+          redirect,
+        }
+      })
+      .then((finalGuard) => {
+        setGuard(finalGuard)
+      })
+  }, [])
+
+  return guard
 }

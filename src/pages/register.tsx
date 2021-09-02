@@ -4,8 +4,8 @@ import styles from '../styles/register.module.scss'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { RegisterRequest } from '../proto/auth_pb'
-import { useAuthFunctions } from '../state/auth'
 import { authService } from '../services'
+import { login } from '../state/auth'
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().email('Az email formátuma nem megfelelő').required('Email kötelező'),
@@ -34,7 +34,6 @@ const initialValues = {
 
 const RegisterPage: React.VFC = () => {
   const [error, setError] = useState('')
-  const { login } = useAuthFunctions()
 
   const onSubmit = async (values: typeof initialValues) => {
     let num_class = RegisterRequest.Class.K_9

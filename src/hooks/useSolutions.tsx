@@ -1,15 +1,14 @@
 import { ClientReadableStream } from 'grpc-web'
 import { useEffect, useRef } from 'react'
-import { useSetRecoilState } from 'recoil'
+import { useSetAtom } from 'yauk/react'
 import { GetSolutionsRequest, GetSolutionsResponse } from '../proto/competition_pb'
 import { competitionService } from '../services'
-import { useAuthFunctions } from '../state/auth'
+import { getAuth } from '../state/auth'
 import { solutionsData } from '../state/competition'
 import { retry } from '../utils/retry'
 
 export const useSolutions = () => {
-  const { getAuth } = useAuthFunctions()
-  const setSolutions = useSetRecoilState(solutionsData)
+  const setSolutions = useSetAtom(solutionsData)
   const streamRef = useRef<ClientReadableStream<GetSolutionsResponse>>()
 
   useEffect(() => {

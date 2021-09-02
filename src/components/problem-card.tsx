@@ -10,12 +10,12 @@ import {
   faImages,
   faTrash,
 } from '@fortawesome/free-solid-svg-icons'
-import { useRecoilValue } from 'recoil'
 import { getProblemByID as competitionGetProblemByID } from '../state/competition'
 import { sortedProblemIDs, getProblemByID } from '../state/problems'
 import { Problem } from '../models/problem'
 import { ErrorMessage } from './error-message'
 import { processFile, ProcessFileError } from '../utils/image'
+import { useAtom } from 'yauk/react'
 
 export interface ProblemCardProps extends CardProps {
   problemID: string
@@ -35,10 +35,8 @@ export const ProblemCard: React.VFC<ProblemCardProps> = ({
   isLoading,
   ...rest
 }) => {
-  const problem = useRecoilValue(
-    admin ? getProblemByID(problemID) : competitionGetProblemByID(problemID)
-  )
-  const totalItems = useRecoilValue(sortedProblemIDs).length
+  const problem = useAtom(admin ? getProblemByID(problemID) : competitionGetProblemByID(problemID))
+  const totalItems = useAtom(sortedProblemIDs).length
 
   const [problemText, setProblemText] = useState(problem.body)
   const [problemSolution, setProblemSolution] = useState(problem.solution)

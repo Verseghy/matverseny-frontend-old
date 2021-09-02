@@ -8,6 +8,8 @@ import { useTimeGuard } from './guards/time'
 import { useLoginGuard } from './guards/login'
 import { useAdminGuard } from './guards/admin'
 import { GuardedRoute } from './components'
+import { Provider } from 'yauk/react'
+import { store } from './state/store'
 
 const LandingPage = React.lazy(() => import('./pages/landing'))
 const LoginPage = React.lazy(() => import('./pages/login'))
@@ -49,43 +51,45 @@ const App: React.FC = () => {
   changeTheme(isDarkTheme() ? Theme.DARK : Theme.LIGHT)
 
   return (
-    <Suspense fallback={<p>Loading...</p>}>
-      <main>
-        <Router>
-          <CompetitionService />
-          <Switch>
-            <Route path="/" exact>
-              <LandingPage />
-            </Route>
-            <Route path="/login">
-              <LoginRoute />
-            </Route>
-            <Route path="/register">
-              <RegisterPage />
-            </Route>
-            <Route path="/forgot-password">
-              <ForgotPasswordPage />
-            </Route>
-            <Route path="/admin">
-              <AdminRoute />
-            </Route>
-            <Route path="/wait">
-              <CompetitionRoute component={WaitPage} state={TimeState.BEFORE_COMP} />
-            </Route>
-            <Route path="/competition">
-              <CompetitionRoute component={CompetitionPage} state={TimeState.IN_COMP} />
-            </Route>
-            <Route path="/end">
-              <CompetitionRoute component={EndPage} state={TimeState.AFTER_COMP} />
-            </Route>
-            <Route path="/team">
-              <TeamRoute />
-            </Route>
-            <Redirect to="/" />
-          </Switch>
-        </Router>
-      </main>
-    </Suspense>
+    <Provider store={store}>
+      <Suspense fallback={<p>Loading...</p>}>
+        <main>
+          <Router>
+            <CompetitionService />
+            <Switch>
+              <Route path="/" exact>
+                <LandingPage />
+              </Route>
+              <Route path="/login">
+                <LoginRoute />
+              </Route>
+              <Route path="/register">
+                <RegisterPage />
+              </Route>
+              <Route path="/forgot-password">
+                <ForgotPasswordPage />
+              </Route>
+              <Route path="/admin">
+                <AdminRoute />
+              </Route>
+              <Route path="/wait">
+                <CompetitionRoute component={WaitPage} state={TimeState.BEFORE_COMP} />
+              </Route>
+              <Route path="/competition">
+                <CompetitionRoute component={CompetitionPage} state={TimeState.IN_COMP} />
+              </Route>
+              <Route path="/end">
+                <CompetitionRoute component={EndPage} state={TimeState.AFTER_COMP} />
+              </Route>
+              <Route path="/team">
+                <TeamRoute />
+              </Route>
+              <Redirect to="/" />
+            </Switch>
+          </Router>
+        </main>
+      </Suspense>
+    </Provider>
   )
 }
 

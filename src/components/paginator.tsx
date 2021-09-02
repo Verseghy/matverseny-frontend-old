@@ -3,8 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { createContext, useCallback, useContext, useState } from 'react'
 import { Button } from '../components'
 import styles from '../styles/paginator.module.scss'
-import { useRecoilValue } from 'recoil'
 import { problemsLength, pageSize } from '../state/problems'
+import { useAtom } from 'yauk/react'
 
 export interface PaginatorProps {
   onPageSwitch: (page: number) => void
@@ -19,7 +19,7 @@ interface PaginatorContextType {
 const PaginatorContext = createContext<PaginatorContextType | null>(null)
 
 export const Paginator: React.FC<PaginatorProps> = ({ onPageSwitch, children }) => {
-  const totalItems = useRecoilValue(problemsLength)
+  const totalItems = useAtom(problemsLength)
   const [currentPage, setCurrentPage] = useState(1)
   const lastPage = Math.ceil(totalItems / pageSize)
 

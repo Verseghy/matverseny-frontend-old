@@ -5,8 +5,8 @@ import { AdminClient } from '../proto/AdminServiceClientPb'
 import { ReadRequest } from '../proto/admin_pb'
 import { CompetitionClient } from '../proto/CompetitionServiceClientPb'
 import { ProblemStream } from '../proto/shared_pb'
-import { useAuthFunctions } from '../state/auth'
-import { useProblemFunctions } from '../state/problems'
+import { getAuth } from '../state/auth'
+import { createProblem, deleteProblem, swapProblem, updateProblem } from '../state/problems'
 import { retry } from '../utils/retry'
 
 export type SetProblemFn = (id: string, problem: Partial<Problem>) => void
@@ -14,8 +14,6 @@ export type FindProblemFn = (pos: number) => Problem | undefined
 
 export const useProblems = <T extends AdminClient | CompetitionClient>(service: T) => {
   const stream = useRef<ClientReadableStream<ProblemStream> | null>(null)
-  const { updateProblem, deleteProblem, swapProblem, createProblem } = useProblemFunctions()
-  const { getAuth } = useAuthFunctions()
 
   useEffect(() => {
     const startStream = (): Promise<void> => {

@@ -1,168 +1,111 @@
-import { atom, selector, selectorFamily, useRecoilCallback } from 'recoil'
 import { Problem } from '../models/problem'
+import { atom, selector, selectorFamily, setAtomValue } from 'yauk'
+import { store } from './store'
+import { getAtomValue } from './util'
 
 export const pageSize = 10
 
-export const problemsData = atom<{ [key: string]: Problem }>({
-  key: 'problems_data',
-  default: {},
+export const problemsData = atom<{ [key: string]: Problem }>({})
+export const problemsPage = atom(1)
+
+export const problemsLength = selector((get) => {
+  const problems = get(problemsData)
+  return Object.keys(problems).length
 })
 
-export const problemsPage = atom({
-  key: 'problems_page',
-  default: 1,
+export const sortedProblems = selector((get) => {
+  const problems = get(problemsData)
+  return Object.values(problems).sort((a, b) => a.position - b.position)
 })
 
-export const problemsLength = selector({
-  key: 'problems_length',
-  get: ({ get }) => {
+export const sortedProblemIDs = selector((get) => {
+  const problems = get(sortedProblems)
+  return problems.map((problem) => problem.id)
+})
+
+export const paginatedProblems = selector((get) => {
+  const problems = get(sortedProblems)
+  const page = get(problemsPage)
+  return problems.slice((page - 1) * pageSize, page * pageSize)
+})
+
+export const getProblemByID = selectorFamily((id: string) => {
+  return (get) => {
     const problems = get(problemsData)
-    return Object.keys(problems).length
-  },
-})
-
-export const sortedProblems = selector({
-  key: 'problems_sortedProblems',
-  get: ({ get }) => {
-    return Object.values(get(problemsData)).sort((a, b) => a.position - b.position)
-  },
-})
-
-export const sortedProblemIDs = selector({
-  key: 'problems_sortedProblemIDs',
-  get: ({ get }) => {
-    const problems = get(sortedProblems)
-    return problems.map((problem) => problem.id)
-  },
-})
-
-export const paginatedProblems = selector({
-  key: 'problems_paginatedProblems',
-  get: ({ get }) => {
-    const problems = get(sortedProblems)
-    const page = get(problemsPage)
-    return problems.slice((page - 1) * pageSize, page * pageSize)
-  },
-})
-
-export const getProblemByID = selectorFamily({
-  key: 'problems_getProblemByID',
-  get:
-    (id: string) =>
-    ({ get }) => {
-      const problems = get(problemsData)
-      return problems[id]
-    },
+    return problems[id]
+  }
 })
 
 export type RequiedKey<T, K extends keyof T> = Partial<Omit<T, K>> & Required<Pick<T, K>>
 
-export const useProblemFunctions = (): {
-  updateProblem: (problem: RequiedKey<Problem, 'id'>) => void
-  deleteProblem: (id: string) => void
-  swapProblem: (a: string, b: string) => void
-  createProblem: (at: number, id: string) => void
-  getProblemFromPos: (pos: number) => Promise<Problem | undefined>
-} => {
-  const updateProblem = useRecoilCallback(
-    ({ set }) =>
-      (problem: RequiedKey<Problem, 'id'>) => {
-        set(problemsData, (state) => ({
-          ...state,
-          [problem.id]: {
-            ...state[problem.id],
-            ...problem,
+export const updateProblem = (problem: RequiedKey<Problem, 'id'>) => {
+  setAtomValue(store, problemsData, (state) => ({
+    ...state,
+    [problem.id]: {
+      ...state[problem.id],
+      ...problem,
+    },
+  }))
+}
+
+export const deleteProblem = (id: string) => {
+  setAtomValue(store, problemsData, (state) => {
+    const position = state[id].position
+
+    return Object.entries(state).reduce((acc, [key, value]) => {
+      if (key === id) return acc
+
+      return {
+        ...acc,
+        [key]: {
+          ...value,
+          position: value.position > position ? value.position - 1 : value.position,
+        },
+      }
+    }, {})
+  })
+}
+
+export const swapProblem = (a: string, b: string) => {
+  setAtomValue(store, problemsData, (state) => {
+    const problemA = { ...state[a] }
+    const problemB = { ...state[b] }
+    ;[problemA.position, problemB.position] = [problemB.position, problemA.position]
+
+    return {
+      ...state,
+      [a]: problemA,
+      [b]: problemB,
+    }
+  })
+}
+
+export const createProblem = (at: number, id: string) => {
+  setAtomValue(store, problemsData, (state) => {
+    return Object.entries(state).reduce<{ [key: string]: Problem }>(
+      (acc, [key, value]) => {
+        return {
+          ...acc,
+          [key]: {
+            ...value,
+            position: value.position >= at ? value.position + 1 : value.position,
           },
-        }))
+        }
       },
-    []
-  )
+      {
+        [id]: {
+          id,
+          position: at,
+          body: '',
+          image: '',
+          solution: '',
+        },
+      }
+    )
+  })
+}
 
-  const deleteProblem = useRecoilCallback(
-    ({ set }) =>
-      (id: string) => {
-        set(problemsData, (state) => {
-          const position = state[id].position
-
-          const mapped = Object.entries(state).reduce((acc, [key, value]) => {
-            if (key === id) return acc
-
-            return {
-              ...acc,
-              [key]: {
-                ...value,
-                position: value.position > position ? value.position - 1 : value.position,
-              },
-            }
-          }, {})
-
-          return mapped
-        })
-      },
-    []
-  )
-
-  const swapProblem = useRecoilCallback(
-    ({ set }) =>
-      (a: string, b: string) => {
-        set(problemsData, (state) => {
-          const problemA = { ...state[a] }
-          const problemB = { ...state[b] }
-          ;[problemA.position, problemB.position] = [problemB.position, problemA.position]
-
-          return {
-            ...state,
-            [a]: problemA,
-            [b]: problemB,
-          }
-        })
-      },
-    []
-  )
-
-  const createProblem = useRecoilCallback(
-    ({ set }) =>
-      (at: number, id: string) => {
-        set(problemsData, (state) =>
-          Object.entries(state).reduce<{ [key: string]: Problem }>(
-            (acc, [key, value]) => {
-              return {
-                ...acc,
-                [key]: {
-                  ...value,
-                  position: value.position >= at ? value.position + 1 : value.position,
-                },
-              }
-            },
-            {
-              [id]: {
-                id,
-                position: at,
-                body: '',
-                image: '',
-                solution: '',
-              },
-            }
-          )
-        )
-      },
-    []
-  )
-
-  const getProblemFromPos = useRecoilCallback(
-    ({ snapshot }) =>
-      async (pos: number) => {
-        const problems = await snapshot.getPromise(problemsData)
-        return Object.values(problems).find((problem) => problem.position === pos)
-      },
-    []
-  )
-
-  return {
-    updateProblem,
-    deleteProblem,
-    swapProblem,
-    createProblem,
-    getProblemFromPos,
-  }
+export const getProblemFromPos = async (pos: number): Promise<Problem | undefined> => {
+  const problems = await getAtomValue(store, problemsData)
+  return Object.values(problems).find((problem) => problem.position === pos)
 }

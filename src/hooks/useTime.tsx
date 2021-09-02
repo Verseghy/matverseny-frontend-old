@@ -1,19 +1,18 @@
 import { ClientReadableStream } from 'grpc-web'
 import { useEffect } from 'react'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { TimeState } from '../models/time'
 import { GetTimesRequest, GetTimesResponse } from '../proto/competition_pb'
 import { competitionService } from '../services'
-import { useAuthFunctions } from '../state/auth'
 import { competitionState, competitionTime, currentTime } from '../state/competition'
 import { useInterval } from '.'
 import { retry } from '../utils/retry'
+import { getAuth } from '../state/auth'
+import { useAtom, useSetAtom } from 'yauk/react'
 
 export const useTime = () => {
-  const { getAuth } = useAuthFunctions()
-  const setTimes = useSetRecoilState(competitionTime)
-  const setCurrentTime = useSetRecoilState(currentTime)
-  const state = useRecoilValue(competitionState)
+  const setTimes = useSetAtom(competitionTime)
+  const setCurrentTime = useSetAtom(currentTime)
+  const state = useAtom(competitionState)
 
   useEffect(() => {
     const getTimes = (): Promise<void> => {

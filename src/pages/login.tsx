@@ -6,8 +6,8 @@ import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { LoginRequest } from '../proto/auth_pb'
 import { Error } from 'grpc-web'
-import { useAuthFunctions } from '../state/auth'
 import { authService } from '../services'
+import { login } from '../state/auth'
 
 const validationSchema = Yup.object({
   email: Yup.string().email('Az email formátuma nem megfelelő').required('Email kötelező'),
@@ -18,7 +18,6 @@ const initialValues = { email: '', password: '' }
 
 const LoginPage: React.VFC = () => {
   const [error, setError] = useState('')
-  const { login } = useAuthFunctions()
 
   const onSubmit = async (values: typeof initialValues) => {
     let req = new LoginRequest().setEmail(values.email).setPassword(values.password)

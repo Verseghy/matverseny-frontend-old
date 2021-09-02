@@ -1,11 +1,11 @@
-import { useRecoilValue } from 'recoil'
+import { useAtom } from 'yauk/react'
 import { Guard } from '../models/guard'
 import { TimeState } from '../models/time'
 import { competitionState, competitionTime } from '../state/competition'
 
-export const useTimeGuard = async (timeState: TimeState): Promise<Guard> => {
-  const times = useRecoilValue(competitionTime)
-  const state = useRecoilValue(competitionState)
+export const useTimeGuard = (timeState: TimeState): Guard => {
+  const times = useAtom(competitionTime)
+  const state = useAtom(competitionState)
 
   if (!times.gotTime) return 'wait'
 

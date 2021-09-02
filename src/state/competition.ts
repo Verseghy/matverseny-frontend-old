@@ -1,4 +1,4 @@
-import { atom, selector, selectorFamily } from 'recoil'
+import { atom, selector, selectorFamily } from 'yauk'
 import { TimeState } from '../models/time'
 import {
   pageSize,
@@ -7,38 +7,26 @@ import {
   sortedProblems as problemsSortedProblems,
 } from './problems'
 
-export const solutionsData = atom<{ [key: string]: string }>({
-  key: 'competition_solutionsData',
-  default: {},
-})
+export const solutionsData = atom<{ [key: string]: string }>({})
 
 export const competitionTime = atom({
-  key: 'competition_time',
-  default: {
-    gotTime: false,
-    start: new Date().getTime(),
-    end: new Date().getTime(),
-  },
+  gotTime: false,
+  start: new Date().getTime(),
+  end: new Date().getTime(),
 })
 
-export const currentTime = atom({
-  key: 'competition_currentTime',
-  default: new Date().getTime(),
-})
+export const currentTime = atom(new Date().getTime())
 
-export const competitionState = selector({
-  key: 'competition_state',
-  get: ({ get }) => {
-    const times = get(competitionTime)
-    const current = get(currentTime)
+export const competitionState = selector((get) => {
+  const times = get(competitionTime)
+  const current = get(currentTime)
 
-    if (times.start > current) {
-      return TimeState.BEFORE_COMP
-    } else if (times.end > current) {
-      return TimeState.IN_COMP
-    }
-    return TimeState.AFTER_COMP
-  },
+  if (times.start > current) {
+    return TimeState.BEFORE_COMP
+  } else if (times.end > current) {
+    return TimeState.IN_COMP
+  }
+  return TimeState.AFTER_COMP
 })
 
 const formatTime = (time: number) => {
@@ -53,53 +41,41 @@ const formatTime = (time: number) => {
   return `${hoursString}:${minutesString}:${secondsString}`
 }
 
-export const timeString = selector({
-  key: 'competition_timeString',
-  get: ({ get }) => {
-    const time = get(competitionTime)
-    const current = get(currentTime)
-    const state = get(competitionState)
+export const timeString = selector((get) => {
+  const time = get(competitionTime)
+  const current = get(currentTime)
+  const state = get(competitionState)
 
-    if (state === TimeState.BEFORE_COMP) {
-      return formatTime(time.start - current)
-    } else if (state === TimeState.IN_COMP) {
-      return formatTime(time.end - current)
-    }
-    return '00:00:00'
-  },
+  if (state === TimeState.BEFORE_COMP) {
+    return formatTime(time.start - current)
+  } else if (state === TimeState.IN_COMP) {
+    return formatTime(time.end - current)
+  }
+  return '00:00:00'
 })
 
-export const getProblemByID = selectorFamily({
-  key: 'competition_getProblemByID',
-  get:
-    (problemID: string) =>
-    ({ get }) => {
-      const problems = get(problemsData)
-      const solutions = get(solutionsData)
-      return {
-        ...problems[problemID],
-        solution: solutions[problemID] ?? '',
-      }
-    },
-})
-
-export const sortedProblems = selector({
-  key: 'competition_sortedProblems',
-  get: ({ get }) => {
-    const problems = get(problemsSortedProblems)
+export const getProblemByID = selectorFamily((problemID: string) => {
+  return (get) => {
+    const problems = get(problemsData)
     const solutions = get(solutionsData)
-    return problems.map((problem) => ({
-      ...problem,
-      solution: solutions[problem.id],
-    }))
-  },
+    return {
+      ...problems[problemID],
+      solution: solutions[problemID] ?? '',
+    }
+  }
 })
 
-export const paginatedProblems = selector({
-  key: 'competition_paginatedProblems',
-  get: ({ get }) => {
-    const problems = get(sortedProblems)
-    const page = get(problemsPage)
-    return problems.slice((page - 1) * pageSize, page * pageSize)
-  },
+export const sortedProblems = selector((get) => {
+  const problems = get(problemsSortedProblems)
+  const solutions = get(solutionsData)
+  return problems.map((problem) => ({
+    ...problem,
+    solution: solutions[problem.id],
+  }))
+})
+
+export const paginatedProblems = selector((get) => {
+  const problems = get(sortedProblems)
+  const page = get(problemsPage)
+  return problems.slice((page - 1) * pageSize, page * pageSize)
 })

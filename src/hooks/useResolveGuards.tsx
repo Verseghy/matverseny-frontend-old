@@ -1,55 +1,23 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Guard } from '../models/guard'
 
-export const useResolveGuards = (
-  guards: Promise<Guard>[]
-): {
-  isPending: boolean
-  guard: Guard | null
-} => {
-  const isPending = useRef(true)
-  const [finalGuard, setFinalGuard] = useState<Guard | null>(null)
-  const isUnmounted = useRef(false)
-
-  useEffect(
-    () => () => {
-      isUnmounted.current = true
-    },
-    []
-  )
+export const useResolveGuards = (guards: Guard[]): Guard => {
+  const [finalGuard, setFinalGuard] = useState<Guard>({
+    valid: true,
+  })
 
   useEffect(() => {
-    const checkGuards = async () => {
-      for (const guard of guards) {
-        const result = await guard
+    if (guards.length === 0) return
 
-        if (isUnmounted.current === true) return
-
-        if (result === 'wait' || result.valid === false) {
-          isPending.current = false
-          setFinalGuard(result)
-          return
-        }
+    for (const guard of guards) {
+      if (guard === 'wait' || guard.valid === false) {
+        setFinalGuard(guard)
+        return
       }
-
-      isPending.current = false
-      setFinalGuard(await guards[guards.length - 1])
     }
 
-    isPending.current = true
-
-    if (guards.length === 0) {
-      isPending.current = false
-      setFinalGuard({
-        valid: true,
-      })
-    } else {
-      checkGuards()
-    }
+    setFinalGuard(guards[guards.length - 1])
   }, [guards])
 
-  return {
-    isPending: isPending.current,
-    guard: finalGuard,
-  }
+  return finalGuard
 }

@@ -12,7 +12,6 @@ import {
   ChangeCoOwnerStatusRequest,
 } from '../proto/team_pb'
 import { teamService } from '../services'
-import { useAuthFunctions } from '../state/auth'
 import styles from '../styles/team.module.scss'
 import * as Yup from 'yup'
 import { Field, Form, Formik, FieldProps, ErrorMessage as FormikErrorMessage } from 'formik'
@@ -20,10 +19,10 @@ import { convertTeamInfo, Member, MemberRank } from '../models/team'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCrown, faKey, faRedoAlt, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { useTeamGuard } from '../guards/team'
+import { getAuth, getClaims, newToken } from '../state/auth'
 
 const JoinTeamPage: React.VFC = () => {
   const [teamCode, setTeamCode] = useState('')
-  const { getAuth, newToken } = useAuthFunctions()
   const [errorMessage, setErrorMessage] = useState('')
   const history = useHistory()
 
@@ -81,7 +80,6 @@ const createTeamValidationScheme = Yup.object({
 const createTeamInitialValues = { name: '' }
 
 const CreateTeamPage: React.VFC = () => {
-  const { getAuth, newToken } = useAuthFunctions()
   const [errorMessage, setErrorMessage] = useState('')
   const history = useHistory()
 
@@ -149,7 +147,6 @@ const ManageTeamPage: React.VFC = () => {
   const [errorMessage, setErrorMessage] = useState('')
   const [memberRank, setMemberRank] = useState(MemberRank.MEMBER)
   const [userID, setUserID] = useState('')
-  const { getAuth, getClaims, newToken } = useAuthFunctions()
   const history = useHistory()
 
   useEffect(() => {

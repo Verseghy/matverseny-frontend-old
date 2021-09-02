@@ -1,11 +1,11 @@
 import React from 'react'
-import { useRecoilValue } from 'recoil'
+import { useAtom } from 'yauk/react'
 import { Card } from '../components'
 import { timeString } from '../state/competition'
 import styles from '../styles/wait.module.scss'
 
 const WaitPage: React.VFC = () => {
-  const time = useRecoilValue(timeString)
+  const time = useAtom(timeString)
 
   return (
     <div className={styles.container}>
