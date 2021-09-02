@@ -1,24 +1,19 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { useAtom } from 'yauk/react'
 import { Guard } from '../models/guard'
-import { getClaims } from '../state/auth'
+import { authClaims, refreshToken } from '../state/auth'
 
 export const useAdminGuard = (): Guard => {
-  const [guard, setGuard] = useState<Guard>('wait')
+  const claims = useAtom(authClaims)
 
   useEffect(() => {
-    getClaims()
-      .then<Guard>((claims) => {
-        if (claims !== null && claims.is_admin) return { valid: true }
-
-        return {
-          valid: false,
-          redirect: '/login',
-        }
-      })
-      .then((finalGuard) => {
-        setGuard(finalGuard)
-      })
+    refreshToken()
   }, [])
 
-  return guard
+  if (claims !== null && claims.is_admin) return { valid: true }
+
+  return {
+    valid: false,
+    redirect: '/login',
+  }
 }

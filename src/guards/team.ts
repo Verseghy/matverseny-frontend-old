@@ -1,35 +1,31 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { useAtom } from 'yauk/react'
 import { Guard } from '../models/guard'
-import { getClaims } from '../state/auth'
+import { authClaims, refreshToken } from '../state/auth'
 
 export const useTeamGuard = (teamState: 'hasTeam' | 'noTeam'): Guard => {
-  const [guard, setGuard] = useState<Guard>('wait')
+  const claims = useAtom(authClaims)
 
   useEffect(() => {
-    getClaims()
-      .then<Guard>((claims) => {
-        if (claims?.team === '') {
-          if (teamState === 'hasTeam') {
-            return {
-              valid: false,
-              redirect: '/team',
-            }
-          }
-          return { valid: true }
-        }
+    refreshToken()
+  }, [])
 
-        if (teamState === 'hasTeam') {
-          return { valid: true }
-        }
-        return {
-          valid: false,
-          redirect: '/team/manage',
-        }
-      })
-      .then((finalGuard) => {
-        setGuard(finalGuard)
-      })
-  }, [teamState])
+  if (claims?.team === '') {
+    if (teamState === 'hasTeam') {
+      return {
+        valid: false,
+        redirect: '/team',
+      }
+    }
+    return { valid: true }
+  }
 
-  return guard
+  if (teamState === 'hasTeam') {
+    return { valid: true }
+  }
+
+  return {
+    valid: false,
+    redirect: '/team/manage',
+  }
 }

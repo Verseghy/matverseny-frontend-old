@@ -1,31 +1,26 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { useAtom } from 'yauk/react'
 import { Guard } from '../models/guard'
-import { getClaims } from '../state/auth'
+import { authClaims, refreshToken } from '../state/auth'
 
 export const useLoginGuard = (): Guard => {
-  const [guard, setGuard] = useState<Guard>('wait')
+  const claims = useAtom(authClaims)
 
   useEffect(() => {
-    getClaims()
-      .then<Guard>((claims) => {
-        if (claims === null) return { valid: true }
-
-        let redirect = '/competition'
-        if (claims.is_admin) {
-          redirect = '/admin'
-        } else if (claims.team === '') {
-          redirect = '/team'
-        }
-
-        return {
-          valid: false,
-          redirect,
-        }
-      })
-      .then((finalGuard) => {
-        setGuard(finalGuard)
-      })
+    refreshToken()
   }, [])
 
-  return guard
+  if (claims === null) return { valid: true }
+
+  let redirect = '/competition'
+  if (claims.is_admin) {
+    redirect = '/admin'
+  } else if (claims.team === '') {
+    redirect = '/team'
+  }
+
+  return {
+    valid: false,
+    redirect,
+  }
 }

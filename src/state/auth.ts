@@ -110,3 +110,7 @@ export const newToken = async (): Promise<void> => {
   const tokens = await getAtomValue(store, authTokens)
   await getNewToken(tokens.refreshToken)
 }
+
+export const refreshToken = async (): Promise<void> => {
+  await getAccessToken()
+}
