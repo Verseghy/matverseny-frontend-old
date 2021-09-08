@@ -26,6 +26,11 @@ const LoginRoute: React.VFC = () => {
   return <GuardedRoute guards={[loginGuard]} component={LoginPage} />
 }
 
+const RegisterRoute: React.VFC = () => {
+  const loginGuard = useLoginGuard()
+  return <GuardedRoute guards={[loginGuard]} component={RegisterPage} />
+}
+
 const AdminRoute: React.VFC = () => {
   const adminGuard = useAdminGuard()
   return <GuardedRoute guards={[adminGuard]} component={AdminPage} />
@@ -64,7 +69,7 @@ const App: React.FC = () => {
                 <LoginRoute />
               </Route>
               <Route path="/register">
-                <RegisterPage />
+                <RegisterRoute />
               </Route>
               <Route path="/forgot-password">
                 <ForgotPasswordPage />
