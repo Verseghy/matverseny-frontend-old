@@ -44,6 +44,7 @@ interface CompetitionPageProps {
 const CompetitionRoute: React.VFC<CompetitionPageProps> = ({ component, state }) => {
   const authGuard = useAuthGuard()
   const timeGuard = useTimeGuard(state)
+
   return <GuardedRoute guards={[authGuard, timeGuard]} component={component} />
 }
 
