@@ -2,23 +2,25 @@ import { ClientReadableStream } from 'grpc-web'
 import React, { useEffect } from 'react'
 import { Route } from 'react-router-dom'
 import { setAtomValue } from 'yauk'
-import { useProblems, useSolutions } from '../hooks'
+import { useProblems } from '../hooks'
 import { GetTimesRequest, GetTimesResponse } from '../proto/competition_pb'
 import { competitionService } from '../services'
 import { getAuth } from '../state/auth'
 import { competitionTime, currentTime } from '../state/competition'
 import { store } from '../state/store'
 import { RetryStop, retryStream } from '../utils/retry'
+import { startSolutionsService, stopSolutionsService } from './solutions'
 
 const CompetitionServiceInner: React.VFC = () => {
   useProblems(competitionService)
-  useSolutions()
 
   useEffect(() => {
     startTimesService()
+    startSolutionsService()
 
     return () => {
       stopTimesService()
+      stopSolutionsService()
     }
   }, [])
 
@@ -74,7 +76,6 @@ const createTimesStream = async (): Promise<ClientReadableStream<GetTimesRespons
   ) as ClientReadableStream<GetTimesResponse>
 
   stream.on('data', (res: GetTimesResponse) => {
-    console.log('timeService::onData', res)
     setAtomValue(store, competitionTime, {
       gotTime: true,
       start: new Date(res.getStart()).getTime(),
