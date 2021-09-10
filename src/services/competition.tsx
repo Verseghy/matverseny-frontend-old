@@ -1,23 +1,25 @@
 import React, { useEffect } from 'react'
 import { Route } from 'react-router-dom'
-import { useProblems } from '../hooks'
 import { competitionService } from '../services'
 import { clockService } from './clock'
+import { getProblemsService } from './problems'
 import { solutionsService } from './solutions'
 import { timesService } from './times'
 
 const CompetitionServiceInner: React.VFC = () => {
-  useProblems(competitionService)
-
   useEffect(() => {
+    const problemsService = getProblemsService(competitionService)
+
     timesService.start()
     clockService.start()
     solutionsService.start()
+    problemsService.start()
 
     return () => {
       timesService.stop()
       clockService.stop()
       solutionsService.stop()
+      problemsService.stop()
     }
   }, [])
 

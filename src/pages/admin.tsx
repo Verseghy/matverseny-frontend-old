@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Button } from '../components'
 import { CreateRequest, DeleteRequest, SwapRequest, UpdateRequest } from '../proto/admin_pb'
 import { ProblemCard, Paginator, PaginatorControls } from '../components'
@@ -7,17 +7,22 @@ import { Problem } from '../models/problem'
 import { Problem as ProblemPB } from '../proto/shared_pb'
 import { getProblemFromPos, paginatedProblems, problemsPage } from '../state/problems'
 import { adminService } from '../services'
-import { useProblems } from '../hooks'
 import { getAuth, logout } from '../state/auth'
 import { useAtom } from 'yauk/react'
 import { setAtomValue } from 'yauk'
 import { store } from '../state/store'
+import { getProblemsService } from '../services/problems'
 
 const AdminPage: React.VFC = () => {
   const [isLoading, setIsLoading] = useState<{ [key: string]: boolean | null }>({})
   const loadingIntervalRef = useRef<NodeJS.Timeout>()
   const problems = useAtom(paginatedProblems)
-  useProblems(adminService)
+
+  useEffect(() => {
+    const problemsService = getProblemsService(adminService)
+    problemsService.start()
+    return () => problemsService.stop()
+  }, [])
 
   const newProblem = async () => {
     adminService.createProblem(new CreateRequest().setAt(problems.length + 1), await getAuth())
