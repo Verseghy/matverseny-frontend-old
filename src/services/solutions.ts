@@ -5,22 +5,7 @@ import { competitionService } from '../services'
 import { getAuth } from '../state/auth'
 import { solutionsData } from '../state/competition'
 import { store } from '../state/store'
-import { RetryStop, retryStream } from '../utils/retry'
-
-let solutionsServiceStop: null | RetryStop = null
-
-export const startSolutionsService = async (): Promise<void> => {
-  if (solutionsServiceStop !== null) return
-
-  solutionsServiceStop = await retryStream(createSolutionsStream, 2000)
-}
-
-export const stopSolutionsService = () => {
-  if (solutionsServiceStop === null) return
-
-  solutionsServiceStop()
-  solutionsServiceStop = null
-}
+import { createStreamService } from '../utils/streamService'
 
 export const createSolutionsStream = async (): Promise<
   ClientReadableStream<GetSolutionsResponse>
@@ -47,3 +32,5 @@ export const createSolutionsStream = async (): Promise<
 
   return stream
 }
+
+export const solutionsService = createStreamService(createSolutionsStream)
