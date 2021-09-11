@@ -4,7 +4,7 @@ import { ReadRequest } from '../proto/admin_pb'
 import { CompetitionClient } from '../proto/CompetitionServiceClientPb'
 import { ProblemStream } from '../proto/shared_pb'
 import { getAuth } from '../state/auth'
-import { createProblem, deleteProblem, swapProblem, updateProblem } from '../state/problems'
+import { createProblem, deleteProblem, swapProblems, updateProblem } from '../state/problems'
 import { createStreamService } from '../utils/streamService'
 
 const handleInitialProblem = (p: ProblemStream.Initial): void => {
@@ -33,7 +33,7 @@ const handleDeleteProblem = (p: ProblemStream.Delete): void => {
 }
 
 const handleSwapProblem = (p: ProblemStream.Swap): void => {
-  swapProblem(p.getA(), p.getB())
+  swapProblems(p.getA(), p.getB())
 }
 
 const handleCreateProblem = (p: ProblemStream.Create): void => {

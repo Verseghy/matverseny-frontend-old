@@ -66,7 +66,7 @@ export const deleteProblem = (id: string) => {
   })
 }
 
-export const swapProblem = (a: string, b: string) => {
+export const swapProblems = (a: string, b: string) => {
   setAtomValue(store, problemsData, (state) => {
     const problemA = { ...state[a] }
     const problemB = { ...state[b] }
