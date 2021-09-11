@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Route } from 'react-router-dom'
-import { Button, Card, ErrorMessage, GuardedRoute, Input } from '../components'
+import { Button, Card, ErrorMessage, FormField, GuardedRoute, Input } from '../components'
 import { CreateTeamRequest, JoinTeamRequest } from '../proto/team_pb'
 import { teamService } from '../services'
 import styles from '../styles/team.module.scss'
 import * as Yup from 'yup'
-import { Field, Form, Formik, FieldProps, ErrorMessage as FormikErrorMessage } from 'formik'
+import { Form, Formik } from 'formik'
 import { MemberRank } from '../models/team'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCrown, faKey, faRedoAlt, faTimes } from '@fortawesome/free-solid-svg-icons'
@@ -107,22 +107,7 @@ const CreateTeamPage: React.VFC = () => {
             <Form>
               <h1>Csapat létrehozása</h1>
               <ErrorMessage className={styles.errorMessage} message={errorMessage} />
-              <label>
-                <span>Csapat neve</span>
-                <Field name="name">
-                  {({ field, meta }: FieldProps) => (
-                    <Input
-                      className={styles.nameInput}
-                      autoFocus
-                      {...field}
-                      error={!!meta.touched && !!meta.error}
-                    />
-                  )}
-                </Field>
-              </label>
-              <FormikErrorMessage name="name">
-                {(msg) => <span className={styles.fieldError}>{msg}</span>}
-              </FormikErrorMessage>
+              <FormField name="name" display="Csapat neve" autoFocus className={styles.nameInput} />
               <div className={styles.buttons}>
                 <Button to="/team" block>
                   Vissza
