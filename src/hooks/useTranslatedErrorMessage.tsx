@@ -19,6 +19,15 @@ const errorMessages: { [key: string]: string } = {
   E0017: 'Nincs csapat',
   E0018: 'Sikertelen email küldés',
   E0019: 'Hibás token',
+  E0020: 'Queue error',
+  E0021: 'A felhasználó már csapatban van',
+  E0022: 'Csapatnév már foglalt',
+  E0023: 'A lehetetlen megtörtént, a világ pokolra van utalva (próbáld újra)',
+  E0024: 'A csapatfőnök nem léphet ki a csapatból',
+  E0025: 'Nincs jogosultság',
+  E0026: 'Csak üres csapatot lehet törölni',
+  E0027: 'Rossz idő formátum',
+  E0028: 'Túl hosszú csapatnév',
 }
 
 export const useTranslatedErrorMessage = (message: string): string => {
