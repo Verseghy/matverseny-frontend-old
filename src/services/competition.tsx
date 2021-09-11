@@ -28,7 +28,7 @@ const CompetitionServiceInner: React.VFC = () => {
 
 const CompetitionService: React.VFC = () => {
   return (
-    <Route path={['/wait', '/competition', '/end', '/team']}>
+    <Route path={['/wait', '/competition', '/end', '/team/manage']}>
       <CompetitionServiceInner />
     </Route>
   )

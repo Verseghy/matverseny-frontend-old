@@ -32,7 +32,7 @@ const CompetitionPage: React.VFC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.logoutContainer}>
-        <Button to="/team" className={styles.button}>
+        <Button to="/team/manage" className={styles.button}>
           Csapat
         </Button>
         <Timer />
