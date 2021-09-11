@@ -75,7 +75,7 @@ const CompetitionPage: React.VFC = () => {
         <PaginatorControls />
         <div className={styles.buttonsContainer}>
           {problems.map((problem) => (
-            <QuickProblemButton problem={problem} />
+            <QuickProblemButton key={problem.id} problem={problem} />
           ))}
         </div>
         {problems.map((problem) => (
