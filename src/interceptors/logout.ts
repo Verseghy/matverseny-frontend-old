@@ -11,7 +11,7 @@ export class LogoutInterceptor implements UnaryInterceptor<any, any> {
         logout()
       }
 
-      return response
+      throw response
     })
   }
 }

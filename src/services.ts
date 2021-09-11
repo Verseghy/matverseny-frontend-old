@@ -1,27 +1,22 @@
 import { AuthInterceptor } from './interceptors/auth'
+import { DebugInterceptor, DebugStreamInterceptor } from './interceptors/debug'
 import { LogoutInterceptor } from './interceptors/logout'
 import { AdminClient } from './proto/AdminServiceClientPb'
 import { AuthClient } from './proto/AuthServiceClientPb'
 import { CompetitionClient } from './proto/CompetitionServiceClientPb'
 import { TeamClient } from './proto/TeamServiceClientPb'
 
-const devTools = (window as any).__GRPCWEB_DEVTOOLS__
-const enableGRPCDevTools =
-  process.env.NODE_ENV === 'development' && !!devTools ? devTools : () => {}
-
 export const authService = new AuthClient(process.env.REACT_APP_BACKEND_URL!, null, {
-  unaryInterceptors: [new LogoutInterceptor()],
+  unaryInterceptors: [new LogoutInterceptor(), new DebugInterceptor()],
 })
 export const adminService = new AdminClient(process.env.REACT_APP_BACKEND_URL!, null, {
-  unaryInterceptors: [new AuthInterceptor()],
-  streamInterceptors: [new AuthInterceptor()],
+  unaryInterceptors: [new AuthInterceptor(), new DebugInterceptor()],
+  streamInterceptors: [new AuthInterceptor(), new DebugStreamInterceptor()],
 })
 export const competitionService = new CompetitionClient(process.env.REACT_APP_BACKEND_URL!, null, {
-  unaryInterceptors: [new AuthInterceptor()],
-  streamInterceptors: [new AuthInterceptor()],
+  unaryInterceptors: [new AuthInterceptor(), new DebugInterceptor()],
+  streamInterceptors: [new AuthInterceptor(), new DebugStreamInterceptor()],
 })
 export const teamService = new TeamClient(process.env.REACT_APP_BACKEND_URL!, null, {
-  unaryInterceptors: [new AuthInterceptor()],
+  unaryInterceptors: [new AuthInterceptor(), new DebugInterceptor()],
 })
-
-// enableGRPCDevTools([authService, adminService, competitionService, teamService])
