@@ -1,4 +1,5 @@
 import { AuthInterceptor } from './interceptors/auth'
+import { LogoutInterceptor } from './interceptors/logout'
 import { AdminClient } from './proto/AdminServiceClientPb'
 import { AuthClient } from './proto/AuthServiceClientPb'
 import { CompetitionClient } from './proto/CompetitionServiceClientPb'
@@ -8,7 +9,9 @@ const devTools = (window as any).__GRPCWEB_DEVTOOLS__
 const enableGRPCDevTools =
   process.env.NODE_ENV === 'development' && !!devTools ? devTools : () => {}
 
-export const authService = new AuthClient(process.env.REACT_APP_BACKEND_URL!, null, null)
+export const authService = new AuthClient(process.env.REACT_APP_BACKEND_URL!, null, {
+  unaryInterceptors: [new LogoutInterceptor()],
+})
 export const adminService = new AdminClient(process.env.REACT_APP_BACKEND_URL!, null, {
   unaryInterceptors: [new AuthInterceptor()],
   streamInterceptors: [new AuthInterceptor()],
