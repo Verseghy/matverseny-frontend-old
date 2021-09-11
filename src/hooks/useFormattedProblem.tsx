@@ -1,10 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
 import KaTeX from 'katex'
 
 export const useFormattedProblem = (problemText: string) => {
-  const [formattedProblemText, setFormattedProblemText] = useState(problemText)
-
-  useEffect(() => {
+  return useMemo(() => {
     let text = problemText
     const inline = problemText.match(/\$(?!\$)([^$]*)\$(?!\$)/g) || []
     const block = problemText.match(/\$\$([^$]*)\$\$/g) || []
@@ -27,8 +25,6 @@ export const useFormattedProblem = (problemText: string) => {
       text = text.replace(b, a)
     }
 
-    setFormattedProblemText(text)
+    return text
   }, [problemText])
-
-  return formattedProblemText
 }
