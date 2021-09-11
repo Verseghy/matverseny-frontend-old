@@ -10,13 +10,6 @@ export const wait = (timeout: number): Promise<void> => {
 
 export type RetryStop = () => void
 
-export const retry = async (fn: () => Promise<void>, timeout: number) => {
-  while (true) {
-    await fn().catch(() => {})
-    await wait(timeout)
-  }
-}
-
 export const wrapStream = <T>(stream: ClientReadableStream<T>): Promise<void> => {
   return new Promise((resolve, reject) => {
     stream.on('end', () => {
