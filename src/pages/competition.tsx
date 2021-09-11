@@ -10,6 +10,32 @@ import { paginatedProblems, timeString } from '../state/competition'
 import { problemsPage } from '../state/problems'
 import styles from '../styles/competition.module.scss'
 
+interface QuickProblemButtonProps {
+  problem: Problem
+}
+
+const QuickProblemButton: React.VFC<QuickProblemButtonProps> = ({ problem }) => {
+  return (
+    <Button
+      className={styles.problemButton}
+      kind={problem.solution ? 'primary' : undefined}
+      key={problem.id}
+      onClick={() => {
+        window.scrollTo({
+          top: document.getElementById(`card_${problem.id}`)!.offsetTop - 24,
+          behavior: 'smooth',
+        })
+        const input = document.querySelector(`#card_${problem.id} input`) as HTMLInputElement
+        input.focus({
+          preventScroll: true,
+        })
+      }}
+    >
+      {problem.position}
+    </Button>
+  )
+}
+
 const Timer: React.VFC = () => {
   const time = useAtom(timeString)
 
@@ -49,25 +75,7 @@ const CompetitionPage: React.VFC = () => {
         <PaginatorControls />
         <div className={styles.buttonsContainer}>
           {problems.map((problem) => (
-            <Button
-              className={styles.problemButton}
-              kind={problem.solution ? 'primary' : undefined}
-              key={problem.id}
-              onClick={() => {
-                window.scrollTo({
-                  top: document.getElementById(`card_${problem.id}`)!.offsetTop - 24,
-                  behavior: 'smooth',
-                })
-                const input = document.querySelector(
-                  `#card_${problem.id} input`
-                ) as HTMLInputElement
-                input.focus({
-                  preventScroll: true,
-                })
-              }}
-            >
-              {problem.position}
-            </Button>
+            <QuickProblemButton problem={problem} />
           ))}
         </div>
         {problems.map((problem) => (
