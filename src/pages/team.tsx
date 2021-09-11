@@ -10,7 +10,7 @@ import { MemberRank } from '../models/team'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCrown, faKey, faRedoAlt, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { useTeamGuard } from '../guards/team'
-import { getAuth, newToken } from '../state/auth'
+import { newToken } from '../state/auth'
 import {
   deleteTeam,
   kickMember,
@@ -31,7 +31,7 @@ const JoinTeamPage: React.VFC = () => {
   const onJoin = async () => {
     const req = new JoinTeamRequest().setCode(teamCode)
     try {
-      await teamService.joinTeam(req, await getAuth())
+      await teamService.joinTeam(req, null)
       await newToken()
     } catch (err: any) {
       const error = err as Error
@@ -87,7 +87,7 @@ const CreateTeamPage: React.VFC = () => {
     let req = new CreateTeamRequest().setName(values.name)
 
     try {
-      await teamService.createTeam(req, await getAuth())
+      await teamService.createTeam(req, null)
       await newToken()
     } catch (err: any) {
       const error = err as Error

@@ -1,4 +1,3 @@
-import { Metadata } from 'grpc-web'
 import jwtDecode from 'jwt-decode'
 import { RefreshTokenRequest } from '../proto/auth_pb'
 import { authService } from '../services'
@@ -76,7 +75,7 @@ export const getNewToken = async (refreshToken: string): Promise<string> => {
   return accessToken
 }
 
-const getAccessToken = async (): Promise<string> => {
+export const getAccessToken = async (): Promise<string> => {
   const { refreshToken, accessToken } = await getAtomValue(store, authTokens)
 
   if (refreshToken === '') {
@@ -93,10 +92,6 @@ const getAccessToken = async (): Promise<string> => {
   }
 
   return accessToken
-}
-
-export const getAuth = async (): Promise<Metadata> => {
-  return { Authorization: `Bearer: ${await getAccessToken()}` }
 }
 
 export const getClaims = async (): Promise<JWT | null> => {

@@ -5,7 +5,7 @@ import { ProblemCard, Paginator, PaginatorControls } from '../components'
 import { Problem } from '../models/problem'
 import { SetSolutionsRequest } from '../proto/competition_pb'
 import { competitionService } from '../services'
-import { getAuth, logout } from '../state/auth'
+import { logout } from '../state/auth'
 import { paginatedProblems, timeString } from '../state/competition'
 import { problemsPage } from '../state/problems'
 import styles from '../styles/competition.module.scss'
@@ -52,7 +52,7 @@ const CompetitionPage: React.VFC = () => {
       .setValue(Number(problem.solution))
       .setDelete(problem.solution === '')
 
-    await competitionService.setSolutions(req, await getAuth())
+    await competitionService.setSolutions(req, null)
   }, [])
 
   return (

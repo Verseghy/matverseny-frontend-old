@@ -3,7 +3,6 @@ import { AdminClient } from '../proto/AdminServiceClientPb'
 import { ReadRequest } from '../proto/admin_pb'
 import { CompetitionClient } from '../proto/CompetitionServiceClientPb'
 import { ProblemStream } from '../proto/shared_pb'
-import { getAuth } from '../state/auth'
 import { createProblem, deleteProblem, swapProblems, updateProblem } from '../state/problems'
 import { createStreamService } from '../utils/streamService'
 
@@ -44,10 +43,9 @@ export const createProblemsStream = <T extends AdminClient | CompetitionClient>(
   client: T
 ): (() => Promise<ClientReadableStream<ProblemStream>>) => {
   return async () => {
-    const stream = client.getProblems(
-      new ReadRequest(),
-      await getAuth()
-    ) as ClientReadableStream<ProblemStream>
+    const stream = await (client.getProblems(new ReadRequest()) as any as Promise<
+      ClientReadableStream<ProblemStream>
+    >)
 
     stream.on('data', (problem: ProblemStream) => {
       const type = problem.getType()

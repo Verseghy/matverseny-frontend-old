@@ -7,7 +7,7 @@ import { Problem } from '../models/problem'
 import { Problem as ProblemPB } from '../proto/shared_pb'
 import { getProblemFromPos, paginatedProblems, problemsPage } from '../state/problems'
 import { adminService } from '../services'
-import { getAuth, logout } from '../state/auth'
+import { logout } from '../state/auth'
 import { useAtom } from 'yauk/react'
 import { setAtomValue } from 'yauk'
 import { store } from '../state/store'
@@ -25,13 +25,13 @@ const AdminPage: React.VFC = () => {
   }, [])
 
   const newProblem = async () => {
-    adminService.createProblem(new CreateRequest().setAt(problems.length + 1), await getAuth())
+    adminService.createProblem(new CreateRequest().setAt(problems.length + 1), null)
   }
 
   const deleteProblem = useCallback(async (id: string) => {
     const req = new DeleteRequest().setId(id)
 
-    await adminService.deleteProblem(req, await getAuth())
+    await adminService.deleteProblem(req, null)
   }, [])
 
   const updateProblem = useCallback(async (problem: Problem) => {
@@ -49,7 +49,7 @@ const AdminPage: React.VFC = () => {
       ...state,
       [problem.id]: true,
     }))
-    await adminService.updateProblem(req, await getAuth())
+    await adminService.updateProblem(req, null)
     setIsLoading((state) => ({
       ...state,
       [problem.id]: false,
@@ -70,7 +70,7 @@ const AdminPage: React.VFC = () => {
 
     const req = new SwapRequest().setA(problemA.id).setB(problemB.id)
 
-    await adminService.swapProblem(req, await getAuth())
+    await adminService.swapProblem(req, null)
   }, [])
 
   return (

@@ -9,12 +9,12 @@ import {
   LeaveTeamRequest,
 } from '../proto/team_pb'
 import { teamService } from '../services'
-import { authClaims, getAuth, newToken } from './auth'
+import { authClaims, newToken } from './auth'
 import { store } from './store'
 
 export const fetchTeamInfo = async (): Promise<TeamInfo> => {
   const req = new GetTeamInfoRequest()
-  const info = await teamService.getTeamInfo(req, await getAuth())
+  const info = await teamService.getTeamInfo(req, null)
   return convertTeamInfo(info)
 }
 
@@ -54,7 +54,7 @@ export const refetchTeamInfo = async () => {
 export const regenerateJoinCode = async () => {
   const req = new GenerateJoinCodeRequest()
   try {
-    const code = await teamService.generateJoinCode(req, await getAuth())
+    const code = await teamService.generateJoinCode(req, null)
     setAtomValue(store, teamInfo, (state) => ({
       ...state,
       code: code.getNewCode(),
@@ -68,7 +68,7 @@ export const regenerateJoinCode = async () => {
 export const leaveTeam = async () => {
   const req = new LeaveTeamRequest()
   try {
-    await teamService.leaveTeam(req, await getAuth())
+    await teamService.leaveTeam(req, null)
     await newToken()
     error(null)
   } catch (err: any) {
@@ -79,7 +79,7 @@ export const leaveTeam = async () => {
 export const deleteTeam = async () => {
   const req = new DisbandTeamRequest()
   try {
-    await teamService.disbandTeam(req, await getAuth())
+    await teamService.disbandTeam(req, null)
     await newToken()
     error(null)
   } catch (err: any) {
@@ -90,7 +90,7 @@ export const deleteTeam = async () => {
 export const kickMember = async (userID: string) => {
   const req = new KickUserRequest().setUserId(userID)
   try {
-    await teamService.kickUser(req, await getAuth())
+    await teamService.kickUser(req, null)
     setAtomValue(store, teamInfo, (state) => ({
       ...state,
       members: state.members.filter((member) => member.id !== userID),
@@ -112,7 +112,7 @@ export const toggleCoOwnerStatus = async (userID: string) => {
   const req = new ChangeCoOwnerStatusRequest().setUserId(userID).setShouldCoowner(shouldCoOwner)
 
   try {
-    await teamService.changeCoOwnerStatus(req, await getAuth())
+    await teamService.changeCoOwnerStatus(req, null)
     setAtomValue(store, teamInfo, (state) => ({
       ...state,
       members: state.members.map((member) => {
