@@ -2,7 +2,6 @@ import React, { Suspense } from 'react'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 import { changeTheme, isDarkTheme, Theme } from './utils/theme'
 import { useAuthGuard } from './guards/auth'
-import CompetitionService from './services/competition'
 import { TimeState } from './models/time'
 import { useTimeGuard } from './guards/time'
 import { useLoginGuard } from './guards/login'
@@ -61,7 +60,6 @@ const App: React.FC = () => {
       <Suspense fallback={<p>Loading...</p>}>
         <main>
           <Router>
-            <CompetitionService />
             <Switch>
               <Route path="/" exact>
                 <LandingPage />

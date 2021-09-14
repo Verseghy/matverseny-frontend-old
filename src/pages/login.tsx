@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Button, Card, ErrorMessage, FormField } from '../components'
 import styles from '../styles/login.module.scss'
@@ -8,6 +8,7 @@ import { LoginRequest } from '../proto/auth_pb'
 import { Error } from 'grpc-web'
 import { authService } from '../services'
 import { login } from '../state/auth'
+import { timesService } from '../services/times'
 
 const validationSchema = Yup.object({
   email: Yup.string().email('Az email formátuma nem megfelelő').required('Email kötelező'),
@@ -18,6 +19,10 @@ const initialValues = { email: '', password: '' }
 
 const LoginPage: React.VFC = () => {
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    timesService.stop()
+  }, [])
 
   const onSubmit = async (values: typeof initialValues) => {
     let req = new LoginRequest().setEmail(values.email).setPassword(values.password)

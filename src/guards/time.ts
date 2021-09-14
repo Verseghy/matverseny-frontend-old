@@ -1,9 +1,12 @@
 import { useAtom } from 'yauk/react'
 import { Guard } from '../models/guard'
 import { TimeState } from '../models/time'
+import { timesService } from '../services/times'
 import { competitionState, competitionTime } from '../state/competition'
 
 export const useTimeGuard = (timeState: TimeState): Guard => {
+  timesService.start()
+
   const times = useAtom(competitionTime)
   const state = useAtom(competitionState)
 

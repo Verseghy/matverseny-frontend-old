@@ -1,10 +1,13 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useAtom, useSetAtom } from 'yauk/react'
 import { Button } from '../components'
 import { ProblemCard, Paginator, PaginatorControls } from '../components'
 import { Problem } from '../models/problem'
 import { SetSolutionsRequest } from '../proto/competition_pb'
 import { competitionService } from '../services'
+import { clockService } from '../services/clock'
+import { getProblemsService } from '../services/problems'
+import { solutionsService } from '../services/solutions'
 import { logout } from '../state/auth'
 import { paginatedProblems, timeString } from '../state/competition'
 import { problemsPage } from '../state/problems'
@@ -39,12 +42,22 @@ const QuickProblemButton: React.VFC<QuickProblemButtonProps> = ({ problem }) => 
 const Timer: React.VFC = () => {
   const time = useAtom(timeString)
 
+  useEffect(() => {
+    clockService.start()
+  }, [])
+
   return <span className={styles.timer}>{time}</span>
 }
 
 const CompetitionPage: React.VFC = () => {
   const problems = useAtom(paginatedProblems)
   const setActivePage = useSetAtom(problemsPage)
+
+  useEffect(() => {
+    const problemsService = getProblemsService(competitionService)
+    problemsService.start()
+    solutionsService.start()
+  }, [])
 
   const onUpdate = useCallback(async (problem: Problem) => {
     const req = new SetSolutionsRequest()

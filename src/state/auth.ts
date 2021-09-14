@@ -1,9 +1,13 @@
 import jwtDecode from 'jwt-decode'
 import { RefreshTokenRequest } from '../proto/auth_pb'
-import { authService } from '../services'
+import { adminService, authService, competitionService } from '../services'
 import { atom, selector, setAtomValue } from 'yauk'
 import { store } from './store'
 import { getAtomValue } from './util'
+import { clockService } from '../services/clock'
+import { solutionsService } from '../services/solutions'
+import { timesService } from '../services/times'
+import { getProblemsService } from '../services/problems'
 
 export interface JWT {
   user_id: string
@@ -55,6 +59,12 @@ export const login = (refreshToken: string, accessToken: string) => {
 }
 
 export const logout = () => {
+  getProblemsService(adminService).stop()
+  getProblemsService(competitionService).stop()
+  clockService.stop()
+  solutionsService.stop()
+  timesService.stop()
+
   localStorage.removeItem('refreshToken')
   setAtomValue(store, authTokens, {
     refreshToken: '',
