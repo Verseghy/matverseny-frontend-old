@@ -3,6 +3,7 @@ import { AdminClient } from '../proto/AdminServiceClientPb'
 import { ReadRequest } from '../proto/admin_pb'
 import { CompetitionClient } from '../proto/CompetitionServiceClientPb'
 import { ProblemStream } from '../proto/shared_pb'
+import { adminService, competitionService } from '../services'
 import { createProblem, deleteProblem, swapProblems, updateProblem } from '../state/problems'
 import { createStreamService } from '../utils/streamService'
 
@@ -81,6 +82,12 @@ export const createProblemsStream = <T extends AdminClient | CompetitionClient>(
   }
 }
 
+const adminProblemService = createStreamService(createProblemsStream(adminService))
+const competitionProblemService = createStreamService(createProblemsStream(competitionService))
+
 export const getProblemsService = <T extends AdminClient | CompetitionClient>(client: T) => {
-  return createStreamService(createProblemsStream(client))
+  if (client === adminService) {
+    return adminProblemService
+  }
+  return competitionProblemService
 }
