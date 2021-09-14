@@ -5,16 +5,18 @@ import { RetryStop, retryStream } from './retry'
 export const createStreamService = <T>(
   createStream: () => Promise<ClientReadableStream<T>>
 ): Service => {
-  let serviceStop: null | RetryStop = null
+  let serviceStop: null | Promise<RetryStop> = null
 
   return {
-    start: async () => {
+    start: () => {
       if (serviceStop !== null) return
-      serviceStop = await retryStream(createStream, 2000)
+      serviceStop = retryStream(createStream, 2000)
     },
     stop: () => {
       if (serviceStop === null) return
-      serviceStop()
+      serviceStop.then((stop) => {
+        stop()
+      })
       serviceStop = null
     },
   }

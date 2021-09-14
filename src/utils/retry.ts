@@ -11,13 +11,13 @@ export const wait = (timeout: number): Promise<void> => {
 export type RetryStop = () => void
 
 export const wrapStream = <T>(stream: ClientReadableStream<T>): Promise<void> => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     stream.on('end', () => {
       resolve()
     })
 
     stream.on('error', () => {
-      reject()
+      resolve()
     })
   })
 }
@@ -32,8 +32,7 @@ export const retryStream = async <T>(
   new Promise<void>(async (resolve) => {
     while (!isStopped) {
       resolvedStream = await Promise.resolve(stream())
-      const wrapped = wrapStream(resolvedStream)
-      await wrapped.catch(() => {})
+      await wrapStream(resolvedStream)
       await wait(timeout)
     }
 
