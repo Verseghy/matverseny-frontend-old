@@ -166,12 +166,14 @@ const ManageTeamPage: React.VFC = () => {
                 <div className={styles.actions}>
                   {m.rank !== MemberRank.OWNER && m.id !== user.id && (
                     <>
-                      <Button
-                        onClick={() => toggleCoOwnerStatus(m.id)}
-                        kind={m.rank === MemberRank.COOWNER ? 'primary' : undefined}
-                      >
-                        <FontAwesomeIcon icon={faKey} />
-                      </Button>
+                      {user.rank === MemberRank.OWNER && (
+                        <Button
+                          onClick={() => toggleCoOwnerStatus(m.id)}
+                          kind={m.rank === MemberRank.COOWNER ? 'primary' : undefined}
+                        >
+                          <FontAwesomeIcon icon={faKey} />
+                        </Button>
+                      )}
                       <Button onClick={() => kickMember(m.id)}>
                         <FontAwesomeIcon icon={faTimes} />
                       </Button>
