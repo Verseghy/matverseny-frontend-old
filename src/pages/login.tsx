@@ -52,7 +52,7 @@ const LoginPage: React.VFC = () => {
                 A <span>191</span> matematikaverseny oldalára
               </h2>
               <ErrorMessage message={error} />
-              <FormField name="email" display="Email" className={styles.field} />
+              <FormField autoFocus name="email" display="Email" className={styles.field} />
               <FormField
                 name="password"
                 display="Jelszó"
