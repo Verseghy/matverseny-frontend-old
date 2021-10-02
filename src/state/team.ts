@@ -7,6 +7,7 @@ import {
   GetTeamInfoRequest,
   KickUserRequest,
   LeaveTeamRequest,
+  UpdateTeamRequest,
 } from '../proto/team_pb'
 import { teamService } from '../services'
 import { authClaims, newToken } from './auth'
@@ -127,6 +128,25 @@ export const toggleCoOwnerStatus = async (userID: string) => {
 
         return member
       }),
+    }))
+    error(null)
+  } catch (err: any) {
+    error(err)
+  }
+}
+
+export const renameTeam = async (newName: string) => {
+  const info = await getAtomValue(store, teamInfo)
+
+  if (info.name === newName) return
+
+  const req = new UpdateTeamRequest().setName(newName)
+
+  try {
+    await teamService.updateTeam(req, null)
+    setAtomValue(store, teamInfo, (state) => ({
+      ...state,
+      name: newName,
     }))
     error(null)
   } catch (err: any) {

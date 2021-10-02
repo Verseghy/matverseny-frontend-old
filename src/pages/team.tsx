@@ -21,6 +21,7 @@ import {
   teamInfo,
   toggleCoOwnerStatus,
   userInfo,
+  renameTeam,
 } from '../state/team'
 import { useAtom } from 'yauk/react'
 
@@ -124,14 +125,27 @@ const CreateTeamPage: React.VFC = () => {
   )
 }
 
+const renameTeamValidationScheme = Yup.object({
+  name: Yup.string().max(64, 'Maximum 64 karakter lehet').required('Név megadása kötelező'),
+})
+
+const renameTeamInitialValues = { name: '' }
+
 const ManageTeamPage: React.VFC = () => {
   const info = useAtom(teamInfo)
   const user = useAtom(userInfo)!
   const errorMessage = useAtom(teamError)
 
+  const [editMode, setEditMode] = useState(false)
+
   useEffect(() => {
     refetchTeamInfo()
   }, [])
+
+  const onSubmit = async (values: typeof renameTeamInitialValues) => {
+    await renameTeam(values.name)
+    setEditMode(false)
+  }
 
   return (
     <div className={styles.container}>
@@ -139,18 +153,55 @@ const ManageTeamPage: React.VFC = () => {
         <h1>{info.name}</h1>
         <ErrorMessage message={errorMessage} />
         {user.rank === MemberRank.OWNER && (
-          <div className={styles.codeContainer}>
-            Csapatkód:
-            <Input
-              value={info.code}
-              readOnly
-              className={styles.code}
-              onFocus={(event) => event.target.select()}
-            />
-            <Button onClick={regenerateJoinCode}>
-              <FontAwesomeIcon icon={faRedoAlt} />
-            </Button>
-          </div>
+          <>
+            {!editMode && (
+              <div className={styles.teamOperations}>
+                <Button block onClick={() => setEditMode(true)}>
+                  Csapatnév módosítása
+                </Button>
+                <Button block>Nevezése a versenyre</Button>
+              </div>
+            )}
+            {editMode && (
+              <Formik
+                initialValues={renameTeamInitialValues}
+                onSubmit={onSubmit}
+                validationSchema={renameTeamValidationScheme}
+              >
+                {({ isSubmitting }) => (
+                  <Form>
+                    <div className={styles.renameTeam}>
+                      <FormField block autoFocus name="name" />
+                      <div className={styles.renameButtons}>
+                        <Button
+                          disabled={isSubmitting}
+                          type="submit"
+                          className={styles.submitRename}
+                        >
+                          Átnevezés
+                        </Button>
+                        <Button onClick={() => setEditMode(false)}>
+                          <FontAwesomeIcon icon={faTimes} />
+                        </Button>
+                      </div>
+                    </div>
+                  </Form>
+                )}
+              </Formik>
+            )}
+            <div className={styles.codeContainer}>
+              Csapatkód:
+              <Input
+                value={info.code}
+                readOnly
+                className={styles.code}
+                onFocus={(event) => event.target.select()}
+              />
+              <Button onClick={regenerateJoinCode}>
+                <FontAwesomeIcon icon={faRedoAlt} />
+              </Button>
+            </div>
+          </>
         )}
         <span className={styles.members}>Tagok</span>
         <div>

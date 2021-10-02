@@ -6,7 +6,7 @@ import classnames from 'classnames'
 
 export interface FormFieldProps extends InputProps {
   name: string
-  display: string
+  display?: string
   className?: string
 }
 
@@ -15,7 +15,7 @@ export const FormField: React.VFC<FormFieldProps> = ({ name, display, className,
 
   return (
     <label className={classes}>
-      <span>{display}</span>
+      {display && <span>{display}</span>}
       <Field name={name}>
         {({ field, meta }: FieldProps) => (
           <Input block {...rest} {...field} error={!!meta.touched && !!meta.error} />
