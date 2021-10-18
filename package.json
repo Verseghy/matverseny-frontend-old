@@ -21,7 +21,7 @@
     "yup": "^0.32.9"
   },
   "scripts": {
-    "postinstall": "husky install",
+    "prepare": "husky install",
     "start": "cross-env BROWSER=none react-scripts start",
     "build": "react-scripts build",
     "proto": "cd ./src/proto && protoc -I=. --js_out=import_style=commonjs,binary:. --grpc-web_out=import_style=typescript,mode=grpcwebtext:. *.proto",
