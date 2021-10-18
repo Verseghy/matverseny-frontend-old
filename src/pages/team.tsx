@@ -143,7 +143,7 @@ const ManageTeamPage: React.VFC = () => {
   }, [])
 
   const onSubmit = async (values: typeof renameTeamInitialValues) => {
-    await renameTeam(values.name)
+    await renameTeam(values.name.trim())
     setEditMode(false)
   }
 
