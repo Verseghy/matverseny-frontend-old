@@ -5,7 +5,6 @@ import styles from '../styles/login.module.scss'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { LoginRequest } from '../proto/auth_pb'
-import { Error } from 'grpc-web'
 import { authService } from '../services'
 import { login } from '../state/auth'
 import { timesService } from '../services/times'
@@ -31,8 +30,8 @@ const LoginPage: React.VFC = () => {
       const res = await authService.login(req, null)
       login(res.getRefreshToken(), res.getAccessToken())
     } catch (error: any) {
-      const e = error as Error
-      setError(e.message)
+      const err = error as Error
+      setError(err.message)
     }
   }
 
