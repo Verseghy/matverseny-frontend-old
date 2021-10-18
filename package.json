@@ -26,7 +26,8 @@
     "build": "react-scripts build",
     "proto": "cd ./src/proto && protoc -I=. --js_out=import_style=commonjs,binary:. --grpc-web_out=import_style=typescript,mode=grpcwebtext:. *.proto",
     "format:write": "prettier --write ./src",
-    "format": "prettier --check ./src"
+    "format": "prettier --check ./src",
+    "docker:build": "docker build . -t smrtrfszm/vfg-math --build-arg BA_URL=http://localhost:8080"
   },
   "eslintConfig": {
     "extends": [
