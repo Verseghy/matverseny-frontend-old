@@ -11,7 +11,7 @@ RUN yarn install --frozen-lockfile
 
 COPY public ./public/
 COPY src ./src/
-COPY tsconfig.json ./
+COPY .env tsconfig.json ./
 RUN npx browserslist@latest --update-db && yarn build
 
 
