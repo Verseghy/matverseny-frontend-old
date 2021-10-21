@@ -27,7 +27,7 @@
     "proto": "cd ./src/proto && protoc -I=. --js_out=import_style=commonjs,binary:. --grpc-web_out=import_style=typescript,mode=grpcwebtext:. *.proto",
     "format:write": "prettier --write ./src",
     "format": "prettier --check ./src",
-    "docker:build": "docker build . -t smrtrfszm/vfg-math --build-arg BA_URL=http://localhost:8080"
+    "docker:build": "docker build . -t smrtrfszm/vfg-math --build-arg BA_URL=https://api.191.verseghy-gimnazium.net"
   },
   "eslintConfig": {
     "extends": [
