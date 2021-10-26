@@ -115,6 +115,15 @@
     align-items: center;
     gap: 1.6rem;
     margin: 3.2rem auto 0;
+
+    @include mobile {
+      flex-direction: column;
+    }
+
+    .codeActions {
+      display: flex;
+      gap: 1.6rem;
+    }
   }
 
   .teamOperations {
