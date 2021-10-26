@@ -1,6 +1,14 @@
 import { useEffect, useState } from 'react'
 import { Route } from 'react-router-dom'
-import { Button, Card, ErrorMessage, FormField, GuardedRoute, Input } from '../components'
+import {
+  Button,
+  Card,
+  CopyButton,
+  ErrorMessage,
+  FormField,
+  GuardedRoute,
+  Input,
+} from '../components'
 import { CreateTeamRequest, JoinTeamRequest } from '../proto/team_pb'
 import { teamService } from '../services'
 import styles from '../styles/team.module.scss'
@@ -190,16 +198,19 @@ const ManageTeamPage: React.VFC = () => {
               </Formik>
             )}
             <div className={styles.codeContainer}>
-              Csapatkód:
-              <Input
-                value={info.code}
-                readOnly
-                className={styles.code}
-                onFocus={(event) => event.target.select()}
-              />
-              <Button onClick={regenerateJoinCode}>
-                <FontAwesomeIcon icon={faRedoAlt} />
-              </Button>
+              <span className={styles.codeTitle}>Csapatkód:</span>
+              <div className={styles.codeActions}>
+                <Input
+                  value={info.code}
+                  readOnly
+                  className={styles.code}
+                  onFocus={(event) => event.target.select()}
+                />
+                <CopyButton text={info.code} />
+                <Button onClick={regenerateJoinCode}>
+                  <FontAwesomeIcon icon={faRedoAlt} />
+                </Button>
+              </div>
             </div>
           </>
         )}
