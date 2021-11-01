@@ -1286,7 +1286,8 @@ proto.team.GetTeamInfoResponse.toObject = function(includeInstance, msg) {
     name: jspb.Message.getFieldWithDefault(msg, 1, ""),
     joinCode: jspb.Message.getFieldWithDefault(msg, 2, ""),
     membersList: jspb.Message.toObjectList(msg.getMembersList(),
-    proto.team.GetTeamInfoResponse.Member.toObject, includeInstance)
+    proto.team.GetTeamInfoResponse.Member.toObject, includeInstance),
+    isLocked: jspb.Message.getBooleanFieldWithDefault(msg, 4, false)
   };
 
   if (includeInstance) {
@@ -1335,6 +1336,10 @@ proto.team.GetTeamInfoResponse.deserializeBinaryFromReader = function(msg, reade
       var value = new proto.team.GetTeamInfoResponse.Member;
       reader.readMessage(value,proto.team.GetTeamInfoResponse.Member.deserializeBinaryFromReader);
       msg.addMembers(value);
+      break;
+    case 4:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setIsLocked(value);
       break;
     default:
       reader.skipField();
@@ -1385,6 +1390,13 @@ proto.team.GetTeamInfoResponse.serializeBinaryToWriter = function(message, write
       3,
       f,
       proto.team.GetTeamInfoResponse.Member.serializeBinaryToWriter
+    );
+  }
+  f = message.getIsLocked();
+  if (f) {
+    writer.writeBool(
+      4,
+      f
     );
   }
 };
@@ -1700,6 +1712,24 @@ proto.team.GetTeamInfoResponse.prototype.addMembers = function(opt_value, opt_in
  */
 proto.team.GetTeamInfoResponse.prototype.clearMembersList = function() {
   return this.setMembersList([]);
+};
+
+
+/**
+ * optional bool is_locked = 4;
+ * @return {boolean}
+ */
+proto.team.GetTeamInfoResponse.prototype.getIsLocked = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 4, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.team.GetTeamInfoResponse} returns this
+ */
+proto.team.GetTeamInfoResponse.prototype.setIsLocked = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 4, value);
 };
 
 
