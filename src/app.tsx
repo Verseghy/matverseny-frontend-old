@@ -19,6 +19,7 @@ const CompetitionPage = React.lazy(() => import('./pages/competition'))
 const WaitPage = React.lazy(() => import('./pages/wait'))
 const EndPage = React.lazy(() => import('./pages/end'))
 const TeamPage = React.lazy(() => import('./pages/team'))
+const SuperAdminPage = React.lazy(() => import('./pages/superadmin'))
 
 const LoginRoute: React.VFC = () => {
   const loginGuard = useLoginGuard()
@@ -87,6 +88,9 @@ const App: React.FC = () => {
               </Route>
               <Route path="/team">
                 <TeamRoute />
+              </Route>
+              <Route path="/superadmin">
+                <SuperAdminPage />
               </Route>
               <Redirect to="/" />
             </Switch>
