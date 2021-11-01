@@ -75,5 +75,64 @@ export class SuperAdminClient {
     this.methodInfoSetTime);
   }
 
+  methodInfoGetTime = new grpcWeb.AbstractClientBase.MethodInfo(
+    superadmin_pb.GetTimeResponse,
+    (request: superadmin_pb.GetTimeRequest) => {
+      return request.serializeBinary();
+    },
+    superadmin_pb.GetTimeResponse.deserializeBinary
+  );
+
+  getTime(
+    request: superadmin_pb.GetTimeRequest,
+    metadata: grpcWeb.Metadata | null): Promise<superadmin_pb.GetTimeResponse>;
+
+  getTime(
+    request: superadmin_pb.GetTimeRequest,
+    metadata: grpcWeb.Metadata | null,
+    callback: (err: grpcWeb.Error,
+               response: superadmin_pb.GetTimeResponse) => void): grpcWeb.ClientReadableStream<superadmin_pb.GetTimeResponse>;
+
+  getTime(
+    request: superadmin_pb.GetTimeRequest,
+    metadata: grpcWeb.Metadata | null,
+    callback?: (err: grpcWeb.Error,
+               response: superadmin_pb.GetTimeResponse) => void) {
+    if (callback !== undefined) {
+      return this.client_.rpcCall(
+        this.hostname_ +
+          '/superadmin.SuperAdmin/GetTime',
+        request,
+        metadata || {},
+        this.methodInfoGetTime,
+        callback);
+    }
+    return this.client_.unaryCall(
+    this.hostname_ +
+      '/superadmin.SuperAdmin/GetTime',
+    request,
+    metadata || {},
+    this.methodInfoGetTime);
+  }
+
+  methodInfoGetResults = new grpcWeb.AbstractClientBase.MethodInfo(
+    superadmin_pb.GetResultsResponse,
+    (request: superadmin_pb.GetResultsRequest) => {
+      return request.serializeBinary();
+    },
+    superadmin_pb.GetResultsResponse.deserializeBinary
+  );
+
+  getResults(
+    request: superadmin_pb.GetResultsRequest,
+    metadata?: grpcWeb.Metadata) {
+    return this.client_.serverStreaming(
+      this.hostname_ +
+        '/superadmin.SuperAdmin/GetResults',
+      request,
+      metadata || {},
+      this.methodInfoGetResults);
+  }
+
 }
 

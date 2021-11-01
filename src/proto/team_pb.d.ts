@@ -120,6 +120,9 @@ export class GetTeamInfoResponse extends jspb.Message {
   clearMembersList(): GetTeamInfoResponse;
   addMembers(value?: GetTeamInfoResponse.Member, index?: number): GetTeamInfoResponse.Member;
 
+  getIsLocked(): boolean;
+  setIsLocked(value: boolean): GetTeamInfoResponse;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetTeamInfoResponse.AsObject;
   static toObject(includeInstance: boolean, msg: GetTeamInfoResponse): GetTeamInfoResponse.AsObject;
@@ -133,6 +136,7 @@ export namespace GetTeamInfoResponse {
     name: string,
     joinCode: string,
     membersList: Array<GetTeamInfoResponse.Member.AsObject>,
+    isLocked: boolean,
   }
 
   export class Member extends jspb.Message {
