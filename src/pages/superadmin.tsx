@@ -1,12 +1,28 @@
 import { Form, Formik } from 'formik'
-import React, { Suspense } from 'react'
+import React, { Suspense, useEffect } from 'react'
 import { useAtomState } from 'yauk/react'
 import { Button, Card, FormField } from '../components'
 import { saTimes } from '../state/superadmin'
 import s from '../styles/SuperAdmin.module.scss'
 import * as Yup from 'yup'
 import { saService } from '../services'
-import { SetTimeRequest } from '../proto/superadmin_pb'
+import { GetResultsRequest, GetResultsResponse, SetTimeRequest } from '../proto/superadmin_pb'
+import { ClientReadableStream } from 'grpc-web'
+import { createStreamService } from '../utils/streamService'
+
+export const createSuperadminStream = async (): Promise<
+  ClientReadableStream<GetResultsResponse>
+> => {
+  const stream = await (saService.getResults(new GetResultsRequest()) as any as Promise<
+    ClientReadableStream<GetResultsResponse>
+  >)
+
+  stream.on('data', (res: GetResultsResponse) => {})
+
+  return stream
+}
+
+const superadminService = createStreamService(createSuperadminStream)
 
 const timesValidation = Yup.object({
   start: Yup.number(),
@@ -46,6 +62,11 @@ const TimeSettings: React.VFC = () => {
 }
 
 const SuperAdminPage: React.VFC = () => {
+  useEffect(() => {
+    superadminService.start()
+    return () => superadminService.stop()
+  }, [])
+
   return (
     <div className={s.container}>
       <Suspense fallback="asd">
