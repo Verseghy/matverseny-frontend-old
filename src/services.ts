@@ -24,4 +24,5 @@ export const teamService = new TeamClient(process.env.REACT_APP_BACKEND_URL!, nu
 })
 export const saService = new SuperAdminClient(process.env.REACT_APP_BACKEND_URL!, null, {
   unaryInterceptors: [new SAAuthInterceptor(), new DebugInterceptor()],
+  streamInterceptors: [new SAAuthInterceptor(), new DebugStreamInterceptor()],
 })
