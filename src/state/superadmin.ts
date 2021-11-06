@@ -48,3 +48,15 @@ export const saTimes = atom(async () => {
     end: new Date(times.getEnd()).getTime(),
   }
 })
+
+export interface Result {
+  total: number
+  successful: number
+}
+
+export interface Results {
+  time: number
+  result: Map<string, Result>
+}
+
+export const saResults = atom<Results[]>([])
