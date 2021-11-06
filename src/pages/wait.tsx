@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useAtom } from 'yauk/react'
 import { Card } from '../components'
 import { competitionService } from '../services'
+import { clockService } from '../services/clock'
 import { getProblemsService } from '../services/problems'
 import { timeString } from '../state/competition'
 import styles from '../styles/wait.module.scss'
@@ -13,6 +14,7 @@ const WaitPage: React.VFC = () => {
 
   useEffect(() => {
     problemsService.start()
+    clockService.start()
   }, [])
 
   return (
