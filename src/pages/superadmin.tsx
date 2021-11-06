@@ -2,13 +2,31 @@ import { Form, Formik } from 'formik'
 import React, { Suspense, useEffect } from 'react'
 import { useAtomState } from 'yauk/react'
 import { Button, Card, FormField } from '../components'
-import { saTimes } from '../state/superadmin'
+import { Result, saResults, saTimes } from '../state/superadmin'
 import s from '../styles/SuperAdmin.module.scss'
 import * as Yup from 'yup'
 import { saService } from '../services'
 import { GetResultsRequest, GetResultsResponse, SetTimeRequest } from '../proto/superadmin_pb'
 import { ClientReadableStream } from 'grpc-web'
 import { createStreamService } from '../utils/streamService'
+import { getAtomValue, setAtomValue } from 'yauk'
+import { Map as ProtoMap } from 'google-protobuf'
+import { store } from '../state/store'
+
+const convertResultMap = (
+  map: ProtoMap<string, GetResultsResponse.Result>
+): Map<string, Result> => {
+  const convertedMap = new Map<string, Result>()
+
+  map.forEach((res: GetResultsResponse.Result, team: string) => {
+    convertedMap.set(team, {
+      total: res.getTotalAnswered(),
+      successful: res.getSuccessfullyAnswered(),
+    })
+  })
+
+  return convertedMap
+}
 
 export const createSuperadminStream = async (): Promise<
   ClientReadableStream<GetResultsResponse>
@@ -17,7 +35,18 @@ export const createSuperadminStream = async (): Promise<
     ClientReadableStream<GetResultsResponse>
   >)
 
-  stream.on('data', (res: GetResultsResponse) => {})
+  stream.on('data', async (res: GetResultsResponse) => {
+    const times = await getAtomValue(store, saTimes)
+    const result = convertResultMap(res.getResultsMap())
+
+    setAtomValue(store, saResults, (state) => {
+      state[(res.getTimestamp() - times.start / 1000) / 30] = {
+        time: res.getTimestamp(),
+        result,
+      }
+      return state
+    })
+  })
 
   return stream
 }
