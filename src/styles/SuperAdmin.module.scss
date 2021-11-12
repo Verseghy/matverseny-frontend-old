@@ -10,9 +10,15 @@
     padding: 0 1.6rem;
   }
 
-  .card {
+  .timeCard {
     width: min(100%, 45ch);
+  }
 
+  .teamsCard {
+    width: min(100%, 70ch);
+  }
+
+  .card {
     h1 {
       font-family: 'Inter', sans-serif;
       font-weight: 900;
@@ -46,4 +52,10 @@
   100% {
     transform: rotate(360deg);
   }
+}
+
+.tooltip {
+  background-color: var(--gray);
+  padding: 1.2rem;
+  border-radius: 0.6rem;
 }
