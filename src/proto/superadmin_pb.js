@@ -948,7 +948,8 @@ proto.superadmin.GetResultsResponse.Result.prototype.toObject = function(opt_inc
 proto.superadmin.GetResultsResponse.Result.toObject = function(includeInstance, msg) {
   var f, obj = {
     totalAnswered: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    successfullyAnswered: jspb.Message.getFieldWithDefault(msg, 2, 0)
+    successfullyAnswered: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    teamName: jspb.Message.getFieldWithDefault(msg, 3, "")
   };
 
   if (includeInstance) {
@@ -993,6 +994,10 @@ proto.superadmin.GetResultsResponse.Result.deserializeBinaryFromReader = functio
       var value = /** @type {number} */ (reader.readUint32());
       msg.setSuccessfullyAnswered(value);
       break;
+    case 3:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setTeamName(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -1036,6 +1041,13 @@ proto.superadmin.GetResultsResponse.Result.serializeBinaryToWriter = function(me
       f
     );
   }
+  f = message.getTeamName();
+  if (f.length > 0) {
+    writer.writeString(
+      3,
+      f
+    );
+  }
 };
 
 
@@ -1072,6 +1084,24 @@ proto.superadmin.GetResultsResponse.Result.prototype.getSuccessfullyAnswered = f
  */
 proto.superadmin.GetResultsResponse.Result.prototype.setSuccessfullyAnswered = function(value) {
   return jspb.Message.setProto3IntField(this, 2, value);
+};
+
+
+/**
+ * optional string team_name = 3;
+ * @return {string}
+ */
+proto.superadmin.GetResultsResponse.Result.prototype.getTeamName = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.superadmin.GetResultsResponse.Result} returns this
+ */
+proto.superadmin.GetResultsResponse.Result.prototype.setTeamName = function(value) {
+  return jspb.Message.setProto3StringField(this, 3, value);
 };
 
 

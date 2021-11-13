@@ -24,6 +24,7 @@ const convertResultMap = (
     convertedMap.set(team, {
       total: res.getTotalAnswered(),
       successful: res.getSuccessfullyAnswered(),
+      team_name: res.getTeamName(),
     })
   })
 
