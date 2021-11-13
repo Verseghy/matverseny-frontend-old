@@ -116,6 +116,9 @@ export namespace GetResultsResponse {
     getSuccessfullyAnswered(): number;
     setSuccessfullyAnswered(value: number): Result;
 
+    getTeamName(): string;
+    setTeamName(value: string): Result;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Result.AsObject;
     static toObject(includeInstance: boolean, msg: Result): Result.AsObject;
@@ -128,6 +131,7 @@ export namespace GetResultsResponse {
     export type AsObject = {
       totalAnswered: number,
       successfullyAnswered: number,
+      teamName: string,
     }
   }
 

@@ -52,6 +52,7 @@ export const saTimes = atom(async () => {
 export interface Result {
   total: number
   successful: number
+  team_name: string
 }
 
 export interface Results {
