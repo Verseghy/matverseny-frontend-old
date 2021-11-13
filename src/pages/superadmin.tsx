@@ -1,6 +1,6 @@
 import { Form, Formik } from 'formik'
 import React, { Suspense, useEffect } from 'react'
-import { useAtomState } from 'yauk/react'
+import { useAtom, useAtomState } from 'yauk/react'
 import { Button, Card, FormField } from '../components'
 import { Result, saResults, saTimes } from '../state/superadmin'
 import s from '../styles/SuperAdmin.module.scss'
@@ -42,11 +42,14 @@ export const createSuperadminStream = async (): Promise<
     const result = convertResultMap(res.getResultsMap())
 
     setAtomValue(store, saResults, (state) => {
-      state[(res.getTimestamp() - times.start / 1000) / 30] = {
+      let newState = [...state]
+
+      newState[(res.getTimestamp() - times.start / 1000) / 30] = {
         time: res.getTimestamp(),
         result,
       }
-      return state
+
+      return newState
     })
   })
 
@@ -92,49 +95,6 @@ const TimeSettings: React.VFC = () => {
   )
 }
 
-const data = [
-  {
-    name: 'Valami Random csapatnév',
-    wrong: 99,
-    successful: 1,
-  },
-  {
-    name: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-    wrong: 40,
-    successful: 10,
-  },
-  {
-    name: 'Some random',
-    wrong: 5,
-    successful: 100,
-  },
-  {
-    name: 'Még mindig kéne valami',
-    wrong: 70,
-    successful: 21,
-  },
-  {
-    name: 'Már nem kell sok',
-    wrong: 34,
-    successful: 42,
-  },
-  {
-    name: 'Utolsó előtti',
-    wrong: 10,
-    successful: 82,
-  },
-  {
-    name: 'Na végra már vége van',
-    wrong: 34,
-    successful: 0,
-  },
-  {
-    name: 'Na végra már vége van',
-    wrong: 12,
-    successful: 140,
-  },
-]
-
 interface TooltipProps {
   label?: string
 }
@@ -144,11 +104,23 @@ const ChartTooltip: React.VFC<TooltipProps> = ({ label }) => {
 }
 
 const TeamStatistics: React.VFC = () => {
+  const data = useAtom(saResults)
+
+  if (data.length === 0) return null
+
+  const mappedData = Array.from(data[data.length - 1].result.entries(), ([team, points]) => {
+    return {
+      name: team,
+      wrong: points.total - points.successful,
+      successful: points.successful,
+    }
+  })
+
   return (
     <Card className={classnames(s.card, s.teamsCard)}>
       <h1>Csapat statisztika</h1>
       <ResponsiveContainer width="100%" height={300}>
-        <BarChart width={500} height={300} data={data}>
+        <BarChart width={500} height={300} data={mappedData}>
           <Tooltip cursor={false} isAnimationActive={false} content={ChartTooltip} />
           <CartesianGrid vertical={false} strokeDasharray="4" />
           <XAxis tick={false} dataKey="name" tickCount={0} />
