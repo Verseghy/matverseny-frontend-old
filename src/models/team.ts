@@ -19,6 +19,7 @@ export interface TeamInfo {
   name: string
   code: string
   members: Member[]
+  isLocked: boolean
 }
 
 const classes: { [key in GetTeamInfoResponse.Member.Class]: Class } = {
@@ -48,5 +49,6 @@ export const convertTeamInfo = (teamInfo: GetTeamInfoResponse): TeamInfo => {
     name: teamInfo.getName(),
     code: teamInfo.getJoinCode(),
     members: teamInfo.getMembersList().map((member) => convertMember(member)),
+    isLocked: teamInfo.getIsLocked(),
   }
 }

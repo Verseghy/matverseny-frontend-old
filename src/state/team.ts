@@ -2,6 +2,7 @@ import { atom, getAtomValue, selector, setAtomValue } from 'yauk'
 import { convertTeamInfo, MemberRank, TeamInfo } from '../models/team'
 import {
   ChangeCoOwnerStatusRequest,
+  ChangeLockRequest,
   DisbandTeamRequest,
   GenerateJoinCodeRequest,
   GetTeamInfoRequest,
@@ -149,6 +150,20 @@ export const renameTeam = async (newName: string) => {
       name: newName,
     }))
     error(null)
+  } catch (err: any) {
+    error(err)
+  }
+}
+
+export const changeLock = async (lock: boolean) => {
+  const req = new ChangeLockRequest().setShouldLock(lock)
+
+  try {
+    await teamService.changeLock(req, null)
+    setAtomValue(store, teamInfo, (state) => ({
+      ...state,
+      isLocked: lock,
+    }))
   } catch (err: any) {
     error(err)
   }

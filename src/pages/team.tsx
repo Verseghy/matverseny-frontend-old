@@ -30,6 +30,7 @@ import {
   toggleCoOwnerStatus,
   userInfo,
   renameTeam,
+  changeLock,
 } from '../state/team'
 import { useAtom } from 'yauk/react'
 
@@ -167,7 +168,15 @@ const ManageTeamPage: React.VFC = () => {
                 <Button block onClick={() => setEditMode(true)}>
                   Csapatnév módosítása
                 </Button>
-                <Button block>Nevezése a versenyre</Button>
+                {info.isLocked ? (
+                  <Button onClick={() => changeLock(false)} block>
+                    Nevezés visszavonása
+                  </Button>
+                ) : (
+                  <Button onClick={() => changeLock(true)} block>
+                    Nevezése a versenyre
+                  </Button>
+                )}
               </div>
             )}
             {editMode && (
@@ -247,7 +256,7 @@ const ManageTeamPage: React.VFC = () => {
           ))}
         </div>
         <div className={styles.buttonsContainer}>
-          <Button block kind="primary" to="/competition">
+          <Button block kind="primary" to="/competition" disabled={!info.isLocked}>
             Versenyhez
           </Button>
           {((user.rank === MemberRank.MEMBER || user.rank === MemberRank.COOWNER) && (
