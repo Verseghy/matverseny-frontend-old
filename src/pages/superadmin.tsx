@@ -71,31 +71,37 @@ export const createSuperadminStream = async (): Promise<
 const superadminService = createStreamService(createSuperadminStream)
 
 const timesValidation = Yup.object({
-  start: Yup.number(),
-  end: Yup.number(),
+  start: Yup.string(),
+  end: Yup.string(),
 })
 
 const TimeSettings: React.VFC = () => {
   const [times, setTimes] = useAtomState(saTimes)
 
-  const onSubmit = async ({ start, end }: { start: number; end: number }) => {
+  const onSubmit = async ({ start, end }: { start: string; end: string }) => {
+    const startD = new Date(start)
+    const endD = new Date(end)
+
     const req = new SetTimeRequest()
-      .setStart(new Date(start).toISOString())
-      .setEnd(new Date(end).toISOString())
+      .setStart(startD.toISOString())
+      .setEnd(endD.toISOString())
     await saService.setTime(req, null)
 
-    setTimes({ start, end })
+    setTimes({ start: startD.getTime(), end: endD.getTime() })
   }
 
   return (
     <Card className={classnames(s.card, s.timeCard)}>
       <h1>Idő Beállítások</h1>
-      <Formik initialValues={times} onSubmit={onSubmit} validationSchema={timesValidation}>
+      <Formik initialValues={{
+        start: format(new Date(times.start), "yyyy-MM-dd HH:mm:ss"),
+        end: format(new Date(times.end), "yyyy-MM-dd HH:mm:ss"),
+      }} onSubmit={onSubmit} validationSchema={timesValidation}>
         {({ isSubmitting }) => (
           <Form>
             <div className={s.timesContainer}>
-              <FormField display="Kezdés" type="number" name="start" />
-              <FormField display="Vége" type="number" name="end" />
+              <FormField display="Kezdés" type="text" name="start" />
+              <FormField display="Vége" type="text" name="end" />
             </div>
             <Button disabled={isSubmitting} type="submit" kind="primary">
               Módosítás
