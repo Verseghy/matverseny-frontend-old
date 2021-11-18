@@ -82,9 +82,7 @@ const TimeSettings: React.VFC = () => {
     const startD = new Date(start)
     const endD = new Date(end)
 
-    const req = new SetTimeRequest()
-      .setStart(startD.toISOString())
-      .setEnd(endD.toISOString())
+    const req = new SetTimeRequest().setStart(startD.toISOString()).setEnd(endD.toISOString())
     await saService.setTime(req, null)
 
     setTimes({ start: startD.getTime(), end: endD.getTime() })
@@ -93,10 +91,14 @@ const TimeSettings: React.VFC = () => {
   return (
     <Card className={classnames(s.card, s.timeCard)}>
       <h1>Idő Beállítások</h1>
-      <Formik initialValues={{
-        start: format(new Date(times.start), "yyyy-MM-dd HH:mm:ss"),
-        end: format(new Date(times.end), "yyyy-MM-dd HH:mm:ss"),
-      }} onSubmit={onSubmit} validationSchema={timesValidation}>
+      <Formik
+        initialValues={{
+          start: format(new Date(times.start), 'yyyy-MM-dd HH:mm:ss'),
+          end: format(new Date(times.end), 'yyyy-MM-dd HH:mm:ss'),
+        }}
+        onSubmit={onSubmit}
+        validationSchema={timesValidation}
+      >
         {({ isSubmitting }) => (
           <Form>
             <div className={s.timesContainer}>
@@ -228,7 +230,7 @@ const SuperAdminPage: React.VFC = () => {
 
   return (
     <div className={s.container}>
-      <Suspense fallback="asd">
+      <Suspense fallback="Töltés...">
         <TimeSettings />
       </Suspense>
       <TeamStatistics />
