@@ -58,9 +58,11 @@ const LoginPage: React.VFC = () => {
                 type="password"
                 className={styles.field}
               />
+              {/*
               <Link to="/forgot-password" className={styles.forgot}>
                 Elfelejtetted a jelszavad?
               </Link>
+              */}
               <div className={styles.controls}>
                 <Button block to="/register">
                   Regisztráció
