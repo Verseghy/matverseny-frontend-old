@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useAtom } from 'yauk/react'
-import { Card } from '../components'
+import { Button, Card } from '../components'
 import { competitionService } from '../services'
 import { clockService } from '../services/clock'
 import { getProblemsService } from '../services/problems'
@@ -23,6 +23,7 @@ const WaitPage: React.VFC = () => {
         <h1>Kérlek várj!</h1>
         <p>A verseny kezdetéig még:</p>
         <p className={styles.time}>{time}</p>
+        <Button to="/team">Csapathoz</Button>
       </Card>
     </div>
   )
