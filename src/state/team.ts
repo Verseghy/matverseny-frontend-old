@@ -164,6 +164,7 @@ export const changeLock = async (lock: boolean) => {
       ...state,
       isLocked: lock,
     }))
+    error(null)
   } catch (err: any) {
     error(err)
   }
