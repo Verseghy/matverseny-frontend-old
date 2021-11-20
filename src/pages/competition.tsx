@@ -12,6 +12,7 @@ import { logout } from '../state/auth'
 import { paginatedProblems, timeString } from '../state/competition'
 import { problemsPage } from '../state/problems'
 import styles from '../styles/competition.module.scss'
+import { wait } from '../utils/retry'
 
 interface QuickProblemButtonProps {
   problem: Problem
@@ -65,7 +66,18 @@ const CompetitionPage: React.VFC = () => {
       .setValue(Number(problem.solution))
       .setDelete(problem.solution === '')
 
-    await competitionService.setSolutions(req, null)
+    for (let i = 0; i < 7; ++i) {
+      try {
+        await competitionService.setSolutions(req, null)
+        break
+      } catch (err: any) {
+        if (i === 6) {
+          alert('Ismeretlen hiba történt a válasz mentése közben! Az oldal újra fog tölteni!')
+          window.location.reload()
+        }
+        await wait(500 * 2 ** i)
+      }
+    }
   }, [])
 
   return (
