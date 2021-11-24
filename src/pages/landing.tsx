@@ -11,8 +11,8 @@ const LandingPage: React.FC = () => {
           Verseghy <span>191</span>
         </h1>
         <p>
-          A csapattagok a csapatvezetőtől kapott emailcímmel és jelszóval jelentkezhetnek be az
-          oldalra. Erről a csapatvezetők a verseny napján emailben kapnak értesítést.
+          A versenyzők az oldalon tudnak regisztrálni. A csapatvezető bejelentkezés után létre tud hozni csapatot.
+          A csapattagok bejelentkezés után a csapatvezetőtől kapott kóddal tudnak csatlakozni.
         </p>
         <p>
           {' '}
@@ -29,6 +29,14 @@ const LandingPage: React.FC = () => {
           nagy mértékben csökkenti az akkumulátorhasználatot. Ez a beállítás az alább található
           kapcsolóval állítható. A verseny időtartama alatt bármikor ki és be kapcsolható ezen az
           oldalon.
+        </p>
+        <p>
+          {' '}
+          Technikai probléma esetén:
+        </p>
+        <p>
+          {' '}
+          Email: <a href="mailto:contact@zoltanszepesi.com">contact@zoltanszepesi.com</a>
         </p>
         <div className={styles.controls}>
           <Switch
