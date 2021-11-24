@@ -36,4 +36,20 @@
     justify-content: space-between;
     align-items: center;
   }
+
+  .link {
+    .div {
+      display: flex;
+      align-items: center;
+    }
+
+    .icon {
+      color: var(--primary);
+    }
+
+    a {
+      margin-left: 1.6rem;
+      color: var(--text-color);
+    }
+  }
 }
