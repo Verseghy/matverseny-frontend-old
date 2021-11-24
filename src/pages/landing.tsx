@@ -39,7 +39,7 @@ const LandingPage: React.FC = () => {
           </div>
           <div>
             <FontAwesomeIcon icon={faPhone} className={styles.icon} />
-            <a href="tel:+36705227252">+36705227252</a>
+            <a href="tel:+36705227252">+36 70 522 7252</a>
           </div>
         </p>
         <div className={styles.controls}>
