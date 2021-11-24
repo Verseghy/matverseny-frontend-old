@@ -33,14 +33,14 @@ const LandingPage: React.FC = () => {
         </p>
         <p>Technikai probléma esetén:</p>
         <p className={styles.link}>
-          <div>
+          <span>
             <FontAwesomeIcon icon={faEnvelope} className={styles.icon} />
             <a href="mailto:contact@zoltanszepesi.com">contact@zoltanszepesi.com</a>
-          </div>
-          <div>
+          </span>
+          <span>
             <FontAwesomeIcon icon={faPhone} className={styles.icon} />
             <a href="tel:+36705227252">+36 70 522 7252</a>
-          </div>
+          </span>
         </p>
         <div className={styles.controls}>
           <Switch
