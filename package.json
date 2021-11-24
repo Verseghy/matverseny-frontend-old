@@ -29,7 +29,7 @@
     "proto": "cd ./src/proto && protoc -I=. --js_out=import_style=commonjs,binary:. --grpc-web_out=import_style=typescript,mode=grpcwebtext:. *.proto",
     "format:write": "prettier --write ./src",
     "format": "prettier --check ./src",
-    "docker:build": "docker build . -t smrtrfszm/vfg-math --build-arg BA_URL=https://api.190.verseghy-gimnazium.net"
+    "docker:build": "docker build . -t verseghy/matverseny-frontend --build-arg BA_URL=https://api.190.verseghy-gimnazium.net"
   },
   "eslintConfig": {
     "extends": [
