@@ -21,7 +21,7 @@ const EndPage: React.VFC = () => {
       <Card className={styles.card}>
         <h1>A verseny véget ért!</h1>
         <p>Köszönjük, hogy részt vettetek a versenyen.</p>
-        <p>A feladatsor alkotóközössége:</p>
+        <p>A feladatsor alkotóközössége és technikai háttere:</p>
         <ul>
           {creators.map((creator) => (
             <li key={creator}>{creator}</li>
